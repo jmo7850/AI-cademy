@@ -110,6 +110,8 @@ test('export backup downloads JSON', async ({ page }) => {
 
 test('navigation works on every section and pages have no serious accessibility violations', async ({ page }) => {
   await skipOnboarding(page);
+  const home = await new AxeBuilder({ page: page as never }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(home.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id), 'Home').toEqual([]);
   for (const [name, heading] of [
     ['Course Catalog', 'Course Catalog'], ['My Learning', 'My Learning'], ['Career Paths', 'Career Paths'], ['Quick Credentials', 'Quick Credentials'],
     ['Practice Center', 'Practice Center'], ['Project Lab', 'Project Lab'], ['Progress', 'Progress'], ['Settings', 'Settings'],
@@ -123,5 +125,48 @@ test('navigation works on every section and pages have no serious accessibility 
     // On mobile, content wider than the screen silently widens the layout viewport, so compare with the device width.
     const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
     expect(scrollWidth, `${name} horizontal overflow`).toBeLessThanOrEqual(page.viewportSize()!.width);
+  }
+});
+
+test('new providers work with search, filters, course pages, enrolment, practice exams and persistence', async ({ page }) => {
+  await skipOnboarding(page);
+  await openSection(page, 'Course Catalog');
+  await page.getByText(/^Filters/).click();
+  await page.getByRole('button', { name: 'NVIDIA', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'NVIDIA-Certified Associate: Generative AI LLMs' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Claude 101/ })).toHaveCount(0);
+  await page.getByRole('link', { name: 'NVIDIA-Certified Associate: Generative AI LLMs' }).click();
+  await expect(page.getByText('Official foundational certification').first()).toBeVisible();
+  await expect(page.getByText(/\$125/).first()).toBeVisible();
+  await page.getByRole('button', { name: 'Start studying' }).click();
+  await expect(page.getByRole('heading', { name: 'LLM essentials for the NVIDIA Associate exam' })).toBeVisible();
+
+  // Distinct credential classes on the Google entries.
+  await page.goto('/#/course/google-ai-professional-certificate');
+  await expect(page.getByText(/Professional certificate program/).first()).toBeVisible();
+  await page.goto('/#/course/openai-apply-ai-at-work');
+  await expect(page.getByText(/Learning resource \(no credential stated\)/).first()).toBeVisible();
+
+  await openSection(page, 'Practice Center');
+  await page.getByLabel('Course').selectOption('study-nvidia-genl');
+  await page.getByLabel(/Questions \(max \d+\)/).fill('5');
+  await page.getByRole('button', { name: /Start (practice|exam) \(5 questions\)/ }).click();
+  await expect(page.getByRole('heading', { name: 'Question 1 of 5' })).toBeVisible();
+
+  // Enrolment survives a reload.
+  await page.reload();
+  await openSection(page, 'My Learning');
+  await expect(page.getByRole('link', { name: /NVIDIA-Certified Associate: Generative AI LLMs/ }).first()).toBeVisible();
+});
+
+test('dark theme keeps pages accessible', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await skipOnboarding(page);
+  for (const path of ['/#/', '/#/catalog', '/#/course/nvidia-nca-genl', '/#/learn/nvidia-nca-genl/nvidia-genl-1', '/#/quick', '/#/paths', '/#/progress', '/#/settings']) {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1 }).first()).toBeAttached();
+    const axe = await new AxeBuilder({ page: page as never }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    const serious = axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
+    expect(serious.map((v) => `${v.id}: ${v.nodes[0]?.target}`), path).toEqual([]);
   }
 });

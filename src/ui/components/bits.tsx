@@ -30,11 +30,11 @@ export function FactLine({ label, fact, checkedOn, render }: { label: string; fa
 }
 
 export function TypeBadge({ entry }: { entry: CatalogEntry }) {
-  return <span className="badge b-type">{credentialTypeLabel[entry.credentialType]}</span>;
+  return <span className={`badge b-type t-${entry.credentialType}`}>{credentialTypeLabel[entry.credentialType]}</span>;
 }
 
 export function StatusPill({ status }: { status: CourseStatus }) {
-  const tone = status === 'not-started' ? 'b-estimate' : status === 'in-progress' ? 'b-unverified' : 'b-verified';
+  const tone = status === 'not-started' ? 'b-estimate' : status === 'in-progress' ? 'b-unverified' : status === 'mastery' || status === 'external-recorded' ? 'b-gold' : 'b-verified';
   return <span className={`badge ${tone}`}>{statusLabel[status]}</span>;
 }
 

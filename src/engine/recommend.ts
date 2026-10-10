@@ -26,8 +26,9 @@ export function personalizePath(steps: PathStep[], state: AppState, reg: Registr
   const items: PlanItem[] = [];
   steps.forEach((step, stepIndex) => {
     const entries = step.catalogIds.map((id) => reg.entry(id)).filter((e): e is CatalogEntry => !!e);
-    const formal = entries.filter(isFormal);
-    const preferredFormal = pickPreferred(formal, p);
+    // Formal certifications in one step are always alternatives; chooseOne steps make every entry one.
+    const pool = step.chooseOne ? entries : entries.filter(isFormal);
+    const preferred = pickPreferred(pool, p);
 
     for (const entry of entries) {
       const course = reg.courseForEntry(entry.id);
@@ -43,11 +44,11 @@ export function personalizePath(steps: PathStep[], state: AppState, reg: Registr
         recommended = false;
         reasons.push('This credential is retired.');
       }
-      if (formal.length > 1 && isFormal(entry) && entry !== preferredFormal) {
+      if (pool.length > 1 && pool.includes(entry) && entry !== preferred) {
         recommended = false;
-        reasons.push(`Alternative to ${preferredFormal?.title}. One foundational certification is enough for this step.`);
+        reasons.push(`Alternative to ${preferred?.title}. ${step.chooseOne ? 'One of these is enough for this step.' : 'One foundational certification is enough for this step.'}`);
       }
-      if (formal.length > 1 && entry === preferredFormal) {
+      if (pool.length > 1 && entry === preferred) {
         reasons.push(p.providers.includes(entry.provider) ? 'Matches your preferred provider.' : 'Suggested default; switch to another provider if you prefer.');
       }
       if (course && recommended) {
@@ -62,7 +63,9 @@ export function personalizePath(steps: PathStep[], state: AppState, reg: Registr
         recommended = false;
         reasons.push('You said you already develop software, so this is optional.');
       }
-      if (entry.credentialFree.value === false && p.budget === 'free') {
+      if (entry.credentialFree.value === false && p.budget === 'free' && !entry.exam) {
+        reasons.push('This program is paid. Your budget is set to free, so look for a free alternative in this step or check for financial aid.');
+      } else if (entry.credentialFree.value === false && p.budget === 'free') {
         const fee = entry.exam?.feeUSD?.value;
         reasons.push(`Study is ${entry.learningCost.value === 'free' ? 'free' : 'partly free'}, but the exam is paid${fee ? ` ($${fee})` : ''}. Your budget is set to free, so plan for this or study without booking the exam.`);
       }

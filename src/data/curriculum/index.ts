@@ -2,9 +2,10 @@ import type { StudyCourse } from '../../domain/types';
 import { aiFoundations } from './aiFoundations';
 import { awsAif } from './awsAif';
 import { careerReadiness, devFoundations, llmAppEng, localLlm } from './engineering';
+import { nvidiaGenl } from './nvidiaGenl';
 import { awsClf, gcpGail, msAi901 } from './vendorCourses';
 
-export const builtInCourses: StudyCourse[] = [aiFoundations, devFoundations, llmAppEng, localLlm, careerReadiness, awsAif, awsClf, msAi901, gcpGail];
+export const builtInCourses: StudyCourse[] = [aiFoundations, devFoundations, llmAppEng, localLlm, careerReadiness, awsAif, awsClf, msAi901, gcpGail, nvidiaGenl];
 
 /** Diagnostic: one or two questions per foundational area, drawn from course banks. */
 export const diagnosticItems: { courseId: string; questionId: string }[] = [

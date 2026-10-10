@@ -11,7 +11,7 @@ const isStr = (v: unknown): v is string => typeof v === 'string' && v.trim().len
 const isStrArr = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === 'string');
 const ID = /^[a-z0-9][a-z0-9._-]{1,63}$/;
 
-const CRED_TYPES: CredentialType[] = ['professional-cert', 'foundational-cert', 'course-certificate', 'microcredential', 'independent-assessment', 'portfolio-project'];
+const CRED_TYPES: CredentialType[] = ['professional-cert', 'foundational-cert', 'professional-certificate', 'course-certificate', 'microcredential', 'independent-assessment', 'portfolio-project', 'learning-resource'];
 
 export function validateQuestion(q: unknown, path: string, conceptIds: Set<string>): string[] {
   const e: string[] = [];

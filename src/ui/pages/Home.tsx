@@ -4,6 +4,7 @@ import { useStore } from '../../store/StoreContext';
 import { Empty, ProgressBar } from '../components/bits';
 import { useLessonProgress } from '../hooks';
 import { go, href } from '../router';
+import { Mascot } from '../components/Mascot';
 
 export function HomePage() {
   const { state, registry } = useStore();
@@ -44,10 +45,15 @@ export function HomePage() {
     <div>
       <h1 className="sr-only">Learning Command Center</h1>
       <section className="card hero" aria-labelledby="next-h">
-        <p className="muted small" style={{ margin: 0 }}>Your next step</p>
-        <h2 id="next-h" style={{ fontSize: '1.35rem' }}>{action.label}</h2>
-        <p>{action.reason}</p>
-        <button type="button" className="primary" onClick={act}>Start now</button>
+        <div className="hero-body">
+          <div>
+            <p className="eyebrow">Your next step</p>
+            <h2 id="next-h" style={{ fontSize: '1.45rem' }}>{action.label}</h2>
+            <p className="muted">{action.reason}</p>
+            <button type="button" className="primary" onClick={act}>Start now</button>
+          </div>
+          <Mascot size={120} />
+        </div>
       </section>
 
       {(answeredThisWeek > 0 || minutesThisWeek > 0) && (

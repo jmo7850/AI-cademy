@@ -14,6 +14,7 @@ import { ProgressPage } from './pages/Progress';
 import { ProjectPage, ProjectsPage } from './pages/Projects';
 import { QuickPage } from './pages/Quick';
 import { SettingsPage } from './pages/Settings';
+import { Mascot } from './components/Mascot';
 
 const NAV: [string, string][] = [
   ['', 'Home'],
@@ -83,7 +84,7 @@ export function App() {
       <div className={`shell ${focus ? 'focus' : ''}`}>
         {!focus && (
           <nav className={`nav ${menuOpen ? 'open' : ''}`} aria-label="Main">
-            <div className="brand">AI Career Academy</div>
+            <div className="brand"><Mascot size={40} /><span>AI Career Academy<small>Learn · Practise · Get hired</small></span></div>
             <button type="button" className="menu-btn" aria-expanded={menuOpen} aria-controls="nav-list" onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? 'Close menu' : 'Menu'}
             </button>

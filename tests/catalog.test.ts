@@ -9,8 +9,67 @@ describe('seed catalog', () => {
     expect(new Set(catalog.map((c) => c.id)).size).toBe(catalog.length);
   });
 
-  it('covers Claude Academy, AWS, Microsoft and Google', () => {
-    for (const p of ['anthropic', 'aws', 'microsoft', 'google']) expect(catalog.some((c) => c.provider === p)).toBe(true);
+  it('keeps every id from the first release, so saved progress still resolves', () => {
+    const firstRelease = [
+      'academy-ai-foundations',
+      'academy-career-readiness',
+      'academy-dev-foundations',
+      'academy-llm-app-eng',
+      'academy-local-llm',
+      'aws-ai-practitioner',
+      'aws-cloud-practitioner',
+      'aws-cloud-practitioner-essentials',
+      'claude-ai-capabilities-and-limitations',
+      'claude-ai-fluency-framework-foundations',
+      'claude-building-effective-human-agent-teams',
+      'claude-building-with-the-claude-api',
+      'claude-claude-101',
+      'claude-claude-code-101',
+      'claude-claude-code-in-action',
+      'claude-claude-with-amazon-bedrock',
+      'claude-claude-with-google-cloud-s-vertex-ai',
+      'claude-introduction-to-agent-skills',
+      'claude-introduction-to-model-context-protocol',
+      'claude-introduction-to-subagents',
+      'gcp-cloud-digital-leader',
+      'gcp-generative-ai-leader',
+      'gcp-intro-generative-ai',
+      'ms-applied-copilot-studio',
+      'ms-applied-foundry-agents',
+      'ms-azure-ai-fundamentals',
+      'project-agent-runtime',
+      'project-local-model',
+      'project-rag',
+    ];
+    for (const id of firstRelease) expect(catalogById.has(id), id).toBe(true);
+  });
+
+  it('covers Claude Academy, AWS, Microsoft, Google, OpenAI, AMD and NVIDIA', () => {
+    for (const p of ['anthropic', 'aws', 'microsoft', 'google', 'openai', 'amd', 'nvidia']) expect(catalog.some((c) => c.provider === p)).toBe(true);
+  });
+
+  it('keeps each provider\'s own credential structure distinct', () => {
+    const type = (id: string) => catalogById.get(id)?.credentialType;
+    expect(type('google-ai-professional-certificate')).toBe('professional-certificate');
+    expect(type('google-ai-essentials')).toBe('course-certificate');
+    expect(type('nvidia-nca-genl')).toBe('foundational-cert');
+    expect(type('nvidia-ncp-genl')).toBe('professional-cert');
+    expect(type('amd-rocm-certified-associate')).toBe('microcredential');
+    // OpenAI Academy does not mention any certificate.
+    for (const e of catalog.filter((c) => c.provider === 'openai')) expect(e.credentialType).toBe('learning-resource');
+    // Facts OpenAI does not publish must not be shown as verified.
+    for (const e of catalog.filter((c) => c.provider === 'openai')) {
+      expect(e.studyHours.status).toBe('estimate');
+      expect(e.learningCost.status).toBe('unverified');
+    }
+  });
+
+  it('only shows a verified exam fee for proctored certifications', () => {
+    for (const e of catalog.filter((c) => c.provider === 'nvidia' && c.exam)) {
+      expect(e.exam!.feeUSD!.status).toBe('verified');
+      expect(e.exam!.proctored.value).toBe(true);
+      expect(e.credentialFree.value).toBe(false);
+    }
   });
 
   it('gives every official entry a source URL and check date', () => {

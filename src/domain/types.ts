@@ -21,18 +21,21 @@ export type ContentOrigin = 'official' | 'app' | 'user';
 
 // ---------- Catalog ----------
 
-export type ProviderId = 'anthropic' | 'aws' | 'microsoft' | 'google' | 'academy' | 'custom';
+export type ProviderId = 'anthropic' | 'aws' | 'microsoft' | 'google' | 'openai' | 'amd' | 'nvidia' | 'academy' | 'custom';
 
 /** Credential classifications from the product spec, in order. */
 export type CredentialType =
   | 'professional-cert'
   | 'foundational-cert'
+  | 'professional-certificate'
   | 'course-certificate'
   | 'microcredential'
   | 'independent-assessment'
-  | 'portfolio-project';
+  | 'portfolio-project'
+  | 'learning-resource';
 
-export type Track = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
+/** A–D: Claude, AWS, Microsoft, Google. E–H: app tracks. I–K: OpenAI, AMD, NVIDIA. */
+export type Track = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K';
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 export type Availability = 'available' | 'retired' | 'unknown';
 export type SkillCategory = 'ai' | 'cloud' | 'programming' | 'career';
@@ -205,6 +208,8 @@ export interface PathStep {
   title: string;
   catalogIds: string[];
   why: string;
+  /** The entries are interchangeable options; one is recommended (preferred provider first). */
+  chooseOne?: boolean;
 }
 
 export interface PathTemplate {

@@ -1,6 +1,6 @@
 # AI Career Academy
 
-A local-first, ADHD-friendly study platform for entry-level AI careers. It brings Claude Academy, AWS, Microsoft and Google Cloud credentials together with vendor-neutral curricula, practice exams, spaced repetition, career pathways and a project lab.
+A local-first, ADHD-friendly study platform for entry-level AI careers. It brings Claude Academy, AWS, Microsoft, Google, OpenAI Academy, AMD AI Academy and NVIDIA learning and credentials together with vendor-neutral curricula, practice exams, spaced repetition, career pathways and a project lab.
 
 No account, server or paid AI API is needed. All progress stays in your browser and can be exported as JSON.
 
@@ -22,10 +22,10 @@ npm run test:e2e     # Playwright journeys (desktop + mobile), after `npm run bu
 | Section | What it does |
 | --- | --- |
 | Home | One recommended next action with its reason, plus continue-learning, reviews, recent results and path progress. |
-| Course Catalog | Search and filter by provider, credential type, subject. Each entry shows every fact with a provenance badge: **Verified** (read on the official page on the date shown), **Unverified**, or **Estimate**. |
+| Course Catalog | Search and filter by provider, credential type, subject. Credential classes are kept apart: formal certifications (proctored exams), professional certificate programs, course completion certificates or badges, vendor skill credentials, and learning resources with no credential. Each entry shows every fact with a provenance badge: **Verified** (read on the official page on the date shown), **Unverified**, or **Estimate**. |
 | My Learning | Enrolled, bookmarked and custom plans. |
 | Career Paths | Five templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). Reorder, add, remove, skip or include; every suggestion says why. |
-| Quick Credentials | Short courses, badges and beginner certifications with 13 filters and a speed/depth/cost trade-off note. |
+| Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a speed/depth/cost trade-off note. |
 | Practice Center | Review queue, weak areas, flashcards, and an exam simulator that follows published domain weights. |
 | Project Lab | 9 projects from exercises to capstones, with milestones, definition of done, validation and portfolio entries. |
 | Progress | Mastery per concept, activity, study time, review backlog, confidence, status and history. |
@@ -43,14 +43,18 @@ Not started · In progress · Completed · Practice assessment passed · Demonst
 
 Applied from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `SKILL.md` rules): one clear next action first, numbered and visible progress ("Step 4 of 8"), state restated on every screen, details behind expandable sections, concrete time estimates, visible wins, neutral error wording ("Not quite." plus the fix), no streaks, no forced timers. The optional session timer (5/10/20/30 min) offers a break and can be ignored. Focus mode hides navigation. Lessons and exams resume exactly where you left off.
 
+## Visual design
+
+The Vector theme follows the brand board: navy `#0A1F44`, cyan `#00FFFF`, gold `#FFC700`, ice `#F2F7FF`, white; Montserrat headings and Lato body (Google Fonts, with system fallbacks); rounded cards with soft shadows; a navy sidebar with a cyan active item; a navy hero with a gold call to action and the robot mascot. Cyan is only used on navy or as a glow; links on light surfaces use a deep teal for contrast. Gold marks formal certifications and achievements. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
+
 ## Architecture
 
 ```
 src/
   domain/types.ts        Catalog, curriculum, question and Fact<T> provenance types
   data/                  Seed content (no logic)
-    catalog.ts           29 entries; official facts carry sourceUrl + checkedOn
-    curriculum/          9 study courses (lessons, questions, flashcards, blueprints)
+    catalog.ts           42 entries; official facts carry sourceUrl + checkedOn
+    curriculum/          10 study courses (lessons, questions, flashcards, blueprints)
     paths.ts projects.ts Career path templates and project lab
     registry.ts          Merges built-in and user-imported content
   engine/                Pure, tested logic (no React)
@@ -63,7 +67,7 @@ src/
     validate.ts          Import validation (courses and backups)
     tutor.ts             Optional AI tutor interface; default = authored explanations
   store/                 Versioned state, reducer, localStorage persistence + migrations
-  ui/                    React pages and components, hash router, CSS tokens (light/dark)
+  ui/                    React pages and components, hash router, Vector theme tokens (light/dark) in styles.css
 ```
 
 Dependencies: React and Vite at runtime; Vitest, Testing Library/jsdom, Playwright, axe-core and ESLint for development. No state, routing or validation libraries.
@@ -86,8 +90,12 @@ Official facts were read on these pages on **2026-10-10** and are flagged "Needs
 - Microsoft Azure AI Fundamentals (AI-901): certification page, exam page and study guide on learn.microsoft.com
 - Microsoft Applied Skills: Foundry agents (available) and Copilot Studio agents (retired) pages
 - Google Cloud: certification overview, Generative AI Leader, Cloud Digital Leader, and Google Skills "Introduction to Generative AI"
+- Google AI Professional Certificate: <https://grow.google/ai-professional/> (Coursera: <https://www.coursera.org/google-certificates/google-ai>); Google AI Essentials: <https://grow.google/ai-essentials/>
+- OpenAI Academy: <https://academy.openai.com/pages/courses> and the "Apply AI at Work" page
+- AMD AI Academy: <https://developer.amd.com/amd-ai-academy/> (courses at <https://academy.amd.com>); ROCm certification: <https://developer.amd.com/rocm-certified/>
+- NVIDIA certifications: <https://www.nvidia.com/en-us/learn/certification/> and the NCA-GENL page; NVIDIA DLI free courses: <https://www.nvidia.com/en-us/training/find-training/?Free+Courses=Free>
 
-Not verified and labelled as such: per-course pricing and badge terms on Claude Academy; AWS Cloud Practitioner Essentials duration and cost (page needs sign-in); AI-901 price, duration and renewal (region-dependent or not shown); Applied Skills assessment cost; Google Generative AI Leader domain weights (the simulator uses equal weights and says so).
+Not verified and labelled as such: per-course pricing and badge terms on Claude Academy; AWS Cloud Practitioner Essentials duration and cost (page needs sign-in); AI-901 price, duration and renewal (region-dependent or not shown); Applied Skills assessment cost; Google Generative AI Leader domain weights (the simulator uses equal weights and says so); OpenAI Academy cost and duration (not shown; no certificate mentioned); AMD per-path completion certificates and whether the ROCm exam is proctored; which NVIDIA DLI free courses give a certificate; question counts for NVIDIA exams other than NCA-GENL; Google AI Professional Certificate total hours (8 one-hour courses is an inference; Google's FAQ also says seven). Not listed yet: AMD's announced ROCm Professional and Expert levels.
 
 All lessons, explanations and practice questions are original. Practice questions are labelled as such and are never official exam questions. Study-time figures for certifications are app estimates.
 

@@ -31,3 +31,44 @@ Small question banks; single-browser storage; study time counts timer sessions o
 
 ## Next recommended step
 Grow the AIF-C01 and AI-901 question banks to ~60 each so full-length practice exams don't repeat questions, then add a second lesson for each vendor course.
+
+---
+
+# Update: course expansion and Vector theme (2026-10-10)
+
+## Providers and entries added (13, all checked on the official pages on 2026-10-10)
+| Provider | Entry | Credential class | Cost | Notes |
+| --- | --- | --- | --- | --- |
+| Google | Google AI Professional Certificate | Professional certificate program | $49/month (Coursera, US/Canada) | 8 courses of ~1 h; Coursera, Google Skills, Udemy |
+| Google | Google AI Essentials | Course completion certificate | $49/month after 7-day trial | Under 5 h, 5 modules |
+| OpenAI | Apply AI at Work | Learning resource (no credential) | Not shown (unverified) | Duration is an app estimate |
+| OpenAI | Build with AI (Codex, API) | Learning resource | Not shown (unverified) | Duration is an app estimate |
+| AMD | AI Foundations, Build AI, Optimize & Deploy AI | Course completion certificate (per-path terms unverified) | Free (verified) | AMD AI Academy learning paths |
+| AMD | Core ROCm Software Application Development, Certified Associate | Vendor skill credential (AMD calls it a certification) | Free | 5 modules, GPU labs, exam, Credly badge; proctoring not stated |
+| NVIDIA | NCA-GENL Generative AI LLMs | Foundational certification | $125 exam | 60 min, 50–60 questions, 2-year validity, published domain weights; in-app prep course |
+| NVIDIA | NCA-GENM Generative AI Multimodal | Foundational certification | $125 exam | 60 min |
+| NVIDIA | NCA-AIIO AI Infrastructure and Operations | Foundational certification | $125 exam | 60 min |
+| NVIDIA | NCP-GENL Generative AI LLMs (Professional) | Professional certification | $200 exam | 120 min, advanced |
+| NVIDIA | DLI free self-paced courses | Learning resource | Free | "A day or less"; certificate only in select courses |
+
+Totals now: 42 catalog entries, 10 study courses, 19 lessons, 105 original questions, 43 flashcards. No first-release ids were changed or removed, and the saved-data schema is unchanged, so existing progress loads as before (unit test checks all 29 original ids).
+
+## Integration
+- Two new credential classes: **Professional certificate program** and **Learning resource (no credential stated)**, shown as visually distinct badges (gold = formal certification, navy = certificate program, grey = no credential).
+- Catalog search and provider filter, onboarding provider preferences, a new "Professional certificate program" quick filter (14 total). "Free credential" no longer counts entries with no credential, and "Paid exam" requires an actual exam.
+- Career paths: new options in AI Foundations, Cloud and AI, AI Application Developer and Local LLM Developer. Steps can now be marked choose-one, so alternatives from different providers recommend one (your preferred provider first) instead of all. Existing saved plans are not changed; "Reset to template" picks up the new steps.
+- NVIDIA NCA-GENL prep: one lesson, 12 questions across all 5 published domains (30/14/22/24/10), 4 flashcards; works with mastery, spaced review and the exam simulator.
+
+## Vector theme
+Navy/cyan/gold/ice tokens with dark-mode equivalents, Montserrat + Lato, 16 px rounded cards with soft shadows, navy sidebar with cyan active state, navy hero with gold "Start now" and the robot mascot (inline SVG), pill buttons, cyan-on-navy progress bars, gold status for mastery and recorded credentials. Applied through shared tokens and components, so every section (dashboard, catalog, lessons, exam simulator, progress, paths, settings) picks it up. App name unchanged.
+
+## Validation (actual results)
+| Command | Result |
+| --- | --- |
+| `npm run typecheck` | pass |
+| `npm run lint` | pass, 0 warnings |
+| `npm test` | 77/77 passed (6 new: providers, credential classes, NVIDIA fees, first-release ids, choose-one paths, paid-program wording; plus new filter assertions) |
+| `npm run build` | pass (≈396 kB JS, 122 kB gzipped; 10 kB CSS) |
+| `npm run test:e2e` | 14/14 passed (desktop + Pixel 7): previous journeys, plus new-provider flow (filter → NVIDIA entry → enrol → lesson → NVIDIA practice exam → reload → still enrolled) and axe WCAG A/AA in dark mode on 8 pages, plus Home in light mode |
+
+Not run: manual screen-reader pass; browsers other than Chromium.

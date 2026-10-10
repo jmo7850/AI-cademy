@@ -30,7 +30,8 @@ const STEPS: Step[] = [
     { value: 'any', label: 'Budget is not a constraint' },
   ] },
   { key: 'providers', title: 'Any preferred providers?', help: 'Pick any, or none.', multi: true, options: [
-    { value: 'anthropic', label: 'Claude Academy' }, { value: 'aws', label: 'AWS' }, { value: 'microsoft', label: 'Microsoft' }, { value: 'google', label: 'Google Cloud' },
+    { value: 'anthropic', label: 'Claude Academy' }, { value: 'aws', label: 'AWS' }, { value: 'microsoft', label: 'Microsoft' }, { value: 'google', label: 'Google' },
+    { value: 'openai', label: 'OpenAI' }, { value: 'amd', label: 'AMD' }, { value: 'nvidia', label: 'NVIDIA' },
   ] },
   { key: 'timelineWeeks', title: 'What timeline are you aiming for?', options: [4, 12, 26, 52].map((w) => ({ value: w, label: w < 52 ? `${w} weeks` : '1 year' })) },
   { key: 'sessionMinutes', title: 'How long should a study session be?', help: 'Short sessions are easier to start. You can always keep going.', options: [5, 10, 20, 30].map((m) => ({ value: m, label: `${m} minutes` })) },

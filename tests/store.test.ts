@@ -117,6 +117,23 @@ describe('recommendations', () => {
     for (const i of items) expect(i.reasons.length).toBeGreaterThan(0);
   });
 
+  it('treats choose-one steps as alternatives and follows the preferred provider', () => {
+    const s = onboarded('ai-foundations', { providers: ['openai'] });
+    const items = personalizePath(pathById.get('ai-foundations')!.steps, s, buildRegistry(s));
+    const fluency = items.filter((i) => i.stepTitle === 'AI fluency');
+    expect(fluency.filter((i) => i.recommended).map((i) => i.entry.id)).toEqual(['openai-apply-ai-at-work']);
+    const google = items.find((i) => i.entry.id === 'google-ai-professional-certificate')!;
+    expect(google.recommended).toBe(true);
+  });
+
+  it('says a paid certificate program is paid, not that it has an exam', () => {
+    const s = onboarded('ai-foundations', { budget: 'free' });
+    const items = personalizePath(pathById.get('ai-foundations')!.steps, s, buildRegistry(s));
+    const reasons = items.find((i) => i.entry.id === 'google-ai-professional-certificate')!.reasons.join(' ');
+    expect(reasons).toMatch(/program is paid/);
+    expect(reasons).not.toMatch(/exam is paid/);
+  });
+
   it('skips a developer-foundations step for experienced developers', () => {
     const s = onboarded('ai-app-dev', { experience: 'developer' });
     const items = personalizePath(pathById.get('ai-app-dev')!.steps, s, buildRegistry(s));
@@ -139,6 +156,12 @@ describe('catalog search and quick credentials', () => {
     const formal = quickCredentials(catalog, ['formal-cert', 'paid-exam']);
     expect(formal.every((e) => e.credentialType === 'foundational-cert')).toBe(true);
     expect(tradeOff(catalogById.get('aws-ai-practitioner')!)).toMatch(/\$100/);
+    expect(quickCredentials(catalog, ['certificate-program']).map((e) => e.id)).toEqual(['google-ai-professional-certificate']);
+    // Entries with no credential never appear as a free credential, and paid programs without an exam are not "paid exam".
+    expect(quickCredentials(catalog, ['free-credential']).some((e) => e.credentialType === 'learning-resource')).toBe(false);
+    expect(quickCredentials(catalog, ['paid-exam']).every((e) => !!e.exam)).toBe(true);
+    expect(searchCatalog(catalog, { text: 'NCA-GENL' }).map((e) => e.id)).toEqual(['nvidia-nca-genl']);
+    expect(searchCatalog(catalog, { text: 'rocm' }).some((e) => e.id === 'amd-rocm-certified-associate')).toBe(true);
   });
 
   it('flags official facts as stale after 90 days unless re-checked', () => {

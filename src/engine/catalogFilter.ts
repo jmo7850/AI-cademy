@@ -4,17 +4,22 @@ import { STALE_AFTER_DAYS } from '../data/facts';
 export const credentialTypeLabel: Record<CredentialType, string> = {
   'professional-cert': 'Official professional certification',
   'foundational-cert': 'Official foundational certification',
+  'professional-certificate': 'Professional certificate program (not an exam-based certification)',
   'course-certificate': 'Course completion certificate or badge',
   microcredential: 'Vendor skill credential',
   'independent-assessment': 'Independent learning assessment',
   'portfolio-project': 'Portfolio project',
+  'learning-resource': 'Learning resource (no credential stated)',
 };
 
 export const providerLabel: Record<CatalogEntry['provider'], string> = {
   anthropic: 'Claude Academy (Anthropic)',
   aws: 'AWS',
   microsoft: 'Microsoft',
-  google: 'Google Cloud',
+  google: 'Google',
+  openai: 'OpenAI Academy',
+  amd: 'AMD AI Academy',
+  nvidia: 'NVIDIA',
   academy: 'This app',
   custom: 'Your import',
 };
@@ -57,7 +62,8 @@ export type QuickFilter =
   | 'ai'
   | 'cloud'
   | 'hands-on'
-  | 'formal-cert';
+  | 'formal-cert'
+  | 'certificate-program';
 
 export const quickFilterLabel: Record<QuickFilter, string> = {
   'free-learning': 'Free learning',
@@ -73,6 +79,7 @@ export const quickFilterLabel: Record<QuickFilter, string> = {
   cloud: 'Cloud-focused',
   'hands-on': 'Hands-on',
   'formal-cert': 'Formal certification',
+  'certificate-program': 'Professional certificate program',
 };
 
 /** Hours thresholds. "1 day" = 8 study hours, "1 week" = 40 (stated as such in the UI). */
@@ -83,9 +90,9 @@ export function matchesQuick(e: CatalogEntry, f: QuickFilter): boolean {
     case 'free-learning':
       return e.learningCost.value === 'free';
     case 'free-credential':
-      return e.credentialFree.value === true;
+      return e.credentialFree.value === true && e.credentialType !== 'learning-resource';
     case 'paid-exam':
-      return e.credentialFree.value === false;
+      return e.credentialFree.value === false && !!e.exam;
     case 'under-2h':
     case 'under-1d':
     case 'under-1w':
@@ -104,6 +111,8 @@ export function matchesQuick(e: CatalogEntry, f: QuickFilter): boolean {
       return e.handsOn;
     case 'formal-cert':
       return e.credentialType === 'professional-cert' || e.credentialType === 'foundational-cert';
+    case 'certificate-program':
+      return e.credentialType === 'professional-certificate';
   }
 }
 
@@ -120,6 +129,8 @@ export function tradeOff(e: CatalogEntry): string {
   const formal = e.credentialType === 'foundational-cert' || e.credentialType === 'professional-cert';
   const fee = e.exam?.feeUSD?.value;
   if (formal) return `Slower and ${fee ? `costs $${fee}` : 'paid'}, but a proctored, employer-recognised certification.`;
+  if (e.credentialType === 'professional-certificate') return 'A multi-course program with a provider certificate. Broader than one course, but not a proctored certification.';
+  if (e.credentialType === 'learning-resource') return 'Skills only, no credential. Show what you learned with a project.';
   if (e.studyHours.value <= 2) return 'Fast and low-risk. Shows initiative, but proves little on its own; pair it with a project.';
   if (e.credentialType === 'microcredential') return 'Hands-on proof of a specific skill. Narrower than a certification.';
   return 'Builds real skill. Recognition depends on the evidence you produce.';
