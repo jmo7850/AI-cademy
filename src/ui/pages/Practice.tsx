@@ -15,7 +15,7 @@ import { go, href } from '../router';
 
 const ORIGINAL_NOTE = 'Original practice questions written for this app. They are not official, leaked or actual exam questions, and practice scores are not official results.';
 
-function allCourses(registry: ReturnType<typeof useStore>['registry']): StudyCourse[] {
+export function allCourses(registry: ReturnType<typeof useStore>['registry']): StudyCourse[] {
   return registry.entries.map((e) => registry.courseForEntry(e.id)).filter((c, i, arr): c is StudyCourse => !!c && arr.indexOf(c) === i);
 }
 

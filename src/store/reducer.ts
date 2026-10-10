@@ -1,6 +1,6 @@
 import type { CatalogEntry, StudyCourse } from '../domain/types';
 import { schedule } from '../engine/srs';
-import type { AppState, Attempt, CourseProgress, CustomPlan, ExamAttempt, Profile } from './schema';
+import type { AppState, Attempt, CourseProgress, CustomPlan, ExamAttempt, GameResult, Profile } from './schema';
 import { initialState } from './schema';
 
 export type Action =
@@ -35,9 +35,11 @@ export type Action =
   | { type: 'recheck'; entryId: string; date: string }
   | { type: 'setNote'; key: string; text: string }
   | { type: 'replaceState'; state: AppState }
+  | { type: 'recordGame'; result: GameResult }
   | { type: 'reset' };
 
 const MAX_ATTEMPTS = 5000;
+const MAX_GAMES = 200;
 
 function ensureCourse(s: AppState, entryId: string, now: string): Record<string, CourseProgress> {
   if (s.courses[entryId]) return s.courses;
@@ -92,6 +94,8 @@ export function reducer(s: AppState, a: Action): AppState {
       if (!c) return s;
       return { ...s, courses: { ...s.courses, [a.entryId]: { ...c, external: a.external } } };
     }
+    case 'recordGame':
+      return { ...s, games: [...s.games, a.result].slice(-MAX_GAMES) };
     case 'startExam':
       return { ...s, exams: [...s.exams, a.exam] };
     case 'updateExam':

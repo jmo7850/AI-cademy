@@ -5,6 +5,8 @@ import { Empty, ProgressBar, StatusPill } from '../components/bits';
 import { useStatuses } from '../hooks';
 import { href } from '../router';
 
+const GAME_NAME = { run: 'Bolt Run', match: 'Flash Match', boss: 'Boss Battle' } as const;
+
 const LEVEL: Record<MasteryLevel, string> = { none: 'Not started', learning: 'Learning', familiar: 'Familiar', mastered: 'Mastered' };
 const TREND = { up: '↑ improving', down: '↓ slipping', flat: '' };
 
@@ -65,6 +67,17 @@ export function ProgressPage() {
         )}
         <p className="small muted">"Practice assessment passed" and "Demonstrated mastery" are app results. Only "External credential recorded" refers to a provider-issued credential, and only as you reported it.</p>
       </section>
+
+      {state.games.some((g) => g.won) && (
+        <section className="card" aria-labelledby="win-h">
+          <h2 id="win-h">Win board</h2>
+          <ul>
+            {state.games.filter((g) => g.won).slice(-8).reverse().map((g) => (
+              <li key={g.id}>{g.at.slice(0, 10)} · {GAME_NAME[g.kind]} · {registry.course(g.courseId)?.title}: {g.correct} of {g.total} right</li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section className="card" aria-labelledby="eh-h">
         <h2 id="eh-h">Assessment history</h2>

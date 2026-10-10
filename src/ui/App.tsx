@@ -15,6 +15,7 @@ import { ProjectPage, ProjectsPage } from './pages/Projects';
 import { QuickPage } from './pages/Quick';
 import { SettingsPage } from './pages/Settings';
 import { Mascot } from './components/Mascot';
+import { ArcadePage, PlayPage } from './pages/Arcade';
 
 const NAV: [string, string][] = [
   ['', 'Home'],
@@ -23,13 +24,14 @@ const NAV: [string, string][] = [
   ['paths', 'Career Paths'],
   ['quick', 'Quick Credentials'],
   ['practice', 'Practice Center'],
+  ['arcade', 'Arcade'],
   ['projects', 'Project Lab'],
   ['progress', 'Progress'],
   ['settings', 'Settings'],
 ];
 
 /** Which nav section a route belongs to. */
-const SECTION: Record<string, string> = { course: 'catalog', learn: 'my', exam: 'practice', review: 'practice', flashcards: 'practice', project: 'projects' };
+const SECTION: Record<string, string> = { course: 'catalog', learn: 'my', exam: 'practice', review: 'practice', flashcards: 'practice', project: 'projects', play: 'arcade' };
 
 export function App() {
   const route = useRoute();
@@ -37,13 +39,13 @@ export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [focus, setFocus] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
-  const [head = '', a, b] = route;
+  const [head = '', a, b, c] = route;
   const section = SECTION[head] ?? head;
   const routeKey = route.join('/');
 
   useEffect(() => {
     setMenuOpen(false);
-    document.title = `${NAV.find(([k]) => k === section)?.[1] ?? 'Study'} · Vector Academy`;
+    document.title = `${NAV.find(([k]) => k === section)?.[1] ?? 'Study'} · PathBolt`;
     mainRef.current?.focus({ preventScroll: true });
   }, [routeKey, section]);
 
@@ -74,6 +76,8 @@ export function App() {
       case 'project': return <ProjectPage projectId={a ?? ''} />;
       case 'progress': return <ProgressPage />;
       case 'settings': return <SettingsPage />;
+      case 'arcade': return <ArcadePage />;
+      case 'play': return <PlayPage kind={a} courseId={b} domainId={c} />;
       default: return <NotFound />;
     }
   })();
@@ -84,12 +88,12 @@ export function App() {
       <div className={`shell ${focus ? 'focus' : ''}`}>
         {!focus && (
           <nav className={`nav ${menuOpen ? 'open' : ''}`} aria-label="Main">
-            <div className="brand"><Mascot size={52} /><span>Vector <b>Academy</b><small>Learn. Build. Certify.</small></span></div>
+            <div className="brand"><Mascot size={52} /><span>Path<b>Bolt</b><small>Learn. Build. Certify.</small></span></div>
             <button type="button" className="menu-btn" aria-expanded={menuOpen} aria-controls="nav-list" onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? 'Close menu' : 'Menu'}
             </button>
             <ul id="nav-list">
-              {NAV.map(([k, label]) => (
+              {NAV.filter(([k]) => k !== 'arcade' || state.profile.games).map(([k, label]) => (
                 <li key={k}>
                   <a href={href(...(k ? [k] : []))} aria-current={section === k ? 'page' : undefined}>{label}</a>
                 </li>

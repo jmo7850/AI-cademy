@@ -1,5 +1,5 @@
 /*
- * Vector Academy brand board: Deep Navy #232F42, Electric Cyan #00FFFF, Brushed Gold #D4A74F,
+ * PathBolt brand board (originally drawn up as Vector Academy): Deep Navy #232F42, Electric Cyan #00FFFF, Brushed Gold #D4A74F,
  * Metallic Silver #B4B7BD, Warm Cream #F7F4E8. Light panels are warm cream; dark panels are navy
  * with a faint cyan circuit pattern. Cyan only sits on navy (or as a glow); on cream, links use a
  * deep teal for contrast. Gold marks achievements and the single most important action.
@@ -169,7 +169,7 @@ select { max-width: 100%; }
 .hero-body .mascot { flex: none; height: 190px; width: auto; margin: -12px 4px -36px 0; filter: drop-shadow(0 0 22px rgba(0, 255, 255, 0.3)); }
 @media (max-width: 560px) { .hero-body .mascot { display: none; } }
 .eyebrow { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; font-weight: 700; margin: 0 0 4px; color: var(--muted); }
-.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); align-items: start; }
 .grid > .card { margin-bottom: 0; }
 .grid + * { margin-top: 16px; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
@@ -242,3 +242,26 @@ th { font-family: var(--font-head); font-size: 0.85rem; }
 @media (prefers-reduced-motion: no-preference) {
   .progress > span { transition: width 0.3s ease; }
 }
+
+/* Arcade */
+.game-card { display: flex; flex-direction: column; gap: 4px; }
+.game-card > .mascot { width: 44px; height: 44px; }
+.game-card .btn { align-self: flex-start; }
+.run-track { display: flex; gap: 6px; list-style: none; padding: 0; margin: 8px 0 12px; align-items: center; }
+.run-track li { flex: 1; min-width: 0; height: 48px; border-radius: var(--radius-sm); background: var(--surface-2); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+.run-track li.done { background: var(--navy); border-color: var(--navy); color: var(--cyan); }
+.run-track li.goal { flex: 0 0 48px; background: var(--gold-soft); }
+.run-track .mascot { width: 36px; height: 36px; }
+.match-board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin-top: 8px; }
+.match-board h2 { margin-bottom: 6px; }
+.match-tile { width: 100%; justify-content: flex-start; text-align: left; border-radius: var(--radius-sm); margin-bottom: 8px; font-weight: 400; min-height: 48px; }
+.match-tile[aria-pressed='true'] { background: var(--primary-bg); color: var(--primary-text); border-color: var(--primary-bg); }
+.match-tile:disabled { opacity: 1; background: var(--ok-bg); color: var(--ok); border-color: var(--ok); }
+.boss .hp { display: flex; gap: 6px; margin: 8px 0; }
+.boss .hp span { flex: 1; height: 14px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); }
+.boss .hp span.on { background: var(--gold); border-color: var(--gold); }
+.badge-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.badge-grid li { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px dashed var(--silver); color: var(--muted); }
+.badge-grid li strong { color: var(--text); }
+.badge-grid li.earned { border: 1px solid var(--gold); background: var(--gold-soft); color: var(--gold-text); }
+@media (max-width: 560px) { .match-board { grid-template-columns: minmax(0, 1fr); } }

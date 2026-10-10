@@ -1,4 +1,4 @@
-# Vector Academy
+# PathBolt
 
 A local-first, ADHD-friendly study platform for entry-level AI careers. It brings Claude Academy, AWS, Microsoft, Google, OpenAI Academy, AMD AI Academy and NVIDIA learning and credentials together with vendor-neutral curricula, practice exams, spaced repetition, career pathways and a project lab.
 
@@ -27,6 +27,7 @@ npm run test:e2e     # Playwright journeys (desktop + mobile), after `npm run bu
 | Career Paths | Five templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). Reorder, add, remove, skip or include; every suggestion says why. |
 | Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a speed/depth/cost trade-off note. |
 | Practice Center | Review queue, weak areas, flashcards, and an exam simulator that follows published domain weights. |
+| Arcade | Optional, untimed games hosted by Bolt: **Bolt Run** (5 questions from due reviews and weak concepts), **Flash Match** (pair terms with meanings), **Boss Battle** (beat one exam domain). Every answer is recorded like normal practice, so it updates mastery and the review schedule. Levels come from concept mastery (not time spent), plus badges and a Win board on Progress. Can be hidden in Settings. |
 | Project Lab | 9 projects from exercises to capstones, with milestones, definition of done, validation and portfolio entries. |
 | Progress | Mastery per concept, activity, study time, review backlog, confidence, status and history. |
 | Settings | Preferences, schedule, budget, theme, backup export/restore, course import, delete all data. |
@@ -45,7 +46,7 @@ Applied from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `S
 
 ## Visual design
 
-Vector Academy follows its brand identity board: Deep Navy `#232F42`, Electric Cyan `#00FFFF`, Brushed Gold `#D4A74F`, Metallic Silver `#B4B7BD`, Warm Cream `#F7F4E8`; Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are warm cream; the sidebar and hero card are navy with a faint cyan circuit pattern. Vector, the mascot, is the logo (head) and stands in the hero card (full figure); both are cut-out images in `src/ui/assets/`, inlined into the build. Cyan is used only on navy or as a glow; links on cream use a deep teal for contrast. Gold marks formal certifications, achievements and the main call to action. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
+PathBolt (first drawn up as Vector Academy) follows its brand identity board: Deep Navy `#232F42`, Electric Cyan `#00FFFF`, Brushed Gold `#D4A74F`, Metallic Silver `#B4B7BD`, Warm Cream `#F7F4E8`; Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are warm cream; the sidebar and hero card are navy with a faint cyan circuit pattern. Bolt, the mascot, is the logo (head) and stands in the hero card (full figure); both are cut-out images in `src/ui/assets/`, inlined into the build. Cyan is used only on navy or as a glow; links on cream use a deep teal for contrast. Gold marks formal certifications, achievements and the main call to action. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
 
 ## Architecture
 
@@ -63,6 +64,7 @@ src/
     mastery.ts           Per-concept mastery, weak areas, readiness, course status
     exam.ts              Blueprint-weighted selection (largest remainder), scoring
     recommend.ts         Path personalisation with reasons; single next action
+    games.ts             Arcade picks, charge, XP levels and badges
     catalogFilter.ts     Search, quick-credential filters, trade-offs, staleness
     validate.ts          Import validation (courses and backups)
     tutor.ts             Optional AI tutor interface; default = authored explanations

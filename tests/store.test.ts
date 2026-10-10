@@ -54,6 +54,21 @@ describe('persistence', () => {
     expect(s.profile.sessionMinutes).toBe(10);
   });
 
+  it('migrates v2 saves to v3 without touching existing progress', () => {
+    const v2 = {
+      ...initialState(), schemaVersion: 2, games: undefined,
+      profile: { ...initialState().profile, onboarded: true, games: undefined },
+      attempts: [{ itemId: 'aif-q1', courseId: 'study-ai-foundations', conceptIds: ['ai.basics'], correct: true, at: '2026-10-01T00:00:00Z', context: 'lesson' }],
+      courses: { 'academy-ai-foundations': { enrolledAt: '2026-10-01T00:00:00Z' } },
+    } as unknown as Record<string, unknown>;
+    const s = migrate(v2);
+    expect(s.schemaVersion).toBe(3);
+    expect(s.games).toEqual([]);
+    expect(s.profile.games).toBe(true);
+    expect(s.attempts).toHaveLength(1);
+    expect(Object.keys(s.courses)).toEqual(['academy-ai-foundations']);
+  });
+
   it('refuses data from a newer schema', () => {
     expect(() => migrate({ schemaVersion: 99 })).toThrow(/newer version/);
   });

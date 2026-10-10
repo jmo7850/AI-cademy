@@ -9,9 +9,11 @@ type Raw = Record<string, unknown>;
 /**
  * Ordered migrations: MIGRATIONS[n] upgrades a version-n object to n+1.
  * v1 (pre-release) lacked import tracking and catalog re-checks.
+ * v2 lacked the Arcade: game results and the games on/off preference.
  */
 const MIGRATIONS: Record<number, (s: Raw) => Raw> = {
   1: (s) => ({ ...s, importedEntries: [], importedCourses: s.importedCourses ?? [], recheckedOn: {}, schemaVersion: 2 }),
+  2: (s) => ({ ...s, games: [], profile: { ...(s.profile as object), games: true }, schemaVersion: 3 }),
 };
 
 export function migrate(raw: Raw): AppState {
@@ -92,7 +94,7 @@ export function importState(text: string): { ok: true; state: AppState } | { ok:
     return { ok: false, error: 'The file is not valid JSON.' };
   }
   if (typeof parsed !== 'object' || parsed === null || (parsed as Raw).app !== EXPORT_APP) {
-    return { ok: false, error: 'This is not a Vector Academy backup file.' };
+    return { ok: false, error: 'This is not a PathBolt backup file.' };
   }
   try {
     const state = migrate((parsed as Raw).state as Raw);

@@ -1,7 +1,7 @@
 import type { Answer, CatalogEntry, PathStep, StudyCourse } from '../domain/types';
 
 /** Bump when the persisted shape changes, and add a migration step. */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export type CareerGoal =
   | 'ai-foundations'
@@ -23,6 +23,8 @@ export interface Profile {
   breakPrompts: boolean;
   reminders: boolean;
   theme: 'system' | 'light' | 'dark';
+  /** Show the Arcade (games) in navigation and on Home. */
+  games: boolean;
 }
 
 /** Leitner/SM-2 style schedule for one reviewable item. */
@@ -45,7 +47,7 @@ export interface Attempt {
   correct: boolean;
   confidence?: 1 | 2 | 3;
   at: string;
-  context: 'lesson' | 'review' | 'exam' | 'diagnostic' | 'flashcard';
+  context: 'lesson' | 'review' | 'exam' | 'diagnostic' | 'flashcard' | 'game';
 }
 
 export interface CourseProgress {
@@ -127,6 +129,22 @@ export interface AppState {
   /** User re-checks of official catalog facts: catalogId -> ISO date. */
   recheckedOn: Record<string, string>;
   notes: Record<string, string>;
+  /** Finished games in the Arcade (most recent last, capped). */
+  games: GameResult[];
+}
+
+export type GameKind = 'run' | 'match' | 'boss';
+
+export interface GameResult {
+  id: string;
+  kind: GameKind;
+  courseId: string;
+  /** Blueprint domain for boss battles. */
+  domainId?: string;
+  at: string;
+  correct: number;
+  total: number;
+  won: boolean;
 }
 
 export const defaultProfile: Profile = {
@@ -142,6 +160,7 @@ export const defaultProfile: Profile = {
   breakPrompts: true,
   reminders: false,
   theme: 'system',
+  games: true,
 };
 
 export function initialState(): AppState {
@@ -159,5 +178,6 @@ export function initialState(): AppState {
     importedCourses: [],
     recheckedOn: {},
     notes: {},
+    games: [],
   };
 }

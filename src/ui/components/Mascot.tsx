@@ -1,8 +1,8 @@
-import fullUrl from '../assets/vector-full.webp';
-import headUrl from '../assets/vector-head.webp';
+import fullUrl from '../assets/bolt-full.webp';
+import headUrl from '../assets/bolt-head.webp';
 
 /**
- * Vector, the Vector Academy mascot. "head" is the logo mark; "full" is the standing figure.
+ * Bolt, the PathBolt mascot. "head" is the logo mark; "full" is the standing figure.
  * Decorative wherever it sits next to the product name, so it is hidden from assistive tech.
  */
 export function Mascot({ variant = 'head', size = 40, className = 'mascot' }: { variant?: 'head' | 'full'; size?: number; className?: string }) {

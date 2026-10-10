@@ -105,7 +105,7 @@ test('export backup downloads JSON', async ({ page }) => {
   await page.goto('/#/settings');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export backup (JSON)' }).click();
-  expect((await download).suggestedFilename()).toMatch(/^vector-academy-backup-.*\.json$/);
+  expect((await download).suggestedFilename()).toMatch(/^pathbolt-backup-.*\.json$/);
 });
 
 test('navigation works on every section and pages have no serious accessibility violations', async ({ page }) => {
@@ -114,7 +114,7 @@ test('navigation works on every section and pages have no serious accessibility 
   expect(home.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id), 'Home').toEqual([]);
   for (const [name, heading] of [
     ['Course Catalog', 'Course Catalog'], ['My Learning', 'My Learning'], ['Career Paths', 'Career Paths'], ['Quick Credentials', 'Quick Credentials'],
-    ['Practice Center', 'Practice Center'], ['Project Lab', 'Project Lab'], ['Progress', 'Progress'], ['Settings', 'Settings'],
+    ['Practice Center', 'Practice Center'], ['Arcade', 'Arcade'], ['Project Lab', 'Project Lab'], ['Progress', 'Progress'], ['Settings', 'Settings'],
   ]) {
     await openSection(page, name!);
     await expect(page.getByRole('heading', { level: 1, name: heading! })).toBeVisible();
@@ -169,4 +169,59 @@ test('dark theme keeps pages accessible', async ({ page }) => {
     const serious = axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
     expect(serious.map((v) => `${v.id}: ${v.nodes[0]?.target}`), path).toEqual([]);
   }
+});
+
+test('arcade games with Bolt record answers and results', async ({ page }) => {
+  await skipOnboarding(page);
+  await openSection(page, 'Arcade');
+  await page.getByLabel('Course').selectOption('study-aws-aif');
+
+  // Bolt Run: answer five questions whichever way, then see results.
+  await page.getByRole('link', { name: 'Play Bolt Run' }).click();
+  for (let i = 0; i < 5; i++) {
+    await expect(page.getByText(`Question ${i + 1} of 5`)).toBeVisible();
+    // Answer any question format; correctness does not matter here.
+    const choice = page.locator('main input[type=radio], main input[type=checkbox]');
+    const selects = page.locator('main article select');
+    const text = page.locator('main input[type=text]');
+    if (await choice.count()) await choice.first().check();
+    else if (await selects.count()) for (let k = 0; k < (await selects.count()); k++) await selects.nth(k).selectOption({ index: 1 });
+    else if (await text.count()) await text.first().fill('x');
+    await page.getByRole('button', { name: 'Check answer' }).click();
+    await page.getByRole('button', { name: i === 4 ? 'See results' : 'Next question' }).click();
+  }
+  await expect(page.getByRole('heading', { name: /Run complete: \d of 5/ })).toBeVisible();
+
+  // Flash Match: pair every term with its meaning (meaning buttons share the card text order).
+  await page.goto('/#/arcade');
+  await page.getByLabel('Course').selectOption('study-ai-foundations');
+  await page.getByRole('link', { name: 'Play Flash Match' }).click();
+  const terms = page.locator('.match-board > div:first-child button');
+  await expect(terms.first()).toBeVisible();
+  const n = await terms.count();
+  for (let i = 0; i < n; i++) {
+    await terms.nth(i).click();
+    const meanings = page.locator('.match-board > div:last-child button:not([disabled])');
+    const m = await meanings.count();
+    for (let j = 0; j < m; j++) {
+      await meanings.nth(j).click();
+      if ((await page.getByRole('heading', { name: 'Board cleared' }).count()) || (await terms.nth(i).isDisabled())) break;
+      await terms.nth(i).click();
+    }
+  }
+  await expect(page.getByRole('heading', { name: 'Board cleared' })).toBeVisible();
+
+  // Results persist and show in Progress and Arcade badges.
+  await page.reload();
+  await openSection(page, 'Progress');
+  await expect(page.getByRole('heading', { name: 'Win board' })).toBeVisible();
+  await openSection(page, 'Arcade');
+  await expect(page.locator('.badge-grid li.earned').first()).toBeVisible();
+
+  // Boss battle loads for a blueprint domain.
+  await page.getByLabel('Course').selectOption('study-aws-aif');
+  await page.getByRole('link', { name: /^Fight:/ }).first().click();
+  await expect(page.getByRole('meter', { name: 'Boss health' })).toBeVisible();
+  const axe = await new AxeBuilder({ page: page as never }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
 });

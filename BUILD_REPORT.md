@@ -80,3 +80,16 @@ Not run: manual screen-reader pass; browsers other than Chromium.
 - Replaced the drawn SVG robot everywhere with **Vector**, the supplied white-and-gold mascot. The checkerboard was removed with an ML background-removal model (run once offline; not a project dependency), and stray specks were cleaned. Head crop = logo, full figure = home hero.
 - Colours retuned to the brand board (navy #232F42, cyan, brushed gold #D4A74F, silver #B4B7BD, warm cream #F7F4E8), with a navy circuit pattern on the sidebar and hero and cream light panels. Dark mode uses the same navy family.
 - Validation: typecheck pass, lint pass, 77/77 unit tests, build pass (443 kB JS incl. ~35 kB of inlined mascot images), 14/14 Playwright tests incl. axe WCAG A/AA in light and dark mode.
+
+---
+
+# Update: PathBolt and the Arcade (2026-10-10)
+- Renamed to **PathBolt**; the mascot is **Bolt** (same white-and-gold art and brand colours). Backups now download as `pathbolt-backup-*.json`; older backups still restore.
+- **Arcade** (new nav section, optional, can be hidden in Settings), hosted by Bolt:
+  - Bolt Run: 5 questions, due reviews first, then weak concepts. Bolt walks a 5-tile track; correct answers charge his battery (a run of correct answers charges double; misses never remove charge).
+  - Flash Match: pair 5 terms with meanings, unseen and due cards first. A card counts as known only if matched first time.
+  - Boss Battle: one boss per exam-blueprint domain; 3 hits win, with 2 spare questions; misses cost nothing.
+  - Level and XP from concept mastery (+10 per game won), 6 badges, and a Win board on Progress.
+  - Every game answer goes through the same `recordAnswer` path (context `game`), so mastery and spaced review update exactly as for lessons.
+- Storage schema 2 → 3 with a migration (adds game results and the Arcade preference); existing progress is untouched (unit test).
+- Validation: typecheck pass, lint pass, 84/84 unit tests (7 new), build pass (456 kB JS), 16/16 Playwright tests (new: plays Bolt Run and Flash Match, checks persistence, Win board, badges, Boss Battle and axe).
