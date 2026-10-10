@@ -5,6 +5,7 @@ import { projectById } from '../../data/projects';
 import { weakConcepts } from '../../engine/mastery';
 import { personalizePath, type PlanItem } from '../../engine/recommend';
 import type { CustomPlan } from '../../store/schema';
+import { ConfirmButton } from '../components/ConfirmButton';
 import { useStore } from '../../store/StoreContext';
 import { Empty, StatusPill } from '../components/bits';
 import { href } from '../router';
@@ -94,7 +95,7 @@ function PlanEditor({ plan }: { plan: CustomPlan }) {
               <span className="row">
                 <button type="button" aria-label={`Move step ${si + 1} up`} disabled={si === 0} onClick={() => moveStep(si, -1)}>↑</button>
                 <button type="button" aria-label={`Move step ${si + 1} down`} disabled={si === plan.steps.length - 1} onClick={() => moveStep(si, 1)}>↓</button>
-                <button type="button" onClick={() => { if (confirm(`Remove step "${step.title}"?`)) setSteps(plan.steps.filter((_, k) => k !== si)); }}>Remove step</button>
+                <ConfirmButton label="Remove step" question={`Remove step "${step.title}"?`} confirmLabel="Remove" onConfirm={() => setSteps(plan.steps.filter((_, k) => k !== si))} />
               </span>
             </div>
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -113,8 +114,8 @@ function PlanEditor({ plan }: { plan: CustomPlan }) {
       </ol>
       <div className="row">
         <button type="button" onClick={() => setSteps([...plan.steps, { title: 'New step', catalogIds: [], why: 'Added by you.' }])}>Add a step</button>
-        {template && <button type="button" onClick={() => { if (confirm('Reset this plan to the template? Your changes to steps are lost.')) save({ steps: structuredClone(template.steps), overrides: {} }); }}>Reset to template</button>}
-        <button type="button" onClick={() => { if (confirm(`Delete plan "${plan.title}"?`)) dispatch({ type: 'deletePlan', id: plan.id }); }}>Delete plan</button>
+        {template && <ConfirmButton label="Reset to template" question="Reset this plan? Your changes to its steps are lost." confirmLabel="Reset" onConfirm={() => save({ steps: structuredClone(template.steps), overrides: {} })} />}
+        <ConfirmButton label="Delete plan" question={`Delete "${plan.title}"?`} confirmLabel="Delete" onConfirm={() => dispatch({ type: 'deletePlan', id: plan.id })} />
       </div>
 
       <section className="card" aria-labelledby="gap-h" style={{ marginTop: 12 }}>

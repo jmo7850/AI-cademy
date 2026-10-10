@@ -97,4 +97,5 @@ All lessons, explanations and practice questions are original. Practice question
 - Progress lives in one browser. Use export/restore to move it.
 - Study time counts only sessions started with the timer.
 - Reminders are in-app only (no push notifications).
+- In the hosted preview, the "Export backup" file download is blocked by the viewer; use "Copy backup text" there.
 - External credentials are self-reported; the app cannot verify them.

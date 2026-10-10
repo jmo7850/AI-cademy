@@ -9,6 +9,7 @@ import { dueCards } from '../../engine/srs';
 import type { ExamAttempt } from '../../store/schema';
 import { nowIso, useStore } from '../../store/StoreContext';
 import { Empty, ProgressBar } from '../components/bits';
+import { ConfirmButton } from '../components/ConfirmButton';
 import { QuestionView } from '../components/QuestionView';
 import { go, href } from '../router';
 
@@ -208,9 +209,10 @@ function ExamRunner({ exam, course }: { exam: ExamAttempt; course: StudyCourse }
     };
   }, [exam.id, dispatch]);
 
-  const submit = (auto = false) => {
-    const unanswered = exam.questionIds.filter((id) => !exam.answers[id]).length;
-    if (!auto && unanswered > 0 && !confirm(`${unanswered} question${unanswered === 1 ? ' is' : 's are'} unanswered and will be marked incorrect. Submit anyway?`)) return;
+  const unanswered = exam.questionIds.filter((id) => !exam.answers[id]).length;
+  const [askSubmit, setAskSubmit] = useState(false);
+  const submit = (force = false) => {
+    if (!force && unanswered > 0) return setAskSubmit(true);
     const scored = scoreExam(exam, course);
     const at = nowIso();
     if (exam.mode === 'exam') {
@@ -276,6 +278,13 @@ function ExamRunner({ exam, course }: { exam: ExamAttempt; course: StudyCourse }
         <button type="button" onClick={() => setPaused(true)}>Pause</button>
         <button type="button" className={exam.current + 1 >= exam.questionIds.length ? 'primary' : ''} onClick={() => submit()}>Submit {exam.mode === 'exam' ? 'exam' : 'and see results'}</button>
       </nav>
+      {askSubmit && (
+        <div className="notice warn row" role="alert">
+          <span>{unanswered} question{unanswered === 1 ? ' is' : 's are'} unanswered and will be marked incorrect.</span>
+          <button type="button" className="primary" onClick={() => submit(true)}>Submit anyway</button>
+          <button type="button" onClick={() => setAskSubmit(false)}>Keep answering</button>
+        </div>
+      )}
       <details>
         <summary>Jump to a question</summary>
         <div className="row" style={{ marginTop: 8 }}>
@@ -286,7 +295,7 @@ function ExamRunner({ exam, course }: { exam: ExamAttempt; course: StudyCourse }
           ))}
         </div>
       </details>
-      <button type="button" className="link" onClick={() => { if (confirm('Discard this attempt? Answers in it are deleted.')) { dispatch({ type: 'discardExam', id: exam.id }); go('practice'); } }}>Discard attempt</button>
+      <ConfirmButton className="link" label="Discard attempt" question="Discard this attempt? Its answers are deleted." confirmLabel="Discard" onConfirm={() => { dispatch({ type: 'discardExam', id: exam.id }); go('practice'); }} />
     </article>
   );
 }

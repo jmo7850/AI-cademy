@@ -69,8 +69,8 @@ test('primary learner journey: study, feedback, resume, review, practice exam', 
   await page.getByRole('button', { name: /Start exam \(5 questions\)/ }).click();
   await expect(page.getByRole('heading', { name: 'Question 1 of 5' })).toBeVisible();
   await expect(page.getByText(/Original practice questions/).first()).toBeVisible();
-  page.once('dialog', (d) => d.accept());
   await page.getByRole('button', { name: 'Submit exam' }).click();
+  await page.getByRole('button', { name: 'Submit anyway' }).click();
   await expect(page.getByRole('heading', { name: 'By domain' })).toBeVisible();
   await expect(page.getByText(/not the official cut score/)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Practise weak domains' })).toBeVisible();

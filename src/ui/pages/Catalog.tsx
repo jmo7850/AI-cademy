@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { CatalogEntry, CredentialType } from '../../domain/types';
 import { credentialTypeLabel, isStale, providerLabel, searchCatalog, tradeOff } from '../../engine/catalogFilter';
 import { readiness } from '../../engine/mastery';
+import { ConfirmButton } from '../components/ConfirmButton';
 import { nowIso, useStore } from '../../store/StoreContext';
 import { EntryMeta, FactLine, hoursText, StatusPill } from '../components/bits';
 import { useStatuses } from '../hooks';
@@ -228,9 +229,7 @@ export function EntryPage({ entryId }: { entryId: string }) {
       )}
 
       {progress && (
-        <button type="button" className="link" onClick={() => { if (confirm('Remove this from My Learning? Your answer history is kept.')) dispatch({ type: 'unenroll', entryId: e.id }); }}>
-          Remove from My Learning
-        </button>
+        <ConfirmButton className="link" label="Remove from My Learning" question="Remove this course? Your answer history is kept." confirmLabel="Remove" onConfirm={() => dispatch({ type: 'unenroll', entryId: e.id })} />
       )}
     </article>
   );
