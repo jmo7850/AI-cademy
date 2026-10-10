@@ -22,6 +22,7 @@ export interface Profile {
   sessionMinutes: 5 | 10 | 20 | 30;
   breakPrompts: boolean;
   reminders: boolean;
+  theme: 'system' | 'light' | 'dark';
 }
 
 /** Leitner/SM-2 style schedule for one reviewable item. */
@@ -68,6 +69,8 @@ export interface ExamAttempt {
   mode: 'practice' | 'exam';
   timed: boolean;
   minutes?: number;
+  /** Active time spent, so a paused timed attempt resumes with the same time left. */
+  elapsedMs?: number;
   startedAt: string;
   finishedAt?: string;
   questionIds: string[];
@@ -85,6 +88,8 @@ export interface CustomPlan {
   title: string;
   steps: PathStep[];
   createdFrom?: string; // template id
+  /** Learner overrides of recommendations: catalogId -> include/skip. */
+  overrides?: Record<string, 'include' | 'skip'>;
 }
 
 export interface ProjectProgress {
@@ -136,6 +141,7 @@ export const defaultProfile: Profile = {
   sessionMinutes: 10,
   breakPrompts: true,
   reminders: false,
+  theme: 'system',
 };
 
 export function initialState(): AppState {

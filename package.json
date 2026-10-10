@@ -4,9 +4,9 @@
   "description": "Local-first, ADHD-friendly AI career academy: catalog, lessons, practice exams, mastery, spaced repetition, pathways and projects.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview --port 4173 --strictPort",
-    "typecheck": "tsc -b --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",

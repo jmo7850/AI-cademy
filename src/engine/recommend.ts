@@ -11,6 +11,7 @@ export interface PlanItem {
   status: CourseStatus;
   recommended: boolean;
   reasons: string[];
+  overridden?: 'include' | 'skip';
 }
 
 const DONE: CourseStatus[] = ['completed', 'assessment-passed', 'mastery', 'external-recorded'];
@@ -20,7 +21,7 @@ const isFormal = (e: CatalogEntry) => e.credentialType === 'foundational-cert' |
  * Explains, for every course in every step, whether it is recommended and why.
  * Nothing here is binding: the UI lets the learner override any suggestion.
  */
-export function personalizePath(steps: PathStep[], state: AppState, reg: Registry): PlanItem[] {
+export function personalizePath(steps: PathStep[], state: AppState, reg: Registry, overrides: Record<string, 'include' | 'skip'> = {}): PlanItem[] {
   const p = state.profile;
   const items: PlanItem[] = [];
   steps.forEach((step, stepIndex) => {
@@ -65,7 +66,12 @@ export function personalizePath(steps: PathStep[], state: AppState, reg: Registr
         const fee = entry.exam?.feeUSD?.value;
         reasons.push(`Study is ${entry.learningCost.value === 'free' ? 'free' : 'partly free'}, but the exam is paid${fee ? ` ($${fee})` : ''}. Your budget is set to free, so plan for this or study without booking the exam.`);
       }
-      items.push({ stepIndex, stepTitle: step.title, entry, status, recommended, reasons });
+      const o = overrides[entry.id];
+      if (o) {
+        recommended = o === 'include';
+        reasons.push(o === 'include' ? 'You chose to include this.' : 'You chose to skip this.');
+      }
+      items.push({ stepIndex, stepTitle: step.title, entry, status, recommended, reasons, overridden: o });
     }
   });
   return items;
@@ -122,7 +128,7 @@ export function nextAction(state: AppState, reg: Registry, now: Date): NextActio
 
   const plan = state.plans.find((pl) => pl.id === state.activePlanId);
   if (plan) {
-    const next = personalizePath(plan.steps, state, reg).find((i) => i.recommended && i.status === 'not-started');
+    const next = personalizePath(plan.steps, state, reg, plan.overrides).find((i) => i.recommended && i.status === 'not-started');
     if (next) return { kind: 'start', label: `Start: ${next.entry.title}`, reason: `Next in "${plan.title}" (step ${next.stepIndex + 1}: ${next.stepTitle}).`, entryId: next.entry.id };
   }
 

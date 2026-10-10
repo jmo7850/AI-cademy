@@ -51,7 +51,7 @@ export function checkState(s: AppState): string[] {
 
 export function loadState(storage: Storage | undefined): { state: AppState; error?: string } {
   if (!storage) return { state: initialState(), error: 'Browser storage is unavailable; progress will not be saved.' };
-  let text: string | null = null;
+  let text: string | null;
   try {
     text = storage.getItem(STORAGE_KEY);
   } catch {
