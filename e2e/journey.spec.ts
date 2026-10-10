@@ -105,7 +105,7 @@ test('export backup downloads JSON', async ({ page }) => {
   await page.goto('/#/settings');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export backup (JSON)' }).click();
-  expect((await download).suggestedFilename()).toMatch(/^ai-career-academy-backup-.*\.json$/);
+  expect((await download).suggestedFilename()).toMatch(/^vector-academy-backup-.*\.json$/);
 });
 
 test('navigation works on every section and pages have no serious accessibility violations', async ({ page }) => {

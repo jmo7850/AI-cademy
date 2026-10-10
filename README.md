@@ -1,4 +1,4 @@
-# AI Career Academy
+# Vector Academy
 
 A local-first, ADHD-friendly study platform for entry-level AI careers. It brings Claude Academy, AWS, Microsoft, Google, OpenAI Academy, AMD AI Academy and NVIDIA learning and credentials together with vendor-neutral curricula, practice exams, spaced repetition, career pathways and a project lab.
 
@@ -45,7 +45,7 @@ Applied from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `S
 
 ## Visual design
 
-The Vector theme follows the brand board: navy `#0A1F44`, cyan `#00FFFF`, gold `#FFC700`, ice `#F2F7FF`, white; Montserrat headings and Lato body (Google Fonts, with system fallbacks); rounded cards with soft shadows; a navy sidebar with a cyan active item; a navy hero with a gold call to action and the robot mascot. Cyan is only used on navy or as a glow; links on light surfaces use a deep teal for contrast. Gold marks formal certifications and achievements. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
+Vector Academy follows its brand identity board: Deep Navy `#232F42`, Electric Cyan `#00FFFF`, Brushed Gold `#D4A74F`, Metallic Silver `#B4B7BD`, Warm Cream `#F7F4E8`; Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are warm cream; the sidebar and hero card are navy with a faint cyan circuit pattern. Vector, the mascot, is the logo (head) and stands in the hero card (full figure); both are cut-out images in `src/ui/assets/`, inlined into the build. Cyan is used only on navy or as a glow; links on cream use a deep teal for contrast. Gold marks formal certifications, achievements and the main call to action. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
 
 ## Architecture
 

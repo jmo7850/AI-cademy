@@ -52,7 +52,7 @@ export function HomePage() {
             <p className="muted">{action.reason}</p>
             <button type="button" className="primary" onClick={act}>Start now</button>
           </div>
-          <Mascot size={120} />
+          <Mascot variant="full" size={190} />
         </div>
       </section>
 

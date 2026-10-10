@@ -39,7 +39,7 @@ export function SettingsPage() {
     const blob = new Blob([exportState(state, new Date())], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `ai-career-academy-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `vector-academy-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
     setMsg({ tone: 'ok', text: 'Backup downloaded.' });

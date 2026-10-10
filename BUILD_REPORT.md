@@ -72,3 +72,11 @@ Navy/cyan/gold/ice tokens with dark-mode equivalents, Montserrat + Lato, 16 px r
 | `npm run test:e2e` | 14/14 passed (desktop + Pixel 7): previous journeys, plus new-provider flow (filter → NVIDIA entry → enrol → lesson → NVIDIA practice exam → reload → still enrolled) and axe WCAG A/AA in dark mode on 8 pages, plus Home in light mode |
 
 Not run: manual screen-reader pass; browsers other than Chromium.
+
+---
+
+# Update: Vector Academy rebrand (2026-10-10)
+- Renamed the app to **Vector Academy** (nav wordmark, page titles, backup file name `vector-academy-backup-*.json`, favicon). Saved progress is untouched: the storage key and backup format id are unchanged, so older backups still restore.
+- Replaced the drawn SVG robot everywhere with **Vector**, the supplied white-and-gold mascot. The checkerboard was removed with an ML background-removal model (run once offline; not a project dependency), and stray specks were cleaned. Head crop = logo, full figure = home hero.
+- Colours retuned to the brand board (navy #232F42, cyan, brushed gold #D4A74F, silver #B4B7BD, warm cream #F7F4E8), with a navy circuit pattern on the sidebar and hero and cream light panels. Dark mode uses the same navy family.
+- Validation: typecheck pass, lint pass, 77/77 unit tests, build pass (443 kB JS incl. ~35 kB of inlined mascot images), 14/14 Playwright tests incl. axe WCAG A/AA in light and dark mode.
