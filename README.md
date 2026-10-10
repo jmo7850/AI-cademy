@@ -49,7 +49,7 @@ Applied from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `S
 src/
   domain/types.ts        Catalog, curriculum, question and Fact<T> provenance types
   data/                  Seed content (no logic)
-    catalog.ts           27 entries; official facts carry sourceUrl + checkedOn
+    catalog.ts           29 entries; official facts carry sourceUrl + checkedOn
     curriculum/          9 study courses (lessons, questions, flashcards, blueprints)
     paths.ts projects.ts Career path templates and project lab
     registry.ts          Merges built-in and user-imported content
