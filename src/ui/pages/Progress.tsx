@@ -5,7 +5,7 @@ import { Empty, ProgressBar, StatusPill } from '../components/bits';
 import { useStatuses } from '../hooks';
 import { href } from '../router';
 
-const GAME_NAME = { run: 'Bolt Run', match: 'Flash Match', boss: 'Boss Battle' } as const;
+const GAME_NAME = { run: 'Poqeni Run', match: 'Flash Match', boss: 'Boss Battle' } as const;
 
 const LEVEL: Record<MasteryLevel, string> = { none: 'Not started', learning: 'Learning', familiar: 'Familiar', mastered: 'Mastered' };
 const TREND = { up: '↑ improving', down: '↓ slipping', flat: '' };

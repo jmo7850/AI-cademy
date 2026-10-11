@@ -94,7 +94,7 @@ export function importState(text: string): { ok: true; state: AppState } | { ok:
     return { ok: false, error: 'The file is not valid JSON.' };
   }
   if (typeof parsed !== 'object' || parsed === null || (parsed as Raw).app !== EXPORT_APP) {
-    return { ok: false, error: 'This is not a PathBolt backup file.' };
+    return { ok: false, error: 'This is not a Poqeni backup file.' };
   }
   try {
     const state = migrate((parsed as Raw).state as Raw);

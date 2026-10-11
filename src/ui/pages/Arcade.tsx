@@ -11,7 +11,7 @@ import { href } from '../router';
 import { allCourses } from './Practice';
 
 const GAMES: { kind: GameKind; title: string; blurb: string; minutes: string }[] = [
-  { kind: 'run', title: 'Bolt Run', blurb: 'Five questions picked from your due reviews and weak spots. Each right answer moves Bolt one step and charges his battery.', minutes: 'about 3 minutes' },
+  { kind: 'run', title: 'Poqeni Run', blurb: 'Five questions picked from your due reviews and weak spots. Each right answer moves Poqeni one step and charges the battery.', minutes: 'about 3 minutes' },
   { kind: 'match', title: 'Flash Match', blurb: 'Pair each term with its meaning. Good for low-energy moments.', minutes: 'about 2 minutes' },
   { kind: 'boss', title: 'Boss Battle', blurb: 'Take on one exam domain. Three right answers beat the boss; misses cost nothing.', minutes: 'about 3 minutes' },
 ];
@@ -35,7 +35,7 @@ export function ArcadePage() {
       <section className="card hero" aria-labelledby="arc-h">
         <div className="hero-body">
           <div>
-            <p className="eyebrow">Arcade with Bolt</p>
+            <p className="eyebrow">Arcade with Poqeni</p>
             <h2 id="arc-h" style={{ fontSize: '1.45rem' }}>Level {lvl.level}</h2>
             <p className="muted">{lvl.into} of {lvl.span} XP to level {lvl.level + 1}. XP comes from concepts you know, so it grows as you learn.</p>
             <ProgressBar value={lvl.into / lvl.span} label={`Level ${lvl.level} progress`} />
@@ -136,7 +136,7 @@ export function PlayPage({ kind, courseId, domainId }: { kind?: string; courseId
   return <Empty>Unknown game. <a href={href('arcade')}>Back to Arcade</a></Empty>;
 }
 
-// ---------- Bolt Run ----------
+// ---------- Poqeni Run ----------
 
 function RunGame({ course, again }: { course: StudyCourse; again: () => void }) {
   const { state } = useStore();
@@ -161,8 +161,8 @@ function RunGame({ course, again }: { course: StudyCourse; again: () => void }) 
   }
   return (
     <article>
-      <p className="eyebrow">Bolt Run · {course.title}</p>
-      <ol className="run-track" aria-label={`Bolt has moved ${steps} of ${qs.length} steps`}>
+      <p className="eyebrow">Poqeni Run · {course.title}</p>
+      <ol className="run-track" aria-label={`Poqeni has moved ${steps} of ${qs.length} steps`}>
         {qs.map((_, i) => (
           <li key={i} className={i < steps ? 'done' : ''}>{i === steps ? <Mascot size={36} /> : <span aria-hidden="true">{i < steps ? '⚡' : ''}</span>}</li>
         ))}

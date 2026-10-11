@@ -123,7 +123,7 @@ test('export backup downloads JSON', async ({ page }) => {
   await page.goto('/#/settings');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export backup (JSON)' }).click();
-  expect((await download).suggestedFilename()).toMatch(/^pathbolt-backup-.*\.json$/);
+  expect((await download).suggestedFilename()).toMatch(/^poqeni-backup-.*\.json$/);
 });
 
 test('navigation works on every section and pages have no serious accessibility violations', async ({ page }) => {
@@ -189,13 +189,13 @@ test('dark theme keeps pages accessible', async ({ page }) => {
   }
 });
 
-test('arcade games with Bolt record answers and results', async ({ page }) => {
+test('arcade games with Poqeni record answers and results', async ({ page }) => {
   await skipOnboarding(page);
   await openSection(page, 'Arcade');
   await page.getByLabel('Course').selectOption('study-aws-aif');
 
-  // Bolt Run: answer five questions whichever way, then see results.
-  await page.getByRole('link', { name: 'Play Bolt Run' }).click();
+  // Poqeni Run: answer five questions whichever way, then see results.
+  await page.getByRole('link', { name: 'Play Poqeni Run' }).click();
   for (let i = 0; i < 5; i++) {
     await expect(page.getByText(`Question ${i + 1} of 5`)).toBeVisible();
     // Answer any question format; correctness does not matter here.

@@ -1,6 +1,6 @@
 # Product, brand and architecture
 
-How PathBolt is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
+How Poqeni is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
 
 ## Product
 
@@ -30,7 +30,7 @@ These came from the spec and from the ADHD reference repo, [ayghri/i-have-adhd](
 | Career Paths | 5 templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). The learner can reorder, add, remove, skip or include steps, and every suggestion says why. Choose-one steps recommend a single provider and prefer the learner's choice. |
 | Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a note on the speed, depth and cost trade-off. |
 | Practice Center | Review queue, weak areas, flashcards, and an exam simulator weighted by the published domain weights. |
-| Arcade | Optional, untimed games hosted by Bolt: Bolt Run, Flash Match and Boss Battle. It can be hidden in Settings. |
+| Arcade | Optional, untimed games hosted by Poqeni: Poqeni Run, Flash Match and Boss Battle. It can be hidden in Settings. |
 | Project Lab | 9 projects from exercises to capstones, each with milestones, a definition of done, validation and a portfolio entry. |
 | Progress | Mastery per concept, activity, study time, review backlog, confidence, history, and the Arcade Win board. |
 | Settings | Preferences, schedule, budget, theme, backup export and restore (file or pasted text), course import, and delete all data. |
@@ -44,13 +44,13 @@ Course status levels are kept separate: Not started, In progress, Completed, Pra
 
 | Item | Value |
 | --- | --- |
-| Name | **PathBolt**, with a capital B. |
-| Mascot | **Bolt**, a white and gold robot. Every robot in the app uses this art; there are no silver variants. The head crop is the logo and browser-tab icon. The full figure stands in the Home hero card and hosts the Arcade. |
-| Mascot files | `src/ui/assets/bolt-head.webp`, `bolt-full.webp` and `bolt-icon.png`, used through `src/ui/components/Mascot.tsx`. The checkerboard background was removed once, offline, with an ML background-removal model, which is not a project dependency. |
-| Palette | Deep Navy `#232F42` · Electric Cyan `#00FFFF` · Brushed Gold `#D4A74F` · Metallic Silver `#B4B7BD` · Warm Cream `#F7F4E8` |
+| Name | **Poqeni**, with a capital P, as drawn in the logo. Pronounced poh-KEN-ee. Files and the package name stay lowercase (`poqeni-*`, `"name": "poqeni"`). |
+| Mascot | **Poqeni**, a flat line-art robot with a graduation cap and two antennae: cream outlines with sky-blue fills. Every robot in the app uses this art. The head is the logo mark and the standing figure appears in the Home and Arcade hero cards. |
+| Logo and mascot files | The supplied lockup is kept as `src/ui/assets/brand/poqeni-lockup-on-dark.svg`, with the standing figure (`poqeni-standing-on-dark.svg`) and a favicon beside it (`poqeni-icon.svg`) and a navy banner for the README (`docs/images/logo.svg`). The app draws the mark, standing figure and lockup as inline SVG in `src/ui/components/Mascot.tsx`, using the same geometry, so they follow the theme (`--mk-line` and `--mk-fill`). If the logo changes, update the SVG files and that component together. |
+| Palette | Deep Navy `#232F42` · Sky Blue `#6FB3E0` · Cream `#F2F0EA` (the last two are the logo's colours) · Brushed Gold `#D4A74F` · Metallic Silver `#B4B7BD` |
 | Fonts | Montserrat for headings and Lato for body text, both from Google Fonts with system fallbacks. |
-| Surfaces | Light panels are warm cream. The sidebar and hero card are navy with a faint cyan circuit pattern (the `--circuit` token). Cards are rounded at 16 px with soft shadows, and buttons are pills. |
-| Colour rules | Cyan appears only on navy or as a glow. Links on cream use deep teal `#00697A` (`--accent`) for contrast. Gold marks formal certifications, achievements and the main call to action. Credential badges are gold for formal certifications, navy for certificate programs and grey for no credential. |
+| Surfaces | Light panels are cream. The sidebar and hero card are navy with a faint sky-blue circuit pattern (the `--circuit` token). Cards are rounded at 16 px with soft shadows, and buttons are pills. |
+| Colour rules | Sky blue appears on navy, as a glow, and as the main call to action. Links on cream use a deeper blue `#175F93` (`--accent`) for contrast. Gold is kept for formal certifications and achievements. Credential badges are gold for formal certifications, navy for certificate programs and grey for no credential. Text and controls meet WCAG AA contrast in both themes. |
 | Tokens | All colours are CSS custom properties in `src/ui/styles.css`, redefined for dark mode. Never hard-code colours in components. |
 | Tagline | "Learn. Build. Certify." |
 
@@ -136,4 +136,4 @@ AI-cademy/
 - **Schema change:** bump `SCHEMA_VERSION` in `store/schema.ts`, add a step to `MIGRATIONS` in `store/persistence.ts`, and add a store test showing that an older save loads unchanged.
 - **AI tutoring:** implement `TutorProvider` behind a server you control. Never put API keys in client code.
 
-Keep these ids stable: the storage key `ai-career-academy`, the backup format id, and the 29 first-release catalog ids (a unit test checks the ids). They were deliberately not renamed, so saved progress and older backups still load. Only the downloaded backup file name changed, to `pathbolt-backup-*.json`.
+Keep these ids stable: the storage key `ai-career-academy`, the backup format id, and the 29 first-release catalog ids (a unit test checks the ids). They were deliberately not renamed, so saved progress and older backups still load. Only the downloaded backup file name changed, to `poqeni-backup-*.json`.

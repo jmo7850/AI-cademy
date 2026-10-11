@@ -39,7 +39,7 @@ export function SettingsPage() {
     const blob = new Blob([exportState(state, new Date())], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `pathbolt-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `poqeni-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
     setMsg({ tone: 'ok', text: 'Backup downloaded.' });
@@ -114,7 +114,7 @@ export function SettingsPage() {
         </div>
         <label className="choice"><input type="checkbox" checked={p.breakPrompts} onChange={(e) => set({ breakPrompts: e.target.checked })} /> <span>Offer a break when a timed session ends (never forced)</span></label>
         <label className="choice"><input type="checkbox" checked={p.reminders} onChange={(e) => set({ reminders: e.target.checked })} /> <span>Show an in-app reminder when reviews are due</span></label>
-        <label className="choice"><input type="checkbox" checked={p.games} onChange={(e) => set({ games: e.target.checked })} /> <span>Show the Arcade (optional games with Bolt that count toward mastery and reviews)</span></label>
+        <label className="choice"><input type="checkbox" checked={p.games} onChange={(e) => set({ games: e.target.checked })} /> <span>Show the Arcade (optional games with Poqeni that count toward mastery and reviews)</span></label>
         <div className="field">
           <label htmlFor="s-theme">Theme</label>
           <select id="s-theme" value={p.theme} onChange={(e) => set({ theme: e.target.value as Profile['theme'] })}>
