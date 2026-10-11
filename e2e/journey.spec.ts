@@ -409,4 +409,9 @@ test('coverage view shows every exam domain with lessons and questions', async (
   await expect(page.getByText(/None yet/)).toHaveCount(0);
   await expect(page.getByText(/original practice questions/)).toBeVisible();
   await expectNoSeriousAxe(page, 'coverage');
+
+  await page.goto('/#/course/ms-azure-ai-fundamentals');
+  await page.getByRole('link', { name: /how much of the exam outline/ }).click();
+  await expect(page.getByRole('row')).toHaveCount(3);
+  await expect(page.getByText(/None yet/)).toHaveCount(0);
 });
