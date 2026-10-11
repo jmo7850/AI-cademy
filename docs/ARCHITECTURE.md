@@ -100,8 +100,8 @@ AI-cademy/
       components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
       styles.css         Theme tokens (light and dark) and all styles
   scripts/catalog-drift.mjs  Weekly check of catalog source pages (npm run catalog:drift)
-  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (167 tests)
-  e2e/journey.spec.ts    Playwright: 17 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 68 tests, with axe WCAG A/AA scans
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (169 tests)
+  e2e/journey.spec.ts    Playwright: 18 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 72 tests, with axe WCAG A/AA scans
 ```
 
 **Dependencies:** React and React DOM at runtime. Development uses Vite, TypeScript, Vitest, Testing Library with jsdom, Playwright, axe-core and ESLint. There are no state, routing or validation libraries, and new dependencies should be avoided unless they clearly earn their place.
