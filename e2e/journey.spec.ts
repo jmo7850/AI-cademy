@@ -243,3 +243,97 @@ test('arcade games with Poqeni record answers and results', async ({ page }) => 
   const axe = await new AxeBuilder({ page: page as never }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
 });
+
+async function answerAny(page: Page) {
+  const choice = page.locator('main input[type=radio], main input[type=checkbox]');
+  const selects = page.locator('main article select');
+  const text = page.locator('main input[type=text]');
+  if (await choice.count()) await choice.first().check();
+  else if (await selects.count()) for (let k = 0; k < (await selects.count()); k++) await selects.nth(k).selectOption({ index: 1 });
+  else if (await text.count()) await text.first().fill('x');
+  await page.getByRole('button', { name: 'Check answer' }).click();
+}
+
+async function expectNoSeriousAxe(page: Page, label: string) {
+  const axe = await new AxeBuilder({ page: page as never }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes[0]?.target}`), label).toEqual([]);
+}
+
+test('outside course: finish, add a note, check what you learned, see an honest status', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/course/aws-cloud-practitioner-essentials');
+  await page.getByRole('button', { name: 'Add to My Learning' }).click();
+  await expect(page.getByRole('heading', { name: 'Study this outside Poqeni' })).toBeVisible();
+  await expectNoSeriousAxe(page, 'outside module');
+
+  await page.getByLabel('I finished this course').check();
+  await expect(page.getByText('You said you finished this.')).toBeVisible();
+  await page.getByLabel(/What you did or learned/).fill('Finished the cloud concepts modules.');
+  await page.getByLabel(/Link to your work/).fill('http://insecure.example');
+  await expect(page.getByText('This link needs to start with https://')).toBeVisible();
+  await page.getByLabel(/Link to your work/).fill('https://example.com/my-work');
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page.getByText(/Poqeni keeps it but does not check it/)).toBeVisible();
+
+  await page.getByRole('link', { name: 'Check what I learned' }).click();
+  await expectNoSeriousAxe(page, 'return check');
+  for (let i = 0; i < 5; i++) {
+    await expect(page.getByText(`Check ${i + 1} of 5`)).toBeVisible();
+    await answerAny(page);
+    await page.getByRole('button', { name: i === 4 ? 'See result' : 'Next' }).click();
+  }
+  await expect(page.getByRole('heading', { name: /You got \d of 5/ })).toBeVisible();
+  await page.getByRole('link', { name: 'Back to the course' }).click();
+  await expect(page.getByText(/Poqeni's check on this topic \((best so far )?\d of 5\)/)).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Where this stands' })).not.toContainText(/confirmed|certified|earned/i);
+});
+
+test('a recorded external credential says Poqeni has not verified it', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/course/nvidia-nca-genm');
+  await page.getByRole('button', { name: 'Add to My Learning' }).click();
+  await page.getByRole('button', { name: 'Record an earned credential' }).click();
+  await page.getByLabel('Date earned').fill('2026-09-01');
+  await page.getByRole('button', { name: 'Save record' }).click();
+  await expect(page.getByText(/Poqeni has not verified it; only the provider can/)).toBeVisible();
+});
+
+test('project milestones keep optional evidence', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/project/api-client');
+  await page.getByRole('button', { name: 'Start this project' }).click();
+  await page.locator('main fieldset input[type=checkbox]').first().check();
+  await page.getByRole('button', { name: /Add evidence for step 1/ }).click();
+  await page.getByLabel(/Link to your work/).fill('https://example.com/commit/1');
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'https://example.com/commit/1' })).toBeVisible();
+  await expect(page.getByText(/It is not checked/)).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('link', { name: 'https://example.com/commit/1' })).toBeVisible();
+});
+
+test('What Poqeni knows: see, add, delete and forget', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('radio', { name: /^AI Application Developer/ }).check();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: /Skip setup/ }).click();
+  await page.goto('/#/know');
+  await expect(page.getByRole('heading', { level: 1, name: 'What Poqeni knows about me' })).toBeVisible();
+  await expect(page.getByText(/AI Application Developer/)).toBeVisible();
+  await expectNoSeriousAxe(page, 'know page');
+
+  await page.getByLabel('Add a note').fill('I study after 8pm only');
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
+  await expect(page.getByText('I study after 8pm only')).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('I study after 8pm only')).toBeVisible();
+  await page.getByRole('button', { name: 'Delete' }).click();
+  await expect(page.getByText('I study after 8pm only')).toHaveCount(0);
+
+  await page.getByLabel('Add a note').fill('prefers short lessons');
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
+  await page.getByRole('button', { name: 'Forget everything' }).first().click();
+  await page.getByRole('button', { name: 'Forget everything' }).last().click();
+  await expect(page.getByText('prefers short lessons')).toHaveCount(0);
+  await expect(page.getByText('No notes.')).toBeVisible();
+});

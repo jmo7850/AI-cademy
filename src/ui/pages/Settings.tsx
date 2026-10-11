@@ -188,7 +188,7 @@ export function SettingsPage() {
 
       <section className="card" aria-labelledby="priv-h">
         <h2 id="priv-h">Privacy and storage</h2>
-        <p>Everything is stored only in this browser (local storage, about {Math.ceil(bytes / 1024)} KB). Nothing is sent to a server, and no account or AI API is needed. Clearing browser data deletes it, so export a backup now and then.</p>
+        <p>Everything is stored only in this browser (local storage, about {Math.ceil(bytes / 1024)} KB). Nothing is sent to a server, and no account or AI API is needed. <a href={href('know')}>See everything Poqeni remembers about you</a>. Clearing browser data deletes it, so export a backup now and then.</p>
         <ConfirmButton label="Delete all data" question="Delete all progress, plans and imports in this browser? This cannot be undone." confirmLabel="Delete everything" onConfirm={() => { dispatch({ type: 'reset' }); go('onboarding'); }} />
       </section>
     </div>

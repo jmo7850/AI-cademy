@@ -62,7 +62,7 @@ describe('persistence', () => {
       courses: { 'academy-ai-foundations': { enrolledAt: '2026-10-01T00:00:00Z' } },
     } as unknown as Record<string, unknown>;
     const s = migrate(v2);
-    expect(s.schemaVersion).toBe(3);
+    expect(s.schemaVersion).toBe(SCHEMA_VERSION);
     expect(s.games).toEqual([]);
     expect(s.profile.games).toBe(true);
     expect(s.attempts).toHaveLength(1);

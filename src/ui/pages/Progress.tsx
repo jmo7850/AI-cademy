@@ -65,7 +65,7 @@ export function ProgressPage() {
         {enrolled.length === 0 ? <p className="muted">No courses yet.</p> : (
           <ul style={{ listStyle: 'none', padding: 0 }}>{enrolled.map((e) => <li key={e!.id} className="row" style={{ justifyContent: 'space-between' }}><a href={href('course', e!.id)}>{e!.title}</a><StatusPill status={status(e!)} /></li>)}</ul>
         )}
-        <p className="small muted">"Practice assessment passed" and "Demonstrated mastery" are app results. Only "External credential recorded" refers to a provider-issued credential, and only as you reported it.</p>
+        <p className="small muted">"Practice assessment passed" and "Demonstrated mastery" are app results. Only "Credential recorded by you" refers to a provider-issued credential, and only as you reported it.</p>
       </section>
 
       {state.games.some((g) => g.won) && (

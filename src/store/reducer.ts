@@ -1,7 +1,7 @@
 import type { CatalogEntry, StudyCourse } from '../domain/types';
 import { schedule } from '../engine/srs';
-import type { AppState, Attempt, CourseProgress, CustomPlan, ExamAttempt, GameResult, Profile } from './schema';
-import { initialState } from './schema';
+import type { AppState, Attempt, Checkpoint, CourseProgress, CustomPlan, ExamAttempt, GameResult, MemoryNote, Profile, ReturnCheck } from './schema';
+import { defaultProfile, initialState } from './schema';
 
 export type Action =
   | { type: 'completeOnboarding'; profile: Profile; plan: CustomPlan }
@@ -36,10 +36,20 @@ export type Action =
   | { type: 'setNote'; key: string; text: string }
   | { type: 'replaceState'; state: AppState }
   | { type: 'recordGame'; result: GameResult }
+  | { type: 'saveEvidence'; entryId: string; evidence: CourseProgress['evidence']; now: string }
+  | { type: 'recordReturnCheck'; entryId: string; check: ReturnCheck; now: string }
+  | { type: 'saveCheckpoint'; projectId: string; milestoneId: string; checkpoint: Checkpoint | undefined }
+  | { type: 'addMemoryNote'; note: MemoryNote }
+  | { type: 'updateMemoryNote'; id: string; text: string }
+  | { type: 'deleteMemoryNote'; id: string }
+  | { type: 'forgetMemory' }
   | { type: 'reset' };
 
 const MAX_ATTEMPTS = 5000;
 const MAX_GAMES = 200;
+const MAX_CHECKS = 20;
+export const MAX_MEMORY_NOTES = 50;
+export const MAX_NOTE_LENGTH = 280;
 
 function ensureCourse(s: AppState, entryId: string, now: string): Record<string, CourseProgress> {
   if (s.courses[entryId]) return s.courses;
@@ -96,6 +106,50 @@ export function reducer(s: AppState, a: Action): AppState {
     }
     case 'recordGame':
       return { ...s, games: [...s.games, a.result].slice(-MAX_GAMES) };
+    case 'saveEvidence': {
+      const courses = ensureCourse(s, a.entryId, a.now);
+      const c = courses[a.entryId]!;
+      return { ...s, courses: { ...courses, [a.entryId]: { ...c, evidence: a.evidence } } };
+    }
+    case 'recordReturnCheck': {
+      const courses = ensureCourse(s, a.entryId, a.now);
+      const c = courses[a.entryId]!;
+      const checks = [...(c.checks ?? []), a.check].slice(-MAX_CHECKS);
+      return { ...s, courses: { ...courses, [a.entryId]: { ...c, checks, lastStudiedAt: a.now } } };
+    }
+    case 'saveCheckpoint': {
+      const p = s.projects[a.projectId];
+      if (!p) return s;
+      const checkpoints = { ...p.checkpoints };
+      if (a.checkpoint) checkpoints[a.milestoneId] = a.checkpoint;
+      else delete checkpoints[a.milestoneId];
+      return { ...s, projects: { ...s.projects, [a.projectId]: { ...p, checkpoints } } };
+    }
+    case 'addMemoryNote': {
+      const text = a.note.text.trim().slice(0, MAX_NOTE_LENGTH);
+      if (!text || s.memoryNotes.length >= MAX_MEMORY_NOTES) return s;
+      return { ...s, memoryNotes: [...s.memoryNotes, { ...a.note, text }] };
+    }
+    case 'updateMemoryNote': {
+      const text = a.text.trim().slice(0, MAX_NOTE_LENGTH);
+      if (!text) return s;
+      return { ...s, memoryNotes: s.memoryNotes.map((n) => (n.id === a.id ? { ...n, text } : n)) };
+    }
+    case 'deleteMemoryNote':
+      return { ...s, memoryNotes: s.memoryNotes.filter((n) => n.id !== a.id) };
+    case 'forgetMemory': {
+      // Back to the defaults for everything Poqeni was told. Progress, answers and plans are untouched.
+      const keep = s.profile;
+      const profile: Profile = {
+        ...defaultProfile,
+        onboarded: keep.onboarded,
+        theme: keep.theme,
+        games: keep.games,
+        breakPrompts: keep.breakPrompts,
+        reminders: keep.reminders,
+      };
+      return { ...s, profile, memoryNotes: [] };
+    }
     case 'startExam':
       return { ...s, exams: [...s.exams, a.exam] };
     case 'updateExam':

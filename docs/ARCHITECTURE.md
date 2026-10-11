@@ -38,7 +38,7 @@ These came from the spec and from the ADHD reference repo, [ayghri/i-have-adhd](
 ### The learning loop
 Lessons are shown one section at a time, and "Go deeper" is optional. Each lesson ends with a knowledge check that explains every option and asks for an optional confidence rating. Answers schedule spaced reviews, and a missed item returns after 10 minutes. Concept mastery updates with each answer, and a weak concept gets a *different* example in targeted review. Practice exams run by official domain and show domain results, weak-area remediation and readiness.
 
-Course status levels are kept separate: Not started, In progress, Completed, Practice assessment passed, Demonstrated mastery, and External credential recorded.
+Course status levels are kept separate: Not started, In progress, Completed, Practice assessment passed, Demonstrated mastery, and Credential recorded by you.
 
 ## Brand
 
@@ -84,20 +84,22 @@ AI-cademy/
       catalogFilter.ts   Search, quick-credential filters, trade-offs, staleness
       validate.ts        Import validation (courses and backups)
       random.ts          mulberry32 seeded PRNG, hashString, seededShuffle
+      outside.ts         Honest status for courses studied elsewhere (self-report, note, return check); return-check picker
+      memory.ts          Everything remembered about the learner, for the "What Poqeni knows about me" screen
       tutor.ts           Optional TutorProvider interface; default returns authored explanations
     store/
-      schema.ts          AppState, SCHEMA_VERSION = 3, initial state
+      schema.ts          AppState, SCHEMA_VERSION = 4, initial state
       reducer.ts         All actions (recordAnswer, recordGame, startExam, …)
       persistence.ts     localStorage key "ai-career-academy", ordered MIGRATIONS, corrupt-data recovery
       StoreContext.tsx   React context + dispatch
     ui/
       App.tsx, router.ts Hash router (#/section/...), so it works on any static host and in the artifact preview
-      pages/             Home, Catalog, MyLearning, Paths, Quick, Practice, Lesson, Arcade, Projects, Progress, Settings, Onboarding
+      pages/             Home, Catalog, MyLearning, Paths, Quick, Practice, Lesson, Arcade, Projects, Progress, Settings, Onboarding, Outside (guided outside courses and return checks), Know (What Poqeni knows about me)
       components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
       styles.css         Theme tokens (light and dark) and all styles
   scripts/catalog-drift.mjs  Weekly check of catalog source pages (npm run catalog:drift)
-  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (86 tests)
-  e2e/journey.spec.ts    Playwright: 8 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 32 tests, with axe WCAG A/AA scans
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (121 tests)
+  e2e/journey.spec.ts    Playwright: 12 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 48 tests, with axe WCAG A/AA scans
 ```
 
 **Dependencies:** React and React DOM at runtime. Development uses Vite, TypeScript, Vitest, Testing Library with jsdom, Playwright, axe-core and ESLint. There are no state, routing or validation libraries, and new dependencies should be avoided unless they clearly earn their place.
@@ -109,6 +111,9 @@ AI-cademy/
 4. Mastery is always **derived** from `attempts` by `mastery.ts` and is never stored.
 
 ### Key engine rules
+
+- **Outside courses:** Poqeni cannot see a provider course, so status is what the learner reported plus what Poqeni itself tested. `engine/outside.ts` never says "confirmed" or "earned"; a recorded credential reads "Poqeni has not verified it". Return-check questions come from Poqeni's own banks (`data/returnChecks.ts` maps each outside entry to a bank and optional concepts) and are recorded as `review` attempts.
+- **Memory is local and visible:** everything remembered is listed on `#/know` (setup answers, optional notes, facts derived from activity), editable and deletable, with "Forget everything". Nothing leaves the device.
 - **SRS (`srs.ts`):**
   - Quality is derived from correctness and confidence: 1 = guessed, 2 = unsure, 3 = confident. A confident miss counts as a misconception and gets quality 0.
   - A miss comes back in 10 minutes. The first successes come back at 1 day, then 3 days, and after that at interval × ease, adjusted for item difficulty.

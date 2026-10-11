@@ -1,6 +1,7 @@
 import { useStore } from '../../store/StoreContext';
 import { Empty, ProgressBar, StatusPill } from '../components/bits';
 import { useLessonProgress, useStatuses } from '../hooks';
+import { OutsideBadge } from './Outside';
 import { href } from '../router';
 
 export function MyLearningPage() {
@@ -23,12 +24,12 @@ export function MyLearningPage() {
               <li key={c.courseId} className="card">
                 <div className="row" style={{ justifyContent: 'space-between' }}>
                   <a href={href('course', e!.id)}><strong>{e!.title}</strong></a>
-                  <StatusPill status={status(e!)} />
+                  <span className="row"><OutsideBadge entry={e!} /><StatusPill status={status(e!)} /></span>
                 </div>
                 <ProgressBar value={progress(e!.id)} label={`${e!.title} progress`} />
                 <div className="row small" style={{ marginTop: 6 }}>
                   {hasLessons && <a className="btn" href={href('learn', e!.id)}>{c.position ? 'Resume' : 'Start'}</a>}
-                  {c.external && <span className="badge b-verified">Credential recorded {c.external.earnedOn}</span>}
+                  {c.external && <span className="badge b-verified">You recorded a credential ({c.external.earnedOn}, not verified)</span>}
                 </div>
               </li>
             );

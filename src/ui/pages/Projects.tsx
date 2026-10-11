@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { projectById, projects } from '../../data/projects';
 import type { Project } from '../../domain/types';
 import { nowIso, useStore } from '../../store/StoreContext';
+import { EvidenceForm, EvidenceView } from './Outside';
 import { Empty, FactBadge, hoursText, ProgressBar } from '../components/bits';
 import { href } from '../router';
 
@@ -85,10 +86,13 @@ export function ProjectPage({ projectId }: { projectId: string }) {
             <fieldset style={{ marginTop: 8 }}>
               <legend className="sr-only">Milestones</legend>
               {p.milestones.map((m, i) => (
-                <label key={m.id} className="choice">
-                  <input type="checkbox" checked={prog.milestones.includes(m.id)} onChange={() => dispatch({ type: 'toggleMilestone', projectId: p.id, milestoneId: m.id })} />
-                  <span>{i + 1}. {m.text}</span>
-                </label>
+                <div key={m.id}>
+                  <label className="choice">
+                    <input type="checkbox" checked={prog.milestones.includes(m.id)} onChange={() => dispatch({ type: 'toggleMilestone', projectId: p.id, milestoneId: m.id })} />
+                    <span>{i + 1}. {m.text}</span>
+                  </label>
+                  {prog.milestones.includes(m.id) && <Checkpoint projectId={p.id} milestoneId={m.id} index={i + 1} />}
+                </div>
               ))}
             </fieldset>
           </>
@@ -104,6 +108,31 @@ export function ProjectPage({ projectId }: { projectId: string }) {
         </section>
       )}
     </article>
+  );
+}
+
+/** Optional evidence for one finished milestone: a note and/or an https link. Kept for the learner, never checked. */
+function Checkpoint({ projectId, milestoneId, index }: { projectId: string; milestoneId: string; index: number }) {
+  const { state, dispatch } = useStore();
+  const cp = state.projects[projectId]?.checkpoints?.[milestoneId];
+  const [open, setOpen] = useState(false);
+  const save = (v: { note?: string; url?: string }) => { dispatch({ type: 'saveCheckpoint', projectId, milestoneId, checkpoint: { ...v, addedOn: nowIso() } }); setOpen(false); };
+  return (
+    <div style={{ marginLeft: 28, marginBottom: 8 }}>
+      {open ? (
+        <EvidenceForm idPrefix={`cp-${index}`} initial={cp} onSave={save} onCancel={() => setOpen(false)} />
+      ) : cp ? (
+        <>
+          <EvidenceView value={cp} />
+          <div className="row">
+            <button type="button" onClick={() => setOpen(true)}>Edit evidence for step {index}</button>
+            <button type="button" onClick={() => dispatch({ type: 'saveCheckpoint', projectId, milestoneId, checkpoint: undefined })}>Remove evidence for step {index}</button>
+          </div>
+        </>
+      ) : (
+        <button type="button" className="link" onClick={() => setOpen(true)}>Add evidence for step {index} (optional)</button>
+      )}
+    </div>
   );
 }
 

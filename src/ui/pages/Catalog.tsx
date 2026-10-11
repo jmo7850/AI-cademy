@@ -6,6 +6,8 @@ import { ConfirmButton } from '../components/ConfirmButton';
 import { nowIso, useStore } from '../../store/StoreContext';
 import { EntryMeta, FactLine, hoursText, StatusPill } from '../components/bits';
 import { useStatuses } from '../hooks';
+import { OutsideBadge, OutsideModule } from './Outside';
+import { credentialClaim } from '../../engine/outside';
 import { go, href } from '../router';
 
 function toggle<T>(arr: T[], v: T): T[] {
@@ -72,7 +74,7 @@ export function CatalogPage() {
           <li key={e.id} className="card">
             <div className="row" style={{ justifyContent: 'space-between' }}>
               <h2 style={{ margin: 0 }}><a href={href('course', e.id)}>{e.title}</a></h2>
-              <StatusPill status={status(e)} />
+              <span className="row"><OutsideBadge entry={e} /><StatusPill status={status(e)} /></span>
             </div>
             <EntryMeta entry={e} />
             <p className="small" style={{ marginTop: 6 }}>{costSummary(e)}</p>
@@ -188,16 +190,7 @@ export function EntryPage({ entryId }: { entryId: string }) {
         {e.origin === 'user' && <p className="small muted">Imported by you. Not verified by this app.</p>}
       </section>
 
-      {progress && !course && e.credentialType !== 'portfolio-project' && (
-        <section className="card">
-          <h2>Provider course</h2>
-          <p>This course is studied on the provider's site. Mark it finished here when you complete it.</p>
-          <label className="choice">
-            <input type="checkbox" checked={progress.completedLessons.includes('external-course')} onChange={(ev) => dispatch({ type: 'markProviderCourseDone', entryId: e.id, done: ev.target.checked, now: nowIso() })} />
-            I finished this course
-          </label>
-        </section>
-      )}
+      {progress && !course && e.credentialType !== 'portfolio-project' && <OutsideModule entry={e} />}
 
       {progress && isCredential && (
         <section className="card">
@@ -205,7 +198,7 @@ export function EntryPage({ entryId }: { entryId: string }) {
           <p className="small muted">Finishing study here does not mean you earned the credential. Record it only after the provider issues it. The app stores what you enter; it cannot verify it.</p>
           {progress.external ? (
             <div>
-              <p>Recorded: earned {progress.external.earnedOn}{progress.external.credentialId ? `, ID ${progress.external.credentialId}` : ''}.</p>
+              <p><strong>{credentialClaim(progress)!.label}.</strong> {credentialClaim(progress)!.text}{progress.external.credentialId ? ` ID: ${progress.external.credentialId}.` : ''}</p>
               {progress.external.verificationUrl && <p><a href={progress.external.verificationUrl} target="_blank" rel="noreferrer">Provider verification link</a></p>}
               <button type="button" onClick={() => dispatch({ type: 'recordExternal', entryId: e.id, external: undefined })}>Remove record</button>
             </div>
