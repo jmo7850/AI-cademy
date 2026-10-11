@@ -1,0 +1,138 @@
+# Product, brand and architecture
+
+How PathBolt is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
+
+## Product
+
+### Who it is for and the three questions it answers
+The learner is someone aiming for an entry-level AI role, such as AI support or implementation specialist, AI operations associate, junior AI application developer, AI automation specialist, junior cloud or AI practitioner, or LLM application developer. The app helps them answer three questions:
+1. What can I learn or get certified in?
+2. What should I study next for the AI career I want?
+3. Can I show that I actually understand and can apply the material?
+
+### Non-negotiable product rules
+These came from the spec and from the ADHD reference repo, [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `SKILL.md`). Keep them in any change.
+- Show one clear next action first. Keep progress numbered and visible ("Step 4 of 8"), and restate the learner's state on every screen.
+- Put detail behind expandable sections, give concrete time estimates, and make wins visible.
+- Use neutral error wording: "Not quite." followed by the fix.
+- **No streaks, no forced timers, and no punitive gamification.** The session timer (5, 10, 20 or 30 minutes) is optional and can be ignored.
+- Keep credential classes separate. **A course badge is never presented as a certification.**
+- Every official fact carries provenance: **Verified** (read on the official page on the date shown), **Unverified**, or **Estimate**.
+- Finishing study never marks an external credential as earned. Only the learner records that, after the provider issues it.
+- Collecting certificates is never presented as enough on its own; credentials are paired with projects and demonstrable skills.
+
+### Sections (left nav)
+| Section | What it does |
+| --- | --- |
+| Home | One recommended next action with its reason, plus continue-learning, reviews, recent results and path progress. |
+| Course Catalog | Search and filter by provider, credential type and subject. Every fact shows a provenance badge, its source and its check date. |
+| My Learning | Enrolled, bookmarked and custom plans. |
+| Career Paths | 5 templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). The learner can reorder, add, remove, skip or include steps, and every suggestion says why. Choose-one steps recommend a single provider and prefer the learner's choice. |
+| Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a note on the speed, depth and cost trade-off. |
+| Practice Center | Review queue, weak areas, flashcards, and an exam simulator weighted by the published domain weights. |
+| Arcade | Optional, untimed games hosted by Bolt: Bolt Run, Flash Match and Boss Battle. It can be hidden in Settings. |
+| Project Lab | 9 projects from exercises to capstones, each with milestones, a definition of done, validation and a portfolio entry. |
+| Progress | Mastery per concept, activity, study time, review backlog, confidence, history, and the Arcade Win board. |
+| Settings | Preferences, schedule, budget, theme, backup export and restore (file or pasted text), course import, and delete all data. |
+
+### The learning loop
+Lessons are shown one section at a time, and "Go deeper" is optional. Each lesson ends with a knowledge check that explains every option and asks for an optional confidence rating. Answers schedule spaced reviews, and a missed item returns after 10 minutes. Concept mastery updates with each answer, and a weak concept gets a *different* example in targeted review. Practice exams run by official domain and show domain results, weak-area remediation and readiness.
+
+Course status levels are kept separate: Not started, In progress, Completed, Practice assessment passed, Demonstrated mastery, and External credential recorded.
+
+## Brand
+
+| Item | Value |
+| --- | --- |
+| Name | **PathBolt**, with a capital B. |
+| Mascot | **Bolt**, a white and gold robot. Every robot in the app uses this art; there are no silver variants. The head crop is the logo and browser-tab icon. The full figure stands in the Home hero card and hosts the Arcade. |
+| Mascot files | `src/ui/assets/bolt-head.webp`, `bolt-full.webp` and `bolt-icon.png`, used through `src/ui/components/Mascot.tsx`. The checkerboard background was removed once, offline, with an ML background-removal model, which is not a project dependency. |
+| Palette | Deep Navy `#232F42` · Electric Cyan `#00FFFF` · Brushed Gold `#D4A74F` · Metallic Silver `#B4B7BD` · Warm Cream `#F7F4E8` |
+| Fonts | Montserrat for headings and Lato for body text, both from Google Fonts with system fallbacks. |
+| Surfaces | Light panels are warm cream. The sidebar and hero card are navy with a faint cyan circuit pattern (the `--circuit` token). Cards are rounded at 16 px with soft shadows, and buttons are pills. |
+| Colour rules | Cyan appears only on navy or as a glow. Links on cream use deep teal `#00697A` (`--accent`) for contrast. Gold marks formal certifications, achievements and the main call to action. Credential badges are gold for formal certifications, navy for certificate programs and grey for no credential. |
+| Tokens | All colours are CSS custom properties in `src/ui/styles.css`, redefined for dark mode. Never hard-code colours in components. |
+| Tagline | "Learn. Build. Certify." |
+
+Name clearance (domains and trademark) is still open; see [ROADMAP.md](ROADMAP.md).
+
+## Architecture
+
+```
+AI-cademy/
+  index.html, vite.config.ts, tsconfig.json, eslint.config.js, playwright.config.ts
+  README.md              Setup, features, sources, limitations
+  CONTRIBUTING.md        How to work on the project
+  .github/workflows/     CI: check + Playwright on every push and pull request
+  docs/                  Architecture, catalog, games, testing, roadmap, build report
+  src/
+    domain/types.ts      Catalog, curriculum, question and Fact<T> provenance types
+    data/                Seed content only, no logic
+      catalog.ts         42 entries; official facts carry sourceUrl + checkedOn via verified()
+      facts.ts           Fact helpers (verified / unverified / estimate)
+      curriculum/        10 study courses (lessons, questions, flashcards, blueprints); index.ts registers them
+      paths.ts           5 career path templates
+      projects.ts        9 Project Lab projects
+      registry.ts        Merges built-in and user-imported content
+    engine/              Pure, unit-tested logic with no React
+      grading.ts         All question types; normalised text and numeric-tolerance fill answers
+      srs.ts             Modified SM-2 using correctness, confidence and difficulty
+      mastery.ts         Per-concept mastery, weak concepts, readiness, course status
+      exam.ts            Blueprint-weighted selection (allocate = largest remainder), scoring, weak domains
+      recommend.ts       Path personalisation with reasons; nextAction() for Home
+      games.ts           Arcade pickers, charge, XP levels, badges
+      catalogFilter.ts   Search, quick-credential filters, trade-offs, staleness
+      validate.ts        Import validation (courses and backups)
+      random.ts          mulberry32 seeded PRNG, hashString, seededShuffle
+      tutor.ts           Optional TutorProvider interface; default returns authored explanations
+    store/
+      schema.ts          AppState, SCHEMA_VERSION = 3, initial state
+      reducer.ts         All actions (recordAnswer, recordGame, startExam, …)
+      persistence.ts     localStorage key "ai-career-academy", ordered MIGRATIONS, corrupt-data recovery
+      StoreContext.tsx   React context + dispatch
+    ui/
+      App.tsx, router.ts Hash router (#/section/...), so it works on any static host and in the artifact preview
+      pages/             Home, Catalog, MyLearning, Paths, Quick, Practice, Lesson, Arcade, Projects, Progress, Settings, Onboarding
+      components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
+      styles.css         Theme tokens (light and dark) and all styles
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (84 tests)
+  e2e/journey.spec.ts    Playwright: 8 journeys × desktop + Pixel 7 = 16 tests, with axe WCAG A/AA scans
+```
+
+**Dependencies:** React and React DOM at runtime. Development uses Vite, TypeScript, Vitest, Testing Library with jsdom, Playwright, axe-core and ESLint. There are no state, routing or validation libraries, and new dependencies should be avoided unless they clearly earn their place.
+
+### Data flow
+1. The UI dispatches an action to `reducer.ts`.
+2. State is persisted to `localStorage` under the key `ai-career-academy`.
+3. Every answer anywhere in the app (lesson, review, exam, diagnostic, flashcard or game) goes through `recordAnswer`. That action appends an `Attempt` (capped at 5,000) and, unless `noSchedule` is set, updates the item's `ReviewCard` with `srs.schedule`. The review key is `${courseId}:${itemId}`.
+4. Mastery is always **derived** from `attempts` by `mastery.ts` and is never stored.
+
+### Key engine rules
+- **SRS (`srs.ts`):**
+  - Quality is derived from correctness and confidence: 1 = guessed, 2 = unsure, 3 = confident. A confident miss counts as a misconception and gets quality 0.
+  - A miss comes back in 10 minutes. The first successes come back at 1 day, then 3 days, and after that at interval × ease, adjusted for item difficulty.
+  - A guessed correct answer is capped at a 1-day interval.
+- **Mastery (`mastery.ts`):**
+  - Mastery is per concept, using a recency-weighted score over the last 8 attempts with a decay of 0.7.
+  - A guessed correct answer earns 0.5 credit and an unsure one 0.8.
+  - "Mastered" needs at least 3 attempts, a score of 0.8 or more, at least 2 *different* items answered correctly, and a correct most recent attempt.
+- **Exam (`exam.ts`):** `allocate()` splits the question count across domains by weight using the largest-remainder method. Each `passPercent` is an app readiness threshold, not the official cut score.
+- **Games (`games.ts`):**
+  - `pickRun()` picks due reviews first (most overdue first), then weak concepts, then fresh questions.
+  - `pickMatch()` puts unseen and due flashcards first.
+  - `bossFor()` gives one boss per blueprint domain, with HP = min(3, the number of questions), plus 2 spare questions.
+  - `charge()` gives 1 per correct answer, or 2 when it continues a run of correct answers, and never subtracts.
+  - XP comes from mastery (mastered 50, familiar 20, learning 5 per concept) plus 10 per game won. Level n needs 50·n·(n−1) XP.
+  - There are 6 badges.
+
+### Extending
+- **New provider or course:**
+  - Add a `CatalogEntry` in `data/catalog.ts`. Use `verified()` only for facts read on the official page, and set `sourceUrl` and `checkedOn`.
+  - Add a `StudyCourse` in `src/data/curriculum/` and register it in `curriculum/index.ts`.
+  - `tests/catalog.test.ts` checks links, ids, explanations and blueprint coverage.
+- **New exam blueprint:** set `blueprint.domains` with the published weights (`weightsStatus: 'verified'`), and give every domain at least one question.
+- **Without code:** use Settings → Import a course (`aca-course@1` JSON). Imported courses are always labelled user-added and unverified.
+- **Schema change:** bump `SCHEMA_VERSION` in `store/schema.ts`, add a step to `MIGRATIONS` in `store/persistence.ts`, and add a store test showing that an older save loads unchanged.
+- **AI tutoring:** implement `TutorProvider` behind a server you control. Never put API keys in client code.
+
+Keep these ids stable: the storage key `ai-career-academy`, the backup format id, and the 29 first-release catalog ids (a unit test checks the ids). They were deliberately not renamed, so saved progress and older backups still load. Only the downloaded backup file name changed, to `pathbolt-backup-*.json`.

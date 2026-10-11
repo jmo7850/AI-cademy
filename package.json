@@ -1,7 +1,7 @@
 {
-  "name": "ai-career-academy",
-  "version": "0.1.0",
-  "description": "Local-first, ADHD-friendly AI career academy: catalog, lessons, practice exams, mastery, spaced repetition, pathways and projects.",
+  "name": "pathbolt",
+  "version": "1.0.0",
+  "description": "PathBolt: a local-first, ADHD-friendly study platform for entry-level AI careers, with a verified course catalog, practice exams, spaced repetition, career paths and an optional games Arcade.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -35,5 +35,12 @@
     "vitest": "^5.0.3"
   },
   "private": true,
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmo7850/AI-cademy.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }
