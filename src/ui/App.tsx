@@ -67,7 +67,7 @@ export function App() {
       case 'onboarding': return <OnboardingPage />;
       case 'catalog': return <CatalogPage />;
       case 'course': return <EntryPage entryId={a ?? ''} />;
-      case 'learn': return <LessonPage entryId={a ?? ''} lessonId={b} focus={focus} />;
+      case 'learn': return <LessonPage entryId={a ?? ''} lessonId={b} section={c !== undefined ? Number(c) : undefined} focus={focus} />;
       case 'my': return <MyLearningPage />;
       case 'paths': return <PathsPage />;
       case 'fast': return a ? <FastTrackPage key={a} trackId={a} /> : <FastTrackIndex />;

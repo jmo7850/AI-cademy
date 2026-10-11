@@ -88,6 +88,16 @@ export function validateStudyCourse(c: unknown): string[] {
     }
     for (const id of isStrArr(l.checkIds) ? l.checkIds : []) if (!qids.has(id)) e.push(`course.lessons[${i}].checkIds: unknown question "${id}"`);
   });
+  const lessonSections = new Map<string, number>();
+  for (const l of Array.isArray(c.lessons) ? c.lessons : []) if (isObj(l) && isStr(l.id) && Array.isArray(l.sections)) lessonSections.set(l.id, l.sections.length);
+  (Array.isArray(c.questions) ? c.questions : []).forEach((q, i) => {
+    if (!isObj(q) || q.teachIn === undefined) return;
+    const t = q.teachIn;
+    const n = isObj(t) && isStr(t.lessonId) ? lessonSections.get(t.lessonId) : undefined;
+    if (!isObj(t) || n === undefined || !Number.isInteger(t.section) || (t.section as number) < 0 || (t.section as number) >= n) {
+      e.push(`course.questions[${i}].teachIn: must name an existing lesson and section`);
+    }
+  });
   if (c.blueprint !== undefined) {
     const b = c.blueprint;
     if (!isObj(b) || !Array.isArray(b.domains) || b.domains.length === 0) e.push('course.blueprint.domains: at least one domain');

@@ -99,8 +99,8 @@ AI-cademy/
       components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
       styles.css         Theme tokens (light and dark) and all styles
   scripts/catalog-drift.mjs  Weekly check of catalog source pages (npm run catalog:drift)
-  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (126 tests)
-  e2e/journey.spec.ts    Playwright: 13 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 52 tests, with axe WCAG A/AA scans
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (142 tests)
+  e2e/journey.spec.ts    Playwright: 14 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 56 tests, with axe WCAG A/AA scans
 ```
 
 **Dependencies:** React and React DOM at runtime. Development uses Vite, TypeScript, Vitest, Testing Library with jsdom, Playwright, axe-core and ESLint. There are no state, routing or validation libraries, and new dependencies should be avoided unless they clearly earn their place.
@@ -112,6 +112,8 @@ AI-cademy/
 4. Mastery is always **derived** from `attempts` by `mastery.ts` and is never stored.
 
 ### Key engine rules
+
+- **Lesson standard:** each `LessonSection` can carry a `diagram` (a text flow, so it stays accessible and safe in imported courses), a worked `example`, a `nonExample`, a `misconception` and a two-line `recap`. Each `Question` can carry `teachIn` (lesson id and section index); a wrong answer then shows "Review this section" linking to `#/learn/<entry>/<lesson>/<section>`. `tests/lessons.test.ts` checks every link resolves and, for AWS AI Practitioner (the pilot, one lesson per exam domain), that every section has all the parts.
 
 - **Outside courses:** Poqeni cannot see a provider course, so status is what the learner reported plus what Poqeni itself tested. `engine/outside.ts` never says "confirmed" or "earned"; a recorded credential reads "Poqeni has not verified it". Return-check questions come from Poqeni's own banks (`data/returnChecks.ts` maps each outside entry to a bank and optional concepts) and are recorded as `review` attempts.
 - **Memory is local and visible:** everything remembered is listed on `#/know` (setup answers, optional notes, facts derived from activity), editable and deletable, with "Forget everything". Nothing leaves the device.

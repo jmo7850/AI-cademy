@@ -184,6 +184,7 @@ function ReturnCheck({ entryId, onRetry }: { entryId: string; onRetry: () => voi
       <div className="card" style={{ marginTop: 12 }}>
         <QuestionView
           key={`${idx}-${q.id}`}
+          courseId={plan.course.id}
           question={q}
           seed={seed}
           onSubmit={(r, _a, c) => {

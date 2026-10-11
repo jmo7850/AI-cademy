@@ -2,6 +2,8 @@ import { useId, useMemo, useState } from 'react';
 import type { Answer, Question } from '../../domain/types';
 import { correctAnswerText, gradeQuestion, isAnswerComplete, type GradeResult } from '../../engine/grading';
 import { seededShuffle } from '../../engine/random';
+import { useStore } from '../../store/StoreContext';
+import { href } from '../router';
 
 interface Props {
   question: Question;
@@ -14,13 +16,16 @@ interface Props {
   /** Show a graded review (exam results) without inputs. */
   reviewOnly?: boolean;
   label?: string;
+  /** The course this question belongs to, so a miss can link back to the section that teaches it. */
+  courseId?: string;
 }
 
 const emptyAnswer = (q: Question): Answer =>
   q.kind === 'fill' ? { kind: 'fill', text: '' } : q.kind === 'order' ? { kind: 'order', order: [] } : q.kind === 'match' ? { kind: 'match', mapping: {} } : { kind: 'choice', selected: [] };
 
-export function QuestionView({ question: q, seed, value, onChange, onSubmit, reviewOnly, label }: Props) {
+export function QuestionView({ question: q, seed, value, onChange, onSubmit, reviewOnly, label, courseId }: Props) {
   const uid = useId();
+  const { registry } = useStore();
   const [local, setLocal] = useState<Answer>(() => emptyAnswer(q));
   const [confidence, setConfidence] = useState<1 | 2 | 3 | undefined>();
   const [result, setResult] = useState<GradeResult | null>(null);
@@ -43,6 +48,10 @@ export function QuestionView({ question: q, seed, value, onChange, onSubmit, rev
     setResult(r);
     onSubmit?.(r, answer, confidence);
   };
+
+  const course = courseId ? registry.course(courseId) : undefined;
+  const lesson = q.teachIn && course ? course.lessons.find((l) => l.id === q.teachIn!.lessonId) : undefined;
+  const teach = lesson && course?.catalogId ? { href: href('learn', course.catalogId, lesson.id, String(q.teachIn!.section)), label: lesson.sections[q.teachIn!.section]?.heading ?? lesson.title } : undefined;
 
   const cls = (id: string) => (graded ? graded.details[id] ?? '' : '');
 
@@ -129,6 +138,7 @@ export function QuestionView({ question: q, seed, value, onChange, onSubmit, rev
         <div className={`feedback ${graded.correct ? 'ok' : 'no'}`} role="status">
           <p style={{ marginBottom: 6 }}><strong>{graded.correct ? 'Correct.' : 'Not quite.'}</strong> {!graded.correct && <>Correct answer: {correctAnswerText(q)}</>}</p>
           <p style={{ margin: 0 }}>{q.explanation}</p>
+          {!graded.correct && teach && <p style={{ margin: '8px 0 0' }}><a href={teach.href}>Review this section: {teach.label}</a></p>}
         </div>
       )}
     </div>

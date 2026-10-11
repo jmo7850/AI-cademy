@@ -6,7 +6,7 @@ import { ProgressBar } from '../components/bits';
 import { QuestionView } from '../components/QuestionView';
 import { go, href } from '../router';
 
-export function LessonPage({ entryId, lessonId, focus }: { entryId: string; lessonId?: string; focus: boolean }) {
+export function LessonPage({ entryId, lessonId, section, focus }: { entryId: string; lessonId?: string; section?: number; focus: boolean }) {
   const { state, registry } = useStore();
   const entry = registry.entry(entryId);
   const course = registry.courseForEntry(entryId);
@@ -21,8 +21,10 @@ export function LessonPage({ entryId, lessonId, focus }: { entryId: string; less
 
   if (!entry || !course) return <div className="card"><h1>No in-app lessons</h1><p>This entry is studied on the provider's site.</p><a href={href('course', entryId)}>Back to course</a></div>;
   if (!lesson) return <div className="card"><h1>{course.title}</h1><p>This course has no lessons yet. Use the Practice Center for its questions.</p><a href={href('practice')}>Practice Center</a></div>;
-  const savedStep = progress?.position?.lessonId === lesson.id ? progress.position.section : 0;
-  return <LessonView key={lesson.id} entry={entry} course={course} lesson={lesson} initialStep={savedStep} focus={focus} />;
+  const savedStep = section !== undefined && Number.isInteger(section) && section >= 0 && section < lesson.sections.length
+    ? section
+    : progress?.position?.lessonId === lesson.id ? progress.position.section : 0;
+  return <LessonView key={`${lesson.id}:${section ?? ''}`} entry={entry} course={course} lesson={lesson} initialStep={savedStep} focus={focus} />;
 }
 
 function LessonView({ entry, course, lesson, initialStep, focus }: { entry: CatalogEntry; course: StudyCourse; lesson: Lesson; initialStep: number; focus: boolean }) {
@@ -57,10 +59,14 @@ function LessonView({ entry, course, lesson, initialStep, focus }: { entry: Cata
       <section aria-labelledby="sec-h">
         <h2 id="sec-h">{sec.heading}</h2>
         {sec.body.split('\n\n').map((p, i) => <p key={i} style={{ whiteSpace: 'pre-line' }}>{p}</p>)}
+        {sec.diagram && <Diagram {...sec.diagram} />}
         {sec.code && <pre>{sec.code}</pre>}
         {sec.example && (
           <div className="notice"><strong>Worked example. </strong><span style={{ whiteSpace: 'pre-line' }}>{sec.example}</span></div>
         )}
+        {sec.nonExample && <div className="notice"><strong>Not the same thing. </strong><span style={{ whiteSpace: 'pre-line' }}>{sec.nonExample}</span></div>}
+        {sec.misconception && <div className="notice"><strong>Common mix-up. </strong><span style={{ whiteSpace: 'pre-line' }}>{sec.misconception}</span></div>}
+        {sec.recap && <p><strong>Remember: </strong>{sec.recap}</p>}
         {sec.details && (
           <details>
             <summary>Go deeper (optional)</summary>
@@ -80,6 +86,7 @@ function LessonView({ entry, course, lesson, initialStep, focus }: { entry: Cata
         <h2 id="chk-h">Knowledge check {step - S + 1} of {checks.length}</h2>
         <QuestionView
           key={q.id}
+          courseId={course.id}
           question={q}
           seed={seed}
           onSubmit={(r, _a, confidence) => {
@@ -98,6 +105,12 @@ function LessonView({ entry, course, lesson, initialStep, focus }: { entry: Cata
     body = (
       <section aria-labelledby="fin-h">
         <h2 id="fin-h">{done ? 'Lesson complete' : 'Apply it'}</h2>
+        {lesson.sections.some((x) => x.recap) && (
+          <div className="card">
+            <h3>What to remember</h3>
+            <ul>{lesson.sections.filter((x) => x.recap).map((x) => <li key={x.heading}><strong>{x.heading}.</strong> {x.recap}</li>)}</ul>
+          </div>
+        )}
         {lesson.practical && <div className="notice"><strong>Practical task (about 5 minutes). </strong>{lesson.practical}</div>}
         {lesson.sourceLinks && (
           <>
@@ -158,3 +171,16 @@ function LessonView({ entry, course, lesson, initialStep, focus }: { entry: Cata
 }
 
 const lessonIndex = (lessons: Lesson[], id: string) => lessons.findIndex((l) => l.id === id);
+
+function Diagram({ caption, flow }: { caption: string; flow: string[] }) {
+  return (
+    <figure style={{ margin: '12px 0' }}>
+      <ol className="row" style={{ listStyle: 'none', padding: 0, margin: 0, flexWrap: 'wrap' }} aria-label={caption}>
+        {flow.map((f, i) => (
+          <li key={f} className="badge b-estimate" style={{ padding: '6px 10px' }}>{i > 0 && <span aria-hidden="true">→ </span>}{f}</li>
+        ))}
+      </ol>
+      <figcaption className="small muted">{caption}</figcaption>
+    </figure>
+  );
+}

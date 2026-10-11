@@ -8,14 +8,15 @@ How the app is checked and the most recent results.
 | --- | --- |
 | `npm run typecheck` | pass |
 | `npm run lint` | pass |
-| `npm test` (Vitest) | **126/126** passed in 8 files |
+| `npm test` (Vitest) | **142/142** passed in 9 files |
 | `npm run build` | pass: 471.5 kB JS (167.0 kB gzip), 13.1 kB CSS |
-| `npm run test:e2e` (Playwright: desktop Chrome, Pixel 7, Firefox, WebKit) | 13 journeys per browser. **26/26** passed locally on the two Chromium projects; Firefox and WebKit run in CI |
+| `npm run test:e2e` (Playwright: desktop Chrome, Pixel 7, Firefox, WebKit) | 14 journeys per browser. **28/28** passed locally on the two Chromium projects; Firefox and WebKit run in CI |
 
 The e2e suite covers:
 - The full learner journey: onboard, course, lesson, answer, explanation, leave, resume, weak-concept review, practice exam, results.
 - Outside courses: finish, add a note, take the return check, see the honest status; a recorded credential reads "Poqeni has not verified it".
 - Project milestone evidence, and the "What Poqeni knows about me" screen (add, delete, forget everything).
+- A missed question linking back to the lesson section that teaches it.
 - Claude fast track: honest badge wording, pace estimate, "Use as my plan".
 - Quick-credential filters.
 - Path customisation.
