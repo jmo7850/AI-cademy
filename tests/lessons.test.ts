@@ -1,6 +1,7 @@
 import { examCoverage } from '../src/engine/coverage';
 import { builtInCourses } from '../src/data/curriculum';
 import { awsAif } from '../src/data/curriculum/awsAif';
+import { msAi901 } from '../src/data/curriculum/msAi901';
 import { validateStudyCourse } from '../src/engine/validate';
 
 describe('teachIn links', () => {
@@ -100,5 +101,53 @@ describe('AIF-C01 question bank and coverage', () => {
   it('reports a domain with no lesson as studied outside', () => {
     const bare = { ...awsAif, lessons: [], questions: awsAif.questions.map((q) => ({ ...q, teachIn: undefined })) };
     expect(examCoverage(bare).every((r) => r.lessons.length === 0)).toBe(true);
+  });
+});
+
+describe('AI-901 lessons and question bank', () => {
+  const total = msAi901.questions.length;
+
+  it('has a bank of at least 55 questions with unique ids and every question linked to a lesson', () => {
+    expect(total).toBeGreaterThanOrEqual(55);
+    expect(new Set(msAi901.questions.map((q) => q.id)).size).toBe(total);
+    for (const q of msAi901.questions) expect(q.teachIn, q.id).toBeDefined();
+  });
+
+  it('has a lesson for every exam domain and keeps the exam-map lesson id', () => {
+    expect(msAi901.lessons.some((l) => l.id === 'ms-ai901-1')).toBe(true);
+    for (const row of examCoverage(msAi901)) {
+      expect(row.lessons.length, row.name).toBeGreaterThan(0);
+      expect(row.questions, row.name).toBeGreaterThan(0);
+    }
+  });
+
+  it('writes every section to the standard', () => {
+    for (const l of msAi901.lessons) {
+      l.sections.forEach((s, i) => {
+        const where = `${l.id}[${i}] ${s.heading}`;
+        expect(s.body.length, where).toBeGreaterThan(40);
+        expect(!!(s.diagram || s.example), `${where}: diagram or example`).toBe(true);
+        expect(s.nonExample, `${where}: nonExample`).toBeTruthy();
+        expect(s.misconception, `${where}: misconception`).toBeTruthy();
+        expect(s.recap, `${where}: recap`).toBeTruthy();
+        expect(s.recap!.split(/(?<=[.!?])\s+/).length, `${where}: recap length`).toBeLessThanOrEqual(3);
+      });
+      expect(l.checkIds.length, l.id).toBeGreaterThan(0);
+      for (const id of l.checkIds) expect(msAi901.questions.some((q) => q.id === id), `${l.id}/${id}`).toBe(true);
+    }
+  });
+
+  it('explains every option and gives each domain its weighted share of the bank (within one question)', () => {
+    for (const q of msAi901.questions) {
+      if ('options' in q) for (const o of q.options) expect(o.why.length, `${q.id}/${o.id}`).toBeGreaterThan(2);
+    }
+    for (const d of msAi901.blueprint!.domains) {
+      const have = msAi901.questions.filter((q) => q.domainId === d.id).length;
+      expect(have, d.name).toBeGreaterThanOrEqual(Math.floor((d.weight / 100) * total) - 1);
+    }
+  });
+
+  it('still validates as an importable course shape', () => {
+    expect(validateStudyCourse(JSON.parse(JSON.stringify(msAi901)))).toEqual([]);
   });
 });
