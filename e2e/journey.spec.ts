@@ -50,6 +50,18 @@ test('primary learner journey: study, feedback, resume, review, practice exam', 
   await expect(page.getByRole('heading', { name: 'Knowledge check 3 of 4' })).toBeVisible();
 
   // Leave the app and return: progress persists and resumes at the same step.
+  // The place is saved in an effect after render, so wait for the write before leaving
+  // (3 lesson sections + 2 answered checks = section index 5).
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const saved = JSON.parse(localStorage.getItem('ai-career-academy') ?? '{}') as {
+          courses?: Record<string, { position?: { section: number } }>;
+        };
+        return Object.values(saved.courses ?? {}).map((c) => c.position?.section);
+      }),
+    )
+    .toContain(5);
   await page.goto('about:blank');
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Continue: AI, machine learning and generative AI/ })).toBeVisible();
