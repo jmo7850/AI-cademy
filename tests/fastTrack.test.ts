@@ -47,4 +47,14 @@ describe('fast tracks', () => {
     expect(aws.credential.kind).toBe('certification');
     expect(JSON.stringify(aws).toLowerCase()).not.toMatch(/fastest|guarantee|earned here|you will pass/);
   });
+
+  it('the Microsoft track counts only the exam and keeps price and renewal unverified', () => {
+    const ms = fastTracks.find((t) => t.id === 'microsoft-ai')!;
+    const steps = trackSteps(ms, (id) => catalogById.get(id), {});
+    expect(steps.map((x) => x.entry.id)).toEqual(['ms-azure-ai-fundamentals', 'ms-applied-foundry-agents']);
+    expect(trackHours(steps).total).toBe(catalogById.get('ms-azure-ai-fundamentals')!.studyHours.value);
+    expect(catalogById.get('ms-azure-ai-fundamentals')!.exam?.feeUSD?.status).not.toBe('verified');
+    expect(ms.credential.kind).toBe('certification');
+    expect(JSON.stringify(ms).toLowerCase()).not.toMatch(/fastest|guarantee|earned here|you will pass/);
+  });
 });

@@ -427,3 +427,12 @@ test('AWS fast track is an exam route that never says the exam is earned in the 
   await page.getByLabel('Hours a week').selectOption('10');
   await expect(page.getByRole('status')).toContainText('about 3 weeks');
 });
+
+test('Microsoft fast track shows an exam route with the lab as optional', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/fast/microsoft-ai');
+  await expect(page.getByRole('heading', { level: 1, name: 'Azure AI Fundamentals fast track' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Step 2: .*\(optional\)/ })).toBeVisible();
+  await expect(page.getByText(/does not state renewal terms/)).toBeVisible();
+  await expectNoSeriousAxe(page, 'microsoft fast track');
+});

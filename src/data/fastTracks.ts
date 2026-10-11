@@ -53,6 +53,21 @@ export const fastTracks: FastTrack[] = [
       { catalogId: 'aws-ai-practitioner', why: 'Study the five exam domains with lessons, a 60-question practice bank and the coverage view, then book the exam when your practice scores are steady.' },
     ],
   },
+  {
+    id: 'microsoft-ai',
+    title: 'Azure AI Fundamentals fast track',
+    provider: 'Microsoft',
+    summary: 'Poqeni lessons and practice for AI-901, then an optional hands-on lab in Microsoft Foundry.',
+    credential: {
+      name: 'Microsoft Certified: Azure AI Fundamentals',
+      kind: 'certification',
+      note: 'This is a proctored exam that Microsoft grants, not something finishing these steps earns. Its price depends on your country or region, and Microsoft\'s page does not state renewal terms, so both show as unverified on the course page. Poqeni practice never counts as the exam, and Poqeni cannot confirm a result until Microsoft issues it.',
+    },
+    steps: [
+      { catalogId: 'ms-azure-ai-fundamentals', why: 'Study both skill areas with five lessons, a 60-question practice bank and the coverage view, then book the exam when your practice scores are steady.' },
+      { catalogId: 'ms-applied-foundry-agents', why: 'A hands-on lab: deploy a model, build an agent and test it. It is separate from the exam and worth doing if you want to build with Foundry.', optional: true },
+    ],
+  },
 ];
 
 export const fastTrackById = new Map(fastTracks.map((t) => [t.id, t]));
