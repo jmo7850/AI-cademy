@@ -58,3 +58,11 @@ export function match(id: string, c: string[], p: string, pairs: [string, string
 export const card = (id: string, conceptId: string, front: string, back: string) => ({ id, conceptId, front, back });
 
 export type { Question };
+
+/** Attach "taught in" links to authored questions: question id -> [lessonId, section index]. */
+export function withTeachIn(questions: Question[], map: Record<string, [string, number]>): Question[] {
+  return questions.map((q) => {
+    const t = map[q.id];
+    return t ? { ...q, teachIn: { lessonId: t[0], section: t[1] } } : q;
+  });
+}

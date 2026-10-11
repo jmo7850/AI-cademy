@@ -258,7 +258,7 @@ function ExamRunner({ exam, course }: { exam: ExamAttempt; course: StudyCourse }
       ) : (
         <div className="card">
           {exam.mode === 'practice' ? (
-            <QuestionView key={q.id} question={q} seed={exam.seed} value={answer} reviewOnly={practiceAnswered}
+            <QuestionView key={q.id} courseId={course.id} question={q} seed={exam.seed} value={answer} reviewOnly={practiceAnswered}
               onSubmit={practiceAnswered ? undefined : (r, a, confidence) => {
                 update({ answers: { ...exam.answers, [q.id]: a } });
                 dispatch({ type: 'recordAnswer', attempt: { itemId: q.id, courseId: course.id, conceptIds: q.conceptIds, correct: r.correct, confidence, at: nowIso(), context: 'exam' }, difficulty: q.difficulty });
@@ -362,7 +362,7 @@ function ExamResults({ exam, course }: { exam: ExamAttempt; course: StudyCourse 
         </div>
         {shown.map((q, i) => (
           <div className="card" key={q.id}>
-            <QuestionView question={q} seed={exam.seed} value={exam.answers[q.id] ?? emptyFor(q)} reviewOnly label={`Question ${onlyWrong ? i + 1 : exam.questionIds.indexOf(q.id) + 1}`} />
+            <QuestionView courseId={course.id} question={q} seed={exam.seed} value={exam.answers[q.id] ?? emptyFor(q)} reviewOnly label={`Question ${onlyWrong ? i + 1 : exam.questionIds.indexOf(q.id) + 1}`} />
           </div>
         ))}
       </section>
@@ -440,7 +440,7 @@ export function ReviewPage({ courseId, limit: maxItems }: { courseId?: string; l
       <ProgressBar value={idx / queue.length} label="Review progress" />
       <div className="card" style={{ marginTop: 12 }}>
         {item.question ? (
-          <QuestionView key={`${idx}-${item.question.id}`} question={item.question} seed={seed} onSubmit={(r, _a, c) => record(item.question!.id, item.question!.conceptIds, r.correct, c, item.question!.difficulty)} />
+          <QuestionView key={`${idx}-${item.question.id}`} courseId={item.courseId} question={item.question} seed={seed} onSubmit={(r, _a, c) => record(item.question!.id, item.question!.conceptIds, r.correct, c, item.question!.difficulty)} />
         ) : (
           <FlashcardView key={`${idx}-${item.card!.id}`} card={item.card!} onGrade={(ok, c) => record(item.card!.id, [item.card!.conceptId], ok, c, undefined, 'flashcard')} />
         )}

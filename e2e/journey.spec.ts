@@ -353,3 +353,23 @@ test('Claude fast track shows an honest badge route, a pace estimate and can bec
   await page.getByRole('link', { name: 'Open my plans' }).click();
   await expect(page.getByRole('heading', { name: /Step 1: AI Fluency/ })).toBeVisible();
 });
+
+test('a missed question links back to the section that teaches it', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/course/aws-ai-practitioner');
+  await page.getByRole('button', { name: 'Start studying' }).click();
+  await page.goto('/#/learn/aws-ai-practitioner/aws-aif-d1');
+  await expect(page.getByRole('heading', { name: 'AI, machine learning and deep learning' })).toBeVisible();
+  await expect(page.getByText('Not the same thing.')).toBeVisible();
+  await expect(page.getByText('Common mix-up.')).toBeVisible();
+  await expect(page.getByRole('list', { name: /Each term sits inside the one before it/ })).toBeVisible();
+  await expectNoSeriousAxe(page, 'lesson section');
+  for (let i = 0; i < 4; i++) await page.getByRole('button', { name: /Next section|Check what you learned/ }).click();
+  // First check is the overfitting question: pick a wrong answer on purpose.
+  await page.getByLabel('Underfitting').check();
+  await page.getByRole('button', { name: 'Check answer' }).click();
+  await expect(page.getByText('Not quite.')).toBeVisible();
+  await page.getByRole('link', { name: /Review this section: Is the model any good\?/ }).click();
+  await expect(page.getByRole('heading', { name: 'Is the model any good?' })).toBeVisible();
+  await expect(page.getByText('Remember:')).toBeVisible();
+});

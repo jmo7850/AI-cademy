@@ -97,6 +97,20 @@ export interface LessonSection {
   details?: string; // progressive disclosure: "Go deeper"
   example?: string; // worked example
   code?: string;
+  /** A simple flow diagram, drawn from text so it is accessible and safe for imported courses. */
+  diagram?: { caption: string; flow: string[] };
+  /** Something that looks like the idea but is not. */
+  nonExample?: string;
+  /** A common wrong belief, stated and corrected. */
+  misconception?: string;
+  /** One or two lines to remember. */
+  recap?: string;
+}
+
+/** Where a question is taught: a lesson and the zero-based index of its section. */
+export interface TeachIn {
+  lessonId: string;
+  section: number;
 }
 
 export interface Lesson {
@@ -127,6 +141,8 @@ interface QuestionBase {
   prompt: string;
   code?: string;
   explanation: string;
+  /** The lesson section that teaches this, so a miss can link straight back to it. */
+  teachIn?: TeachIn;
 }
 
 export interface ChoiceQuestion extends QuestionBase {
