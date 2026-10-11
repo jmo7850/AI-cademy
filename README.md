@@ -35,7 +35,7 @@ No account, server or paid AI API is needed. All progress stays in your browser 
 
 ## Quick start
 
-Requires **Node 20 or newer** (see `.nvmrc`).
+Requires **Node 20 or newer**; CI uses Node 22 (see `.nvmrc`).
 
 ```bash
 git clone https://github.com/jmo7850/AI-cademy.git

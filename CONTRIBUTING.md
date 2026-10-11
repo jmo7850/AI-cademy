@@ -7,7 +7,7 @@ npm ci
 npm run dev
 ```
 
-Node 20 or newer is required (see `.nvmrc`).
+Node 20 or newer is required; CI uses Node 22 (see `.nvmrc`).
 
 ## Before you open a pull request
 
