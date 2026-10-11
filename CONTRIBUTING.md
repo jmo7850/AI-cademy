@@ -13,7 +13,7 @@ Node 20 or newer is required; CI uses Node 22 (see `.nvmrc`).
 
 ```bash
 npm run check                    # type check, lint, unit tests, production build
-npx playwright install chromium  # first time only
+npx playwright install chromium firefox webkit  # first time only
 npm run test:e2e                 # browser journeys and accessibility scans
 ```
 

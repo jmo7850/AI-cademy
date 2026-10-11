@@ -57,7 +57,8 @@ To build a static site, run `npm run build`. It writes to `dist/`, which any sta
 | `npm run typecheck` | TypeScript in strict mode, no emit. |
 | `npm run lint` | ESLint with the TypeScript and React Hooks rules. |
 | `npm test` | Vitest unit tests (engines, store, catalog integrity). |
-| `npm run test:e2e` | Playwright journeys on desktop and a Pixel 7 profile, with axe accessibility scans. Run `npx playwright install chromium` once first, and `npm run build` before it. |
+| `npm run test:e2e` | Playwright journeys in desktop Chrome, a Pixel 7 profile, Firefox and Safari (WebKit), with axe accessibility scans. Run `npx playwright install chromium firefox webkit` once first, and `npm run build` before it. Add `--project=desktop` to run one browser. |
+| `npm run catalog:drift` | Requests every official source page in the catalog and lists the ones that moved, changed or went away, for a person to re-check. Also runs weekly in GitHub Actions. |
 | `npm run build` | Type check, then a production build in `dist/`. |
 | `npm run preview` | Serves `dist/` on port 4173. |
 
