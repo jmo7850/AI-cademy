@@ -84,6 +84,7 @@ AI-cademy/
       catalogFilter.ts   Search, quick-credential filters, trade-offs, staleness
       validate.ts        Import validation (courses and backups)
       random.ts          mulberry32 seeded PRNG, hashString, seededShuffle
+      fastTrack.ts       Fixed-order route hours and pace-based finish estimate (data in data/fastTracks.ts)
       outside.ts         Honest status for courses studied elsewhere (self-report, note, return check); return-check picker
       memory.ts          Everything remembered about the learner, for the "What Poqeni knows about me" screen
       tutor.ts           Optional TutorProvider interface; default returns authored explanations
@@ -98,8 +99,8 @@ AI-cademy/
       components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
       styles.css         Theme tokens (light and dark) and all styles
   scripts/catalog-drift.mjs  Weekly check of catalog source pages (npm run catalog:drift)
-  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (121 tests)
-  e2e/journey.spec.ts    Playwright: 12 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 48 tests, with axe WCAG A/AA scans
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (126 tests)
+  e2e/journey.spec.ts    Playwright: 13 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 52 tests, with axe WCAG A/AA scans
 ```
 
 **Dependencies:** React and React DOM at runtime. Development uses Vite, TypeScript, Vitest, Testing Library with jsdom, Playwright, axe-core and ESLint. There are no state, routing or validation libraries, and new dependencies should be avoided unless they clearly earn their place.

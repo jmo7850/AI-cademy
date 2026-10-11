@@ -337,3 +337,19 @@ test('What Poqeni knows: see, add, delete and forget', async ({ page }) => {
   await expect(page.getByText('prefers short lessons')).toHaveCount(0);
   await expect(page.getByText('No notes.')).toBeVisible();
 });
+
+test('Claude fast track shows an honest badge route, a pace estimate and can become a plan', async ({ page }) => {
+  await skipOnboarding(page);
+  await openSection(page, 'Career Paths');
+  await page.getByRole('link', { name: /Fast tracks/ }).click();
+  await page.getByRole('link', { name: 'Claude fast track' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Claude fast track' })).toBeVisible();
+  await expect(page.getByText(/not a certification/).first()).toBeVisible();
+  await expectNoSeriousAxe(page, 'fast track');
+  await page.getByLabel('Hours a week').selectOption('5');
+  await expect(page.getByRole('status')).toContainText('about 2 weeks');
+  await page.getByRole('button', { name: 'Use as my plan' }).click();
+  await expect(page.getByRole('button', { name: 'This is one of your plans' })).toBeDisabled();
+  await page.getByRole('link', { name: 'Open my plans' }).click();
+  await expect(page.getByRole('heading', { name: /Step 1: AI Fluency/ })).toBeVisible();
+});
