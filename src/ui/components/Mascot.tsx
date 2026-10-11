@@ -1,5 +1,5 @@
 /**
- * poqeni, the mascot and logo, drawn as flat line art in inline SVG so it follows the theme.
+ * Poqeni, the mascot and logo, drawn as flat line art in inline SVG so it follows the theme.
  * Strokes use `--mk-line` (cream on navy surfaces, the text colour elsewhere) and fills use `--mk-fill` (sky blue).
  * The geometry matches the supplied brand lockup (src/ui/assets/brand/poqeni-lockup-on-dark.svg); keep them in step.
  */
@@ -105,8 +105,8 @@ const WORDMARK: [string, Record<string, string | number>][] = [
 /** The horizontal lockup: mark plus the lowercase wordmark. Always shown on navy, so it uses the cream strokes. */
 export function Lockup({ size = 44, className = 'lockup' }: { size?: number; className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 830.8 237.5" height={size} width={Math.round(size * AspectLockup)} role="img" aria-label="poqeni">
-      <title>poqeni</title>
+    <svg className={className} viewBox="0 0 830.8 237.5" height={size} width={Math.round(size * AspectLockup)} role="img" aria-label="Poqeni">
+      <title>Poqeni</title>
       <Head />
       {WORDMARK.map(([tag, props], i) => {
         const stroke = { fill: 'none', stroke: LINE, strokeWidth: 20, strokeLinecap: 'round' as const };

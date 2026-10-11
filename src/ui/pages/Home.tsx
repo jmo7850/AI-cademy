@@ -129,7 +129,7 @@ export function HomePage() {
         {state.profile.games && (
           <section className="card game-card" aria-labelledby="arc-home-h">
             <Mascot size={44} />
-            <h2 id="arc-home-h">Play with poqeni</h2>
+            <h2 id="arc-home-h">Play with Poqeni</h2>
             <p>Short, untimed games that count toward mastery and reviews. Optional.</p>
             <a className="btn" href={href('arcade')}>Open the Arcade</a>
           </section>

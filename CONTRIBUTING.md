@@ -1,4 +1,4 @@
-# Contributing to poqeni
+# Contributing to Poqeni
 
 ## Set up
 

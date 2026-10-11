@@ -7,7 +7,7 @@ const course = builtInCourses.find((c) => c.id === 'study-aws-aif')!;
 const NOW = new Date('2026-10-10T12:00:00Z');
 
 describe('games', () => {
-  it('puts due reviews first in a poqeni Run and never repeats a question', () => {
+  it('puts due reviews first in a Poqeni Run and never repeats a question', () => {
     let s = initialState();
     const missed = course.questions[7]!;
     s = reducer(s, { type: 'recordAnswer', attempt: { itemId: missed.id, courseId: course.id, conceptIds: missed.conceptIds, correct: false, at: '2026-10-09T00:00:00Z', context: 'lesson' } });

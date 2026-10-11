@@ -189,13 +189,13 @@ test('dark theme keeps pages accessible', async ({ page }) => {
   }
 });
 
-test('arcade games with poqeni record answers and results', async ({ page }) => {
+test('arcade games with Poqeni record answers and results', async ({ page }) => {
   await skipOnboarding(page);
   await openSection(page, 'Arcade');
   await page.getByLabel('Course').selectOption('study-aws-aif');
 
-  // poqeni Run: answer five questions whichever way, then see results.
-  await page.getByRole('link', { name: 'Play poqeni Run' }).click();
+  // Poqeni Run: answer five questions whichever way, then see results.
+  await page.getByRole('link', { name: 'Play Poqeni Run' }).click();
   for (let i = 0; i < 5; i++) {
     await expect(page.getByText(`Question ${i + 1} of 5`)).toBeVisible();
     // Answer any question format; correctness does not matter here.

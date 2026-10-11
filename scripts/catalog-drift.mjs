@@ -34,7 +34,7 @@ async function check(url, { checkedOn }) {
     const res = await fetch(url, {
       redirect: 'follow',
       signal: AbortSignal.timeout(TIMEOUT_MS),
-      headers: { 'user-agent': 'poqeni catalog drift check (+https://github.com/jmo7850/AI-cademy)' },
+      headers: { 'user-agent': 'Poqeni catalog drift check (+https://github.com/jmo7850/AI-cademy)' },
     });
     await res.body?.cancel();
     if (res.status === 404 || res.status === 410) return { kind: 'gone', detail: `HTTP ${res.status}` };

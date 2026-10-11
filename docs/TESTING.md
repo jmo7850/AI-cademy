@@ -20,7 +20,7 @@ The e2e suite covers:
 - Every nav section with axe WCAG 2 A/AA scans (no serious or critical issues) and no horizontal overflow.
 - The new-provider flow with persistence.
 - Dark theme accessibility.
-- Playing poqeni Run and Flash Match, persisting results, the Win board, badges and Boss Battle.
+- Playing Poqeni Run and Flash Match, persisting results, the Win board, badges and Boss Battle.
 
 **Not tested:** a manual screen-reader pass, and real Safari on iOS (WebKit on desktop is the closest CI gets).
 

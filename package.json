@@ -1,7 +1,7 @@
 {
   "name": "poqeni",
   "version": "1.0.0",
-  "description": "poqeni: a local-first, ADHD-friendly study platform for entry-level AI careers, with a verified course catalog, practice exams, spaced repetition, career paths and an optional games Arcade.",
+  "description": "Poqeni: a local-first, ADHD-friendly study platform for entry-level AI careers, with a verified course catalog, practice exams, spaced repetition, career paths and an optional games Arcade.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

@@ -11,7 +11,7 @@ Known limitations, open decisions and the recommended next steps.
 - There is no AI tutor provider yet, only the interface.
 
 ## Open decisions
-1. **Name clearance:** check `poqeni.com` / `poqeni.ai` with a registrar and search USPTO. Nothing has been checked or registered yet. The mascot shares the name poqeni.
+1. **Name clearance:** check `poqeni.com` / `poqeni.ai` with a registrar and search USPTO. Nothing has been checked or registered yet. The mascot shares the name Poqeni.
 2. **Tagline:** keep "Learn. Build. Certify." or adopt one of the alternatives.
 3. **Hosting:** the app is a static site, so any static host works (GitHub Pages, Netlify, Cloudflare Pages). No host has been chosen.
 4. **AI tutor:** whether to add one. It would need a small server to hold the API key.

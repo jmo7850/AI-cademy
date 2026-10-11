@@ -1,6 +1,6 @@
 # Product, brand and architecture
 
-How poqeni is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
+How Poqeni is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
 
 ## Product
 
@@ -30,7 +30,7 @@ These came from the spec and from the ADHD reference repo, [ayghri/i-have-adhd](
 | Career Paths | 5 templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). The learner can reorder, add, remove, skip or include steps, and every suggestion says why. Choose-one steps recommend a single provider and prefer the learner's choice. |
 | Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a note on the speed, depth and cost trade-off. |
 | Practice Center | Review queue, weak areas, flashcards, and an exam simulator weighted by the published domain weights. |
-| Arcade | Optional, untimed games hosted by poqeni: poqeni Run, Flash Match and Boss Battle. It can be hidden in Settings. |
+| Arcade | Optional, untimed games hosted by Poqeni: Poqeni Run, Flash Match and Boss Battle. It can be hidden in Settings. |
 | Project Lab | 9 projects from exercises to capstones, each with milestones, a definition of done, validation and a portfolio entry. |
 | Progress | Mastery per concept, activity, study time, review backlog, confidence, history, and the Arcade Win board. |
 | Settings | Preferences, schedule, budget, theme, backup export and restore (file or pasted text), course import, and delete all data. |
@@ -44,8 +44,8 @@ Course status levels are kept separate: Not started, In progress, Completed, Pra
 
 | Item | Value |
 | --- | --- |
-| Name | **poqeni**, always lowercase, including at the start of a sentence. |
-| Mascot | **poqeni**, a flat line-art robot with a graduation cap and two antennae: cream outlines with sky-blue fills. Every robot in the app uses this art. The head is the logo mark and the standing figure appears in the Home and Arcade hero cards. |
+| Name | **Poqeni**, with a capital P, as drawn in the logo. Pronounced poh-KEN-ee. Files and the package name stay lowercase (`poqeni-*`, `"name": "poqeni"`). |
+| Mascot | **Poqeni**, a flat line-art robot with a graduation cap and two antennae: cream outlines with sky-blue fills. Every robot in the app uses this art. The head is the logo mark and the standing figure appears in the Home and Arcade hero cards. |
 | Logo and mascot files | The supplied lockup is kept as `src/ui/assets/brand/poqeni-lockup-on-dark.svg`, with the standing figure (`poqeni-standing-on-dark.svg`) and a favicon beside it (`poqeni-icon.svg`) and a navy banner for the README (`docs/images/logo.svg`). The app draws the mark, standing figure and lockup as inline SVG in `src/ui/components/Mascot.tsx`, using the same geometry, so they follow the theme (`--mk-line` and `--mk-fill`). If the logo changes, update the SVG files and that component together. |
 | Palette | Deep Navy `#232F42` · Sky Blue `#6FB3E0` · Cream `#F2F0EA` (the last two are the logo's colours) · Brushed Gold `#D4A74F` · Metallic Silver `#B4B7BD` |
 | Fonts | Montserrat for headings and Lato for body text, both from Google Fonts with system fallbacks. |

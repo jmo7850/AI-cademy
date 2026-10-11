@@ -84,7 +84,7 @@ Not run: manual screen-reader pass; browsers other than Chromium.
 ---
 
 # Update: PathBolt and the Arcade (2026-10-10)
-> Later renamed: the app and its mascot Bolt are now both called **poqeni**, and `bolt-*` assets are `poqeni-*`. This section is kept as written.
+> Later renamed: the app and its mascot Bolt are now both called **Poqeni**, and `bolt-*` assets are `poqeni-*`. This section is kept as written.
 - Renamed to **PathBolt**; the mascot is **Bolt** (same white-and-gold art and brand colours). Backups now download as `pathbolt-backup-*.json`; older backups still restore.
 - **Arcade** (new nav section, optional, can be hidden in Settings), hosted by Bolt:
   - Bolt Run: 5 questions, due reviews first, then weak concepts. Bolt walks a 5-tile track; correct answers charge the battery (a run of correct answers charges double; misses never remove charge).

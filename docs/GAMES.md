@@ -1,8 +1,8 @@
 # Games
 
-The Arcade ships with three games: **poqeni Run**, **Flash Match** and **Boss Battle** (`src/ui/pages/Arcade.tsx`, logic in `src/engine/games.ts`). Every answer goes through the normal `recordAnswer` path, so games update mastery and spaced review. This document specifies the next, more video-game style games, which are **not built yet**.
+The Arcade ships with three games: **Poqeni Run**, **Flash Match** and **Boss Battle** (`src/ui/pages/Arcade.tsx`, logic in `src/engine/games.ts`). Every answer goes through the normal `recordAnswer` path, so games update mastery and spaced review. This document specifies the next, more video-game style games, which are **not built yet**.
 
-> **Status: NOT YET BUILT.** This is a specification for a future change; none of it exists in the code yet. The existing Arcade (poqeni Run, Flash Match, Boss Battle) stays as it is.
+> **Status: NOT YET BUILT.** This is a specification for a future change; none of it exists in the code yet. The existing Arcade (Poqeni Run, Flash Match, Boss Battle) stays as it is.
 
 ## 0. Rules every game must keep
 These come from [the product rules](ARCHITECTURE.md#product) and are acceptance criteria for **every** game below.
@@ -12,7 +12,7 @@ These come from [the product rules](ARCHITECTURE.md#product) and are acceptance 
 - **A wrong answer never loses points:** every score, currency or progress meter only goes up. A miss earns less, never minus. There are no lives, health that ends the game, or game-over screens. Every game can always be finished.
 - **Stopping costs nothing:** every answer is recorded the moment it is given. "Stop here" saves partial results and any loot.
 - **Learning first:** every question is shown with the existing `QuestionView`, so the learner always gets the explanation and each option's `why` after answering.
-- **poqeni hosts:** every game uses the existing poqeni art (`Mascot.tsx`) and the brand tokens. Do not add new robot art or silver variants.
+- **Poqeni hosts:** every game uses the existing Poqeni art (`Mascot.tsx`) and the brand tokens. Do not add new robot art or silver variants.
 
 ## 1. Shared foundation (build this first)
 
@@ -37,8 +37,8 @@ pickQueue(course, state, now, seed, n, opts?: {
 
 **Scoring and the meta layer.**
 - In-game score is game-local and only goes up.
-- Games award **poqeni Parts**, a cosmetic currency spent in a new **poqeni's Garage** on Progress: cap colours, a gold bolt badge, trails for Dash and Racer, and tower skins for Defense. This idea comes from the game-ideas note.
-- poqeni Parts never affect XP, mastery, readiness or reviews. XP stays mastery-based (`playerXp()`), and each new game's "won" (always reachable) adds the existing +10.
+- Games award **Poqeni Parts**, a cosmetic currency spent in a new **Poqeni's Garage** on Progress: cap colours, a gold bolt badge, trails for Dash and Racer, and tower skins for Defense. This idea comes from the game-ideas note.
+- Poqeni Parts never affect XP, mastery, readiness or reviews. XP stays mastery-based (`playerXp()`), and each new game's "won" (always reachable) adds the existing +10.
 - Add one badge per new game to `badges()` (for example "Gatecrasher", "Firewall", "Vault diver", "Photo finish", "Sorted"), and show new wins on the existing Win board.
 
 **State and schema: `SCHEMA_VERSION` 3 → 4, with migration step `3:` in `persistence.ts`.**
@@ -65,7 +65,7 @@ pickQueue(course, state, now, seed, n, opts?: {
 
 **Shared acceptance criteria (apply to every game).**
 - [ ] Each answer creates exactly one `Attempt` with `context: 'game'` and the right `courseId`, `itemId` and `conceptIds`, and updates the matching `ReviewCard`. Covered by a unit test.
-- [ ] A property test over random answer sequences shows that score, poqeni Parts and progress never decrease after a wrong answer or any other in-game event.
+- [ ] A property test over random answer sequences shows that score, Poqeni Parts and progress never decrease after a wrong answer or any other in-game event.
 - [ ] No visible timer counts down; pausing stops everything; leaving and reloading resumes the same state.
 - [ ] "Stop here" at any point keeps every recorded answer and the loot earned so far.
 - [ ] The game is hidden when `profile.games` is false.
@@ -74,31 +74,31 @@ pickQueue(course, state, now, seed, n, opts?: {
 - [ ] The game card is disabled with a plain reason when the course content is too small, following the pattern in `ArcadePage`.
 
 ## 2. Circuit Dash: arcade platformer run
-**Pitch:** poqeni runs and jumps across a side-scrolling circuit-board level. Data gates block the way, and answering opens them.
+**Pitch:** Poqeni runs and jumps across a side-scrolling circuit-board level. Data gates block the way, and answering opens them.
 
 **Mechanics**
-- A level is 6 segments, each ending in a **data gate**. poqeni moves only while the learner holds Right (or the on-screen arrow). Nothing auto-scrolls, so the player sets the pace.
+- A level is 6 segments, each ending in a **data gate**. Poqeni moves only while the learner holds Right (or the on-screen arrow). Nothing auto-scrolls, so the player sets the pace.
 - **Jump** (Space or a button) gets over gaps and onto platforms. Collecting **sparks** along the way adds to the score.
 - **At a gate:** movement pauses and a question opens.
-  - A correct answer drops a **boost pad**, and poqeni dashes through a short bonus lane full of sparks.
+  - A correct answer drops a **boost pad**, and Poqeni dashes through a short bonus lane full of sparks.
   - A wrong answer shows the explanation, and the gate opens normally with no bonus lane.
-- **Falling into a gap** respawns poqeni at the segment start. Nothing is lost, and collected sparks stay collected.
+- **Falling into a gap** respawns Poqeni at the segment start. Nothing is lost, and collected sparks stay collected.
 - **Assist mode** (on by default when reduced motion is set) bridges every gap, so the level becomes walk-and-answer.
 - Each level's theme comes from the course domain: for example the "AWS" level uses cloud tiles and "Local LLMs" uses GPU tiles. These are visual only.
 
 **Question hook:** `pickQueue(n = 6)` with any format. Gate 6 prefers the weakest concept.
 
-**Mastery and reviews:** one recorded answer per gate, so a level is 6 attempts. A missed gate's question is due again in 10 minutes through the normal SRS, so it can show up in the next poqeni Run.
+**Mastery and reviews:** one recorded answer per gate, so a level is 6 attempts. A missed gate's question is due again in 10 minutes through the normal SRS, so it can show up in the next Poqeni Run.
 
 **Scoring:**
-- 1 per spark, +5 for each gate answered correctly, and a +3 bonus if the learner marked themselves confident and was right. poqeni Parts equal score ÷ 10.
+- 1 per spark, +5 for each gate answered correctly, and a +3 bonus if the learner marked themselves confident and was right. Poqeni Parts equal score ÷ 10.
 - Won means reaching the finish, which is always possible.
 
 **Acceptance criteria**
 - [ ] 6 gates produce exactly 6 attempts, and no gate can be skipped without answering.
 - [ ] Falling never reduces score or sparks (unit test on the pure physics/score reducer).
 - [ ] Assist mode removes every gap, and the level can be finished with keyboard only and with touch only.
-- [ ] poqeni never moves without player input, and the camera snaps per segment under reduced motion.
+- [ ] Poqeni never moves without player input, and the camera snaps per segment under reduced motion.
 - [ ] "Play as list" gives the same 6 questions and the same spark rewards for correct answers.
 
 ## 3. Firewall Defense: tower defense
@@ -112,7 +112,7 @@ pickQueue(course, state, now, seed, n, opts?: {
   - **Earn charge:** answer a question from any domain. A correct answer gives +2 charge and a confident correct answer gives +3. A wrong answer gives +0 charge but keeps the explanation on screen.
   - **Build** a tower for 2 charge, or **upgrade** one (up to level 3) by answering a question **from that tower's domain**. A correct answer upgrades it. A wrong answer leaves it as it is, and the learner can try another question from that domain.
   - Every wave grants one free basic tower, so the game can always be finished even with no correct answers.
-  - poqeni suggests a placement on the weakest domain ("Your Security tower could use an upgrade").
+  - Poqeni suggests a placement on the weakest domain ("Your Security tower could use an upgrade").
 - **Wave phase:**
   - A deterministic simulation runs at 1× (2× is opt-in) and can be paused at any time.
   - Bugs that reach the server are just "not caught". The server has no health and there is no game over.
@@ -126,7 +126,7 @@ pickQueue(course, state, now, seed, n, opts?: {
 **Mastery and reviews:** each answer is recorded once. Because upgrades come from each domain's questions, the game nudges practice toward weak domains without forcing it.
 
 **Scoring:**
-- Score = bugs caught + 5 per correct answer. poqeni Parts come from stars.
+- Score = bugs caught + 5 per correct answer. Poqeni Parts come from stars.
 - Won means finishing wave 5, which is always reachable.
 
 **Acceptance criteria**
@@ -135,10 +135,10 @@ pickQueue(course, state, now, seed, n, opts?: {
 - [ ] With zero correct answers, the free towers still let the learner finish all 5 waves.
 - [ ] Every tower type maps to a domain or concept group that has at least one question. If none does, the tower type is hidden.
 - [ ] "Play as list" lets the learner answer questions and see each wave's outcome as text, with no grid.
-- [ ] Bugs reaching the server never reduce score, charge or poqeni Parts.
+- [ ] Bugs reaching the server never reduce score, charge or Poqeni Parts.
 
 ## 4. Data Vault: roguelike quiz dungeon
-**Pitch:** poqeni dives through a procedurally generated vault. Every run is different, the learner picks the route, and the route decides what they practise.
+**Pitch:** Poqeni dives through a procedurally generated vault. Every run is different, the learner picks the route, and the route decides what they practise.
 
 **Mechanics**
 - **The map:** 3 floors, each a seeded branching map of 5 to 6 rooms (like Slay the Spire), with a boss room at the end. **Quick dive** is a single floor.
@@ -156,7 +156,7 @@ pickQueue(course, state, now, seed, n, opts?: {
 - **Relics** (they last for one run):
   - **Lens:** removes one wrong option and shows its `why`. The answer is recorded as assisted (`confidence: 1`).
   - **Echo:** after a miss, guarantees a follow-up room on that concept.
-  - **Magnet:** doubles poqeni Parts from the next 3 rooms.
+  - **Magnet:** doubles Poqeni Parts from the next 3 rooms.
   - **Map:** reveals the concepts of all rooms on the floor.
 - **No health and no permadeath.**
   - A miss leaves a **Fog** marker on that concept. Fog spawns a follow-up room later in the run, using `pickSameConcept()` to ask a different question on the same concept.
@@ -167,7 +167,7 @@ pickQueue(course, state, now, seed, n, opts?: {
 **Mastery and reviews:** each room records one attempt. Fog makes sure a missed concept is practised again in the same session with a new example, which builds mastery properly (mastery needs 2 distinct correct items).
 
 **Scoring:**
-- Rooms give poqeni Parts: question 2, elite 5, boss 10, and +1 for a confident correct answer.
+- Rooms give Poqeni Parts: question 2, elite 5, boss 10, and +1 for a confident correct answer.
 - A miss gives 0, never less.
 - Won means clearing the final room of the run.
 
@@ -180,7 +180,7 @@ pickQueue(course, state, now, seed, n, opts?: {
 - [ ] A Quick dive (one floor) fits a 10-minute session setting, and the room count is shown up front ("6 rooms").
 
 ## 5. Cert Circuit Racer: racing
-**Pitch:** race poqeni's kart around a 3-lap circuit against a ghost of your own best run. Knowledge is your turbo.
+**Pitch:** race Poqeni's kart around a 3-lap circuit against a ghost of your own best run. Knowledge is your turbo.
 
 **Mechanics**
 - **The track:** 3 laps of 4 sectors each, so 12 questions. **Each lap is a domain**, chosen by blueprint weight with `allocate()`, or the 3 weakest domains if the learner picks "Train weak spots".
@@ -199,7 +199,7 @@ pickQueue(course, state, now, seed, n, opts?: {
 **Mastery and reviews:** 12 attempts per race, spread across domains in proportion to the exam weights, like a mini mock exam. A course without a blueprint uses its concepts in place of domains.
 
 **Scoring:**
-- Distance only goes up, at 2 per correct answer and 1 per miss. Beating the ghost earns a "Personal best" Win board entry and poqeni Parts.
+- Distance only goes up, at 2 per correct answer and 1 per miss. Beating the ghost earns a "Personal best" Win board entry and Poqeni Parts.
 - Won means crossing the finish line, which is always possible.
 
 **Acceptance criteria**
@@ -210,14 +210,14 @@ pickQueue(course, state, now, seed, n, opts?: {
 - [ ] There is no ranking against other people anywhere.
 
 ## 6. Sorting Factory: conveyor puzzle
-**Pitch:** items roll down poqeni's conveyor belt and the learner sorts each into the right bin. This is the "Sort It" idea from the game-ideas note.
+**Pitch:** items roll down Poqeni's conveyor belt and the learner sorts each into the right bin. This is the "Sort It" idea from the game-ideas note.
 
 **Mechanics**
 - **The belt:** 2 to 4 labelled bins, and a belt that **stops and waits** at the sorter, with no time pressure. Sort by drag, tap-then-bin, or the keys 1–4.
 - **Content sources:**
   - **Flashcard mode:** each item is a flashcard front, and the bins are concepts (`flashcard.conceptId`).
   - **Match mode:** a `match` question's left items are sorted into bins labelled with its right items. The question is graded as one answer with `gradeQuestion()` when every pair is placed.
-- **A wrong bin:** the item bounces back, poqeni shows which bin is right and why (the flashcard back, or the question explanation), and the item re-queues at the end of the belt.
+- **A wrong bin:** the item bounces back, Poqeni shows which bin is right and why (the flashcard back, or the question explanation), and the item re-queues at the end of the belt.
 - **Rounds** are 10 items.
 
 **Question hook:** flashcards via `pickMatch` ordering (unseen and due first), filtered to concepts that have at least 2 cards, and match questions via `pickQueue({ kinds: ['match'] })`.

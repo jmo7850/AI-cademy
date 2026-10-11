@@ -45,7 +45,7 @@ export function App() {
 
   useEffect(() => {
     setMenuOpen(false);
-    document.title = `${NAV.find(([k]) => k === section)?.[1] ?? 'Study'} · poqeni`;
+    document.title = `${NAV.find(([k]) => k === section)?.[1] ?? 'Study'} · Poqeni`;
     mainRef.current?.focus({ preventScroll: true });
   }, [routeKey, section]);
 
