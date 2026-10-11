@@ -7,6 +7,8 @@ const claude = fastTracks.find((t) => t.id === 'claude')!;
 const done = (ids: string[]): Record<string, CourseProgress> =>
   Object.fromEntries(ids.map((id) => [id, { enrolledAt: 'x', completedLessons: ['external-course'] } as CourseProgress]));
 
+const aws = fastTracks.find((t) => t.id === 'aws-ai')!;
+
 describe('fast tracks', () => {
   it.each(fastTracks.map((t) => [t.id, t] as const))('%s only lists real catalog entries', (_id, t) => {
     for (const s of t.steps) expect(catalogById.has(s.catalogId), s.catalogId).toBe(true);
@@ -35,5 +37,14 @@ describe('fast tracks', () => {
     expect(estimateFinish(10, 20, now).weeks).toBe(1);
     expect(estimateFinish(0, 5, now).weeks).toBe(0);
     expect(estimateFinish(10, 5, now).around.toISOString().slice(0, 10)).toBe('2026-10-25');
+  });
+
+  it('the AWS track makes Cloud Practitioner Essentials optional and never claims the exam is earned here', () => {
+    const steps = trackSteps(aws, (id) => catalogById.get(id), {});
+    expect(steps.map((x) => x.entry.id)).toEqual(['aws-cloud-practitioner-essentials', 'aws-ai-practitioner']);
+    expect(steps[0]!.optional).toBe(true);
+    expect(trackHours(steps).total).toBe(catalogById.get('aws-ai-practitioner')!.studyHours.value);
+    expect(aws.credential.kind).toBe('certification');
+    expect(JSON.stringify(aws).toLowerCase()).not.toMatch(/fastest|guarantee|earned here|you will pass/);
   });
 });

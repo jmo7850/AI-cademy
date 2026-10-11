@@ -38,6 +38,21 @@ export const fastTracks: FastTrack[] = [
       { catalogId: 'claude-claude-code-101', why: 'Only if you write software. Skip it otherwise.', optional: true },
     ],
   },
+  {
+    id: 'aws-ai',
+    title: 'AWS AI Practitioner fast track',
+    provider: 'AWS',
+    summary: 'An optional on-ramp to AWS, then Poqeni practice and lessons for the AI Practitioner exam.',
+    credential: {
+      name: 'AWS Certified AI Practitioner',
+      kind: 'certification',
+      note: 'This is a proctored exam that AWS grants, not something finishing these steps earns. The exam page lists the fee, length and renewal terms and shows when each was checked. Poqeni practice never counts as the exam, and Poqeni cannot confirm a result until AWS issues it.',
+    },
+    steps: [
+      { catalogId: 'aws-cloud-practitioner-essentials', why: 'AWS suggests it if cloud terms are new to you. Skip it if you already know what a Region, IAM and S3 are.', optional: true },
+      { catalogId: 'aws-ai-practitioner', why: 'Study the five exam domains with lessons, a 60-question practice bank and the coverage view, then book the exam when your practice scores are steady.' },
+    ],
+  },
 ];
 
 export const fastTrackById = new Map(fastTracks.map((t) => [t.id, t]));

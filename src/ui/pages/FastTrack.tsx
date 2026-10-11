@@ -70,7 +70,9 @@ export function FastTrackPage({ trackId }: { trackId: string }) {
             <h2 style={{ margin: 0 }}>Step {i + 1}: <a href={href('course', s.entry.id)}>{s.entry.title}</a>{s.optional ? ' (optional)' : ''}</h2>
             <p className="small">{hoursText(s.entry.studyHours.value)} <FactBadge fact={s.entry.studyHours} checkedOn={s.entry.checkedOn} /> · <OutsideBadge entry={s.entry} />{!s.saidDone && ' Not finished yet'}</p>
             <p>{s.why}</p>
-            <p className="small muted">Badge: {s.entry.credentialFree.value ? 'listed' : 'not listed'} <FactBadge fact={s.entry.credentialFree} checkedOn={s.entry.checkedOn} />{s.entry.credentialFree.note ? ` ${s.entry.credentialFree.note}` : ''}</p>
+            {s.entry.exam
+              ? <p className="small muted">Proctored exam, set by the provider. Fee, length and renewal are on the <a href={href('course', s.entry.id)}>course page</a>, with when each was checked.</p>
+              : <p className="small muted">Badge: {s.entry.credentialFree.value ? 'listed' : 'not listed'} <FactBadge fact={s.entry.credentialFree} checkedOn={s.entry.checkedOn} />{s.entry.credentialFree.note ? ` ${s.entry.credentialFree.note}` : ''}</p>}
           </li>
         ))}
       </ol>

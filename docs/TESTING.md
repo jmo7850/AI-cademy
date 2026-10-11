@@ -8,9 +8,9 @@ How the app is checked and the most recent results.
 | --- | --- |
 | `npm run typecheck` | pass |
 | `npm run lint` | pass |
-| `npm test` (Vitest) | **165/165** passed in 10 files |
+| `npm test` (Vitest) | **167/167** passed in 10 files |
 | `npm run build` | pass: 471.5 kB JS (167.0 kB gzip), 13.1 kB CSS |
-| `npm run test:e2e` (Playwright: desktop Chrome, Pixel 7, Firefox, WebKit) | 16 journeys per browser. **32/32** passed locally on the two Chromium projects; Firefox and WebKit run in CI |
+| `npm run test:e2e` (Playwright: desktop Chrome, Pixel 7, Firefox, WebKit) | 17 journeys per browser. **34/34** passed locally on the two Chromium projects; Firefox and WebKit run in CI |
 
 The e2e suite covers:
 - The full learner journey: onboard, course, lesson, answer, explanation, leave, resume, weak-concept review, practice exam, results.
