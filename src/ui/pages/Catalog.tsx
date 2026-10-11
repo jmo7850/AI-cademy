@@ -167,6 +167,7 @@ export function EntryPage({ entryId }: { entryId: string }) {
       <section className="card">
         <h2>Objectives and assessed skills</h2>
         <ul>{e.objectives.map((o) => <li key={o}>{o}</li>)}</ul>
+        {course?.blueprint && <p><a href={href('coverage', e.id)}>See how much of the exam outline this course covers</a></p>}
         {course?.blueprint && (
           <p className="small muted">
             Practice exam domains follow {course.blueprint.weightsStatus === 'verified' ? 'the published weights' : 'app-assumed equal weights (official weights not published on the page we checked)'}.

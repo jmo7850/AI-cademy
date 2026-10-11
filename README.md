@@ -87,6 +87,8 @@ For courses that run on the provider's site, the course page is a short guide: w
 
 The AWS AI Practitioner course is the pilot for a lesson standard: short sections that give the idea, a worked example or diagram, something that looks the same but is not, a common mix-up, and a two-line recap. When you miss a question, the feedback links to the exact section that teaches it.
 
+The AWS AI Practitioner bank is now 60 original practice questions weighted across the five exam domains, and its course page links to a coverage view showing, per domain, its exam weight, the lessons that teach it and how many questions test it. Questions are original practice, never official exam content.
+
 ### Fast tracks
 
 Career Paths links to fixed-order routes with a fixed hours budget and a pace picker (5, 10 or 20 hours a week) that shows an estimated finish. The first is the Claude fast track: three Claude Academy courses, with the credential labelled as a completion badge and never as a certification. A route can be copied into your plans. Poqeni never marks a credential earned.

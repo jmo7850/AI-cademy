@@ -82,7 +82,7 @@ test('primary learner journey: study, feedback, resume, review, practice exam', 
   // Take a practice exam in exam mode.
   await openSection(page, 'Practice Center');
   await page.getByLabel('Course').selectOption('study-aws-aif');
-  await page.getByLabel('Questions (max 20)').fill('5');
+  await page.getByLabel(/^Questions \(max \d+\)/).fill('5');
   await page.getByLabel(/Exam: explanations after you submit/).check();
   await page.getByRole('button', { name: /Start exam \(5 questions\)/ }).click();
   await expect(page.getByRole('heading', { name: 'Question 1 of 5' })).toBeVisible();
@@ -202,7 +202,9 @@ test('arcade games with Poqeni record answers and results', async ({ page }) => 
     const choice = page.locator('main input[type=radio], main input[type=checkbox]');
     const selects = page.locator('main article select');
     const text = page.locator('main input[type=text]');
-    if (await choice.count()) await choice.first().check();
+    const moves = page.locator('main button[aria-label^="Move"][aria-label$="down"]');
+    if (await moves.count()) await moves.first().click();
+    else if (await choice.count()) await choice.first().check();
     else if (await selects.count()) for (let k = 0; k < (await selects.count()); k++) await selects.nth(k).selectOption({ index: 1 });
     else if (await text.count()) await text.first().fill('x');
     await page.getByRole('button', { name: 'Check answer' }).click();
@@ -248,7 +250,9 @@ async function answerAny(page: Page) {
   const choice = page.locator('main input[type=radio], main input[type=checkbox]');
   const selects = page.locator('main article select');
   const text = page.locator('main input[type=text]');
-  if (await choice.count()) await choice.first().check();
+  const moves = page.locator('main button[aria-label^="Move"][aria-label$="down"]');
+  if (await moves.count()) await moves.first().click();
+  else if (await choice.count()) await choice.first().check();
   else if (await selects.count()) for (let k = 0; k < (await selects.count()); k++) await selects.nth(k).selectOption({ index: 1 });
   else if (await text.count()) await text.first().fill('x');
   await page.getByRole('button', { name: 'Check answer' }).click();
@@ -372,4 +376,15 @@ test('a missed question links back to the section that teaches it', async ({ pag
   await page.getByRole('link', { name: /Review this section: Is the model any good\?/ }).click();
   await expect(page.getByRole('heading', { name: 'Is the model any good?' })).toBeVisible();
   await expect(page.getByText('Remember:')).toBeVisible();
+});
+
+test('coverage view shows every exam domain with lessons and questions', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/course/aws-ai-practitioner');
+  await page.getByRole('link', { name: /how much of the exam outline/ }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'What this course covers' })).toBeVisible();
+  await expect(page.getByRole('row')).toHaveCount(6);
+  await expect(page.getByText(/None yet/)).toHaveCount(0);
+  await expect(page.getByText(/original practice questions/)).toBeVisible();
+  await expectNoSeriousAxe(page, 'coverage');
 });

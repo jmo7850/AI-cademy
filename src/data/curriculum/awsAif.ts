@@ -1,5 +1,5 @@
 import type { StudyCourse } from '../../domain/types';
-import { card, match, multi, single, tf, withTeachIn } from './helpers';
+import { card, match, multi, order, single, tf, withTeachIn } from './helpers';
 
 /*
  * Original practice questions aligned to the published AIF-C01 domains.
@@ -381,6 +381,236 @@ export const awsAif: StudyCourse = {
       { t: 'Amazon Bedrock console', why: 'Not where compliance reports live.' },
       { t: 'AWS Support Center', why: 'Support cases, not reports.' },
     ], 'Artifact = on-demand compliance documents.', { domain: 'd5' }),
+    // ---- Added questions (original practice, not official AWS content) ----
+    // Domain 1
+    single('aws-aif-q21', ['aif.mlbasics'], 'Predicting the sale price of a house from its size and location is which kind of problem?', [
+      { t: 'Regression, a supervised learning task', why: 'Correct: the output is a number and training examples have known prices.', ok: true },
+      { t: 'Classification', why: 'Classification picks a category such as "spam" or "not spam", not a number.' },
+      { t: 'Clustering', why: 'Clustering groups unlabelled items; here the price is a known target.' },
+      { t: 'Reinforcement learning', why: 'Nothing here learns from rewards for actions.' },
+    ], 'Numeric target with labelled examples = regression.', { domain: 'd1' }),
+    single('aws-aif-q22', ['aif.mlbasics'], 'An email filter learns from thousands of messages already marked spam or not spam. Which learning type is this?', [
+      { t: 'Supervised learning', why: 'Correct: every training example carries a label.', ok: true },
+      { t: 'Unsupervised learning', why: 'That would mean no labels at all.' },
+      { t: 'Reinforcement learning', why: 'There is no reward-driven trial and error.' },
+      { t: 'Rule-based automation', why: 'The behaviour is learned from examples, not hand-written rules.' },
+    ], 'Labelled examples = supervised.', { domain: 'd1' }),
+    tf('aws-aif-q23', ['aif.mlbasics'], 'Deep learning is a kind of machine learning that uses neural networks with many layers.', true,
+      'Correct: deep learning sits inside machine learning.',
+      'Deep learning is a subset of machine learning, not a separate field outside it.',
+      'AI contains machine learning, which contains deep learning.', { domain: 'd1' }),
+    single('aws-aif-q24', ['aif.mlbasics'], 'A model scores poorly on both its training data and on new data. What is the most likely cause?', [
+      { t: 'Underfitting', why: 'Correct: the model is too simple or under-trained to capture the pattern.', ok: true },
+      { t: 'Overfitting', why: 'Overfitting looks good on training data and poor on new data.' },
+      { t: 'A knowledge cutoff', why: 'That is a generative-AI limit about training dates.' },
+      { t: 'Hallucination', why: 'That describes confident false text from a generative model.' },
+    ], 'Poor on both sets points to underfitting; a big gap points to overfitting.', { domain: 'd1', level: 2 }),
+    single('aws-aif-q25', ['aif.mlbasics'], 'A fraud model\'s accuracy slowly drops months after launch because customer behaviour has changed. Which lifecycle practice is meant to catch this?', [
+      { t: 'Monitoring the deployed model', why: 'Correct: monitoring shows quality dropping so you can retrain.', ok: true },
+      { t: 'Data preparation', why: 'That happens before training and does not watch live quality.' },
+      { t: 'Hyperparameter tuning before launch', why: 'It improves training, but cannot see later changes in the world.' },
+      { t: 'Choosing a larger model', why: 'Size does not detect or fix drift on its own.' },
+    ], 'Production data changes; monitoring tells you when to retrain.', { domain: 'd1', level: 2 }),
+    order('aws-aif-q26', ['aif.mlbasics'], 'Put these machine learning lifecycle stages in order.', [
+      'Prepare the data', 'Train the model', 'Evaluate on held-out data', 'Deploy the model', 'Monitor in production',
+    ], 'Monitoring can send you back to the start when quality drops.', { domain: 'd1' }),
+    single('aws-aif-q27', ['aif.mlbasics'], 'Which system is best described as rules-based automation rather than machine learning?', [
+      { t: 'A refund tool that approves any request under a fixed amount written into the code', why: 'Correct: a person wrote the rule and nothing is learned from data.', ok: true },
+      { t: 'A spam filter trained on labelled messages', why: 'It learns its behaviour from data.' },
+      { t: 'A product recommender trained on purchase history', why: 'It learns patterns from data.' },
+      { t: 'An image classifier trained on labelled photos', why: 'It learns from examples.' },
+    ], 'If no learning from data happens, it is not machine learning.', { domain: 'd1' }),
+    single('aws-aif-q28', ['aif.mlbasics'], 'A program learns to play a game by trying moves and earning points for winning. Which learning type is this?', [
+      { t: 'Reinforcement learning', why: 'Correct: it learns from rewards for its actions.', ok: true },
+      { t: 'Supervised learning', why: 'There are no pre-labelled correct answers.' },
+      { t: 'Unsupervised clustering', why: 'It is not grouping unlabelled data.' },
+      { t: 'Transfer learning', why: 'That reuses a trained model and does not describe reward-based learning.' },
+    ], 'Actions plus rewards = reinforcement learning.', { domain: 'd1' }),
+    // Domain 2
+    single('aws-aif-q29', ['aif.genai'], 'What mainly distinguishes a foundation model from a narrow model?', [
+      { t: 'It is pre-trained on broad data and can be adapted to many tasks', why: 'Correct: breadth and adaptability define it.', ok: true },
+      { t: 'It only runs on AWS', why: 'Foundation models are not defined by where they run.' },
+      { t: 'It never needs prompts', why: 'You normally steer it with prompts.' },
+      { t: 'It is always smaller than other models', why: 'Foundation models are typically very large.' },
+    ], 'Broad pre-training plus adaptability.', { domain: 'd2' }),
+    single('aws-aif-q30', ['aif.genai'], 'A developer wants to cap how long a model\'s reply can be. Which setting do they change?', [
+      { t: 'Maximum tokens (response length)', why: 'Correct: it limits how many tokens the model may generate.', ok: true },
+      { t: 'Temperature', why: 'Temperature changes randomness, not length.' },
+      { t: 'The model provider', why: 'Switching provider is not a length control.' },
+      { t: 'The IAM policy', why: 'IAM controls access, not output length.' },
+    ], 'Max tokens bounds length; temperature bounds randomness.', { domain: 'd2' }),
+    single('aws-aif-q31', ['aif.genai'], 'A model confidently cites a court case that does not exist. What is this called?', [
+      { t: 'Hallucination', why: 'Correct: fluent but false output.', ok: true },
+      { t: 'Overfitting', why: 'That is a training-versus-new-data gap.' },
+      { t: 'Drift', why: 'Drift is a change in data over time.' },
+      { t: 'Data leakage', why: 'That is test information leaking into training.' },
+    ], 'Verify factual claims; ground the model in trusted sources.', { domain: 'd2' }),
+    tf('aws-aif-q32', ['aif.genai'], 'At a temperature above zero, sending the exact same prompt twice always returns identical text.', false,
+      'Randomness in token choice means output can differ between runs.',
+      'Correct: sampling makes outputs vary, and lower temperature only reduces the variation.',
+      'Use a low temperature when you need consistent answers.', { domain: 'd2' }),
+    single('aws-aif-q33', ['aif.genai'], 'Why might a model not know about an event that happened last week?', [
+      { t: 'Its training data ends at a knowledge cutoff', why: 'Correct: it knows nothing newer unless you supply it.', ok: true },
+      { t: 'Its temperature is too low', why: 'Temperature does not add or remove knowledge.' },
+      { t: 'Its max tokens is too high', why: 'Length limits do not affect what it knows.' },
+      { t: 'It has been fine-tuned', why: 'Fine-tuning does not give it live information.' },
+    ], 'Supply fresh facts through the prompt or retrieval (RAG).', { domain: 'd2' }),
+    multi('aws-aif-q34', ['aif.genai'], 'Which tasks are reasonable uses of generative AI when a person reviews the result? (Select all that apply.)', [
+      { t: 'Drafting replies to customer emails', why: 'Correct.', ok: true },
+      { t: 'Summarising a long report', why: 'Correct.', ok: true },
+      { t: 'Brainstorming product names', why: 'Correct.', ok: true },
+      { t: 'Being the only source for a legally required calculation to the cent', why: 'Exact, auditable results need deterministic software.' },
+    ], 'Great for drafts and ideas; not a sole source for exact, auditable results.', { domain: 'd2' }),
+    single('aws-aif-q35', ['aif.genai'], 'In the context of language models, what is a token?', [
+      { t: 'A small piece of text the model reads or writes', why: 'Correct: a word, part of a word or punctuation.', ok: true },
+      { t: 'A credential used to call the API', why: 'That is an access token, a different idea.' },
+      { t: 'A single training example', why: 'Training examples contain many tokens.' },
+      { t: 'A layer in the neural network', why: 'Layers are part of the model, not the text.' },
+    ], 'Token counts drive both length limits and cost.', { domain: 'd2' }),
+    single('aws-aif-q36', ['aif.genai'], 'A marketing team wants ten varied slogan ideas from one prompt. Which setting choice helps most?', [
+      { t: 'A higher temperature', why: 'Correct: it increases variety in the wording.', ok: true },
+      { t: 'A temperature of zero', why: 'That makes output as predictable as possible.' },
+      { t: 'A smaller max tokens value', why: 'It only shortens responses.' },
+      { t: 'Disabling the prompt', why: 'The prompt is what steers the model.' },
+    ], 'More variety = higher temperature; more consistency = lower.', { domain: 'd2' }),
+    match('aws-aif-q37', ['aif.genai'], 'Match each generative AI term to its meaning.', [
+      ['Hallucination', 'Confident output that is false'],
+      ['Knowledge cutoff', 'Nothing learned after training data ends'],
+      ['Temperature', 'How random the next-token choice is'],
+      ['Max tokens', 'Upper limit on response length'],
+    ], 'Know the limits and the two main settings.', { domain: 'd2' }),
+    single('aws-aif-q38', ['aif.genai'], 'Which statement about large language models (LLMs) is correct?', [
+      { t: 'They are foundation models focused on understanding and generating text', why: 'Correct.', ok: true },
+      { t: 'They are a type of database', why: 'They generate text from learned patterns; they do not store records to look up.' },
+      { t: 'They always return the same answer to the same prompt', why: 'Output can vary between runs.' },
+      { t: 'They only work after fine-tuning', why: 'They are usable as pre-trained.' },
+    ], 'LLMs are foundation models for language.', { domain: 'd2' }),
+    // Domain 3
+    single('aws-aif-q39', ['aif.customize'], 'A team wants to improve a model\'s answers for a new task. Which change is cheapest and fastest to try first?', [
+      { t: 'Improve the prompt', why: 'Correct: no training and no infrastructure change.', ok: true },
+      { t: 'Fine-tune the model', why: 'Needs labelled data and training.' },
+      { t: 'Pre-train a new model', why: 'By far the most costly option.' },
+      { t: 'Move to a bigger instance', why: 'Hardware does not improve answer quality by itself.' },
+    ], 'Try prompting first, then RAG, then fine-tuning.', { domain: 'd3' }),
+    single('aws-aif-q40', ['aif.customize', 'aif.bedrock'], 'An assistant must answer from internal documents that are updated nightly and show where each answer came from. Which approach fits best?', [
+      { t: 'RAG using Amazon Bedrock Knowledge Bases', why: 'Correct: new documents are indexed, and retrieved passages can be cited.', ok: true },
+      { t: 'Fine-tuning the model every night', why: 'Slow and costly for facts that change daily.' },
+      { t: 'Lowering the temperature', why: 'It does not add any knowledge.' },
+      { t: 'Retraining from scratch weekly', why: 'Far too costly and still out of date.' },
+    ], 'Changing knowledge belongs in documents, retrieved at query time.', { domain: 'd3', level: 2 }),
+    single('aws-aif-q41', ['aif.customize'], 'Among prompt engineering, RAG and fine-tuning, which usually has the highest build and maintenance cost?', [
+      { t: 'Fine-tuning', why: 'Correct: needs labelled data, training and re-doing it when things change.', ok: true },
+      { t: 'Prompt engineering', why: 'The cheapest of the three.' },
+      { t: 'RAG', why: 'More work than prompting, but cheaper to maintain than retraining.' },
+      { t: 'They cost the same', why: 'They differ a lot.' },
+    ], 'Cost order: prompting < RAG < fine-tuning.', { domain: 'd3' }),
+    single('aws-aif-q42', ['aif.customize'], 'Which metric is commonly used to compare machine translation output with reference translations?', [
+      { t: 'BLEU', why: 'Correct: it measures overlap with reference translations.', ok: true },
+      { t: 'ROUGE', why: 'Usually associated with summarisation.' },
+      { t: 'Mean squared error', why: 'For numeric prediction.' },
+      { t: 'Accuracy', why: 'Suited to classification, not to comparing translated text.' },
+    ], 'BLEU for translation, ROUGE for summaries.', { domain: 'd3', level: 2 }),
+    single('aws-aif-q43', ['aif.bedrock', 'aif.responsible'], 'A company wants its Bedrock chatbot to refuse certain topics and filter harmful content. Which capability fits?', [
+      { t: 'Amazon Bedrock Guardrails', why: 'Correct: content filters, denied topics and redaction.', ok: true },
+      { t: 'Amazon Bedrock Agents', why: 'Agents call APIs; they are not content filters.' },
+      { t: 'Provisioned throughput', why: 'Reserves capacity only.' },
+      { t: 'Model evaluation', why: 'Compares model quality.' },
+    ], 'Guardrails filter; agents act; knowledge bases retrieve.', { domain: 'd3' }),
+    single('aws-aif-q44', ['aif.bedrock'], 'A support assistant must issue refunds by calling the company\'s payments API during a chat. Which Bedrock feature enables this?', [
+      { t: 'Agents with action groups', why: 'Correct: the agent plans and calls your API.', ok: true },
+      { t: 'Knowledge Bases alone', why: 'They retrieve documents; they do not perform actions.' },
+      { t: 'Guardrails alone', why: 'They filter content.' },
+      { t: 'Temperature settings', why: 'They change randomness only.' },
+    ], 'Actions need an agent.', { domain: 'd3', level: 2 }),
+    single('aws-aif-q45', ['aif.bedrock', 'aif.customize'], 'What is the main purpose of Amazon Bedrock Knowledge Bases?', [
+      { t: 'To ground model answers in your own documents through retrieval', why: 'Correct: it supports RAG.', ok: true },
+      { t: 'To train a model from scratch', why: 'That is not what it does.' },
+      { t: 'To detect bias in predictions', why: 'That is SageMaker Clarify.' },
+      { t: 'To log API calls for audit', why: 'That is CloudTrail.' },
+    ], 'Knowledge bases = managed retrieval for RAG.', { domain: 'd3' }),
+    multi('aws-aif-q46', ['aif.customize'], 'Which are valid ways to evaluate generated text? (Select all that apply.)', [
+      { t: 'ROUGE against reference summaries', why: 'Correct.', ok: true },
+      { t: 'BLEU against reference translations', why: 'Correct.', ok: true },
+      { t: 'Human review', why: 'Correct: catches tone and nuance.', ok: true },
+      { t: 'Mean squared error on the wording', why: 'Suited to numeric predictions, not free text.' },
+    ], 'Combine automatic scores with human judgement.', { domain: 'd3', level: 2 }),
+    tf('aws-aif-q47', ['aif.customize'], 'Fine-tuning is the best way to keep a model up to date with facts that change every day.', false,
+      'Retrieval from current documents fits better.',
+      'Correct: changing facts belong in retrieved documents; retraining is slow and costly.',
+      'RAG lets you update documents without touching the model.', { domain: 'd3' }),
+    single('aws-aif-q48', ['aif.customize'], 'A company has thousands of labelled examples and wants every output in one consistent brand voice, which prompting alone does not achieve. Which approach fits?', [
+      { t: 'Fine-tuning', why: 'Correct: training on examples teaches style and task behaviour.', ok: true },
+      { t: 'Increasing temperature', why: 'It adds variety, the opposite of consistency.' },
+      { t: 'Adding more max tokens', why: 'It only allows longer replies.' },
+      { t: 'Using Amazon Macie', why: 'Macie finds sensitive data in S3.' },
+    ], 'Consistent style or behaviour from examples = fine-tuning.', { domain: 'd3', level: 2 }),
+    single('aws-aif-q49', ['aif.services'], 'A startup wants to train its own custom ML model on its labelled data and deploy it. Which AWS service is built for this?', [
+      { t: 'Amazon SageMaker AI', why: 'Correct: build, train and deploy your own models.', ok: true },
+      { t: 'Amazon Polly', why: 'Text to speech.' },
+      { t: 'Amazon Translate', why: 'Translation as a ready-made service.' },
+      { t: 'Amazon Rekognition', why: 'A ready-made image and video analysis service.' },
+    ], 'Custom-trained model = SageMaker AI.', { domain: 'd3' }),
+    order('aws-aif-q50', ['aif.customize'], 'Order these ways of changing model behaviour from least to most effort.', [
+      'Prompt engineering', 'Retrieval-augmented generation (RAG)', 'Fine-tuning', 'Pre-training from scratch',
+    ], 'Start with the cheapest change that meets the need.', { domain: 'd3' }),
+    // Domain 4
+    single('aws-aif-q51', ['aif.responsible'], 'A resume-screening model ranks candidates from one group much lower. Which responsible-AI dimension is most directly at issue?', [
+      { t: 'Fairness', why: 'Correct: outcomes differ unfairly between groups.', ok: true },
+      { t: 'Lowest cost', why: 'Not a responsible-AI dimension.' },
+      { t: 'Latency', why: 'An operational metric.' },
+      { t: 'Throughput', why: 'An operational metric.' },
+    ], 'Look for bias in data and outcomes.', { domain: 'd4' }),
+    single('aws-aif-q52', ['aif.responsible'], 'A regulator asks why the model declined a particular loan application. Which dimension does answering this require?', [
+      { t: 'Explainability', why: 'Correct: being able to say which factors drove the result.', ok: true },
+      { t: 'Scalability', why: 'About handling load, not reasons.' },
+      { t: 'Availability', why: 'About uptime.' },
+      { t: 'Cost efficiency', why: 'Not about reasons.' },
+    ], 'Explainability connects a decision to its drivers.', { domain: 'd4' }),
+    tf('aws-aif-q53', ['aif.responsible'], 'If a model reports high confidence, human review of high-impact decisions is no longer needed.', false,
+      'Confidence scores can be wrong; oversight still matters for high-impact outcomes.',
+      'Correct: high-impact decisions keep human oversight regardless of confidence.',
+      'Confidence is not the same as correctness.', { domain: 'd4' }),
+    single('aws-aif-q54', ['aif.responsible'], 'Which AWS service adds human review steps to a machine learning workflow?', [
+      { t: 'Amazon Augmented AI (Amazon A2I)', why: 'Correct.', ok: true },
+      { t: 'Amazon Macie', why: 'Finds sensitive data in S3.' },
+      { t: 'AWS Artifact', why: 'Provides compliance reports.' },
+      { t: 'Amazon Polly', why: 'Text to speech.' },
+    ], 'A2I routes low-confidence results to people.', { domain: 'd4' }),
+    single('aws-aif-q55', ['aif.responsible'], 'A bank wants to measure bias in its training data before it builds a model. Which AWS capability helps?', [
+      { t: 'Amazon SageMaker Clarify', why: 'Correct: it can check data for bias before training as well as predictions afterwards.', ok: true },
+      { t: 'AWS Shield', why: 'DDoS protection.' },
+      { t: 'Amazon Transcribe', why: 'Speech to text.' },
+      { t: 'AWS CloudTrail', why: 'An audit log of API calls.' },
+    ], 'Clarify covers pre-training data checks and post-training predictions.', { domain: 'd4', level: 2 }),
+    // Domain 5
+    single('aws-aif-q56', ['aif.security'], 'Who is responsible for deciding which employees may invoke a Bedrock model in your account?', [
+      { t: 'The customer', why: 'Correct: access configuration is yours.', ok: true },
+      { t: 'AWS', why: 'AWS secures the infrastructure, not your access decisions.' },
+      { t: 'The model provider', why: 'They do not control your account permissions.' },
+      { t: 'Nobody; access is open by default', why: 'Access is denied until policies allow it.' },
+    ], 'You control who can reach your resources, using IAM.', { domain: 'd5' }),
+    tf('aws-aif-q57', ['aif.security'], 'When you use a managed AI service, AWS becomes responsible for all security of your data.', false,
+      'You remain responsible for your data, access and configuration.',
+      'Correct: shared responsibility still applies to managed services.',
+      'AWS secures the platform; you secure what you put on it.', { domain: 'd5' }),
+    single('aws-aif-q58', ['aif.security'], 'An application needs permission to invoke a Bedrock model without storing access keys in its code. What should you use?', [
+      { t: 'An IAM role attached to the application', why: 'Correct: temporary credentials, no keys in code.', ok: true },
+      { t: 'The root user\'s access keys', why: 'Never embed root credentials; this is a serious risk.' },
+      { t: 'A shared password in the config file', why: 'Insecure and hard to rotate.' },
+      { t: 'Making the model public', why: 'That removes access control.' },
+    ], 'Use roles and least-privilege policies.', { domain: 'd5', level: 2 }),
+    match('aws-aif-q59', ['aif.security'], 'Match each AWS service to its governance purpose.', [
+      ['AWS IAM', 'Controls who can access what'],
+      ['AWS CloudTrail', 'Records API calls: who, what, when'],
+      ['Amazon Macie', 'Finds sensitive data in Amazon S3'],
+      ['AWS Artifact', 'Provides AWS compliance reports'],
+    ], 'Know which service answers which question.', { domain: 'd5' }),
+    multi('aws-aif-q60', ['aif.security'], 'Which are the customer\'s responsibilities when using Amazon Bedrock? (Select all that apply.)', [
+      { t: 'Writing IAM policies for who can invoke models', why: 'Correct.', ok: true },
+      { t: 'Deciding what data is sent to the model', why: 'Correct: your data, your decision.', ok: true },
+      { t: 'Configuring guardrails for your application', why: 'Correct: configuration is yours.', ok: true },
+      { t: 'Maintaining the physical data centres', why: 'AWS.' },
+    ], 'AWS secures the cloud; you secure what you put in it.', { domain: 'd5', level: 2 }),
   ], {
     // question id -> [lesson, section index]
     'aws-aif-q1': ['aws-aif-1', 1], 'aws-aif-q2': ['aws-aif-d1', 2], 'aws-aif-q3': ['aws-aif-d1', 1], 'aws-aif-q4': ['aws-aif-d1', 3],
@@ -388,6 +618,15 @@ export const awsAif: StudyCourse = {
     'aws-aif-q9': ['aws-aif-1', 1], 'aws-aif-q10': ['aws-aif-2', 0], 'aws-aif-q11': ['aws-aif-2', 0], 'aws-aif-q12': ['aws-aif-2', 1], 'aws-aif-q13': ['aws-aif-2', 2],
     'aws-aif-q14': ['aws-aif-d4', 1], 'aws-aif-q15': ['aws-aif-d4', 0], 'aws-aif-q16': ['aws-aif-d4', 2],
     'aws-aif-q17': ['aws-aif-d5', 0], 'aws-aif-q18': ['aws-aif-d5', 1], 'aws-aif-q19': ['aws-aif-d5', 1], 'aws-aif-q20': ['aws-aif-d5', 2],
+    'aws-aif-q21': ['aws-aif-d1', 1], 'aws-aif-q22': ['aws-aif-d1', 1], 'aws-aif-q23': ['aws-aif-d1', 0], 'aws-aif-q24': ['aws-aif-d1', 2], 'aws-aif-q25': ['aws-aif-d1', 3],
+    'aws-aif-q26': ['aws-aif-d1', 3], 'aws-aif-q27': ['aws-aif-d1', 0], 'aws-aif-q28': ['aws-aif-d1', 1],
+    'aws-aif-q29': ['aws-aif-d2', 0], 'aws-aif-q30': ['aws-aif-d2', 1], 'aws-aif-q31': ['aws-aif-d2', 2], 'aws-aif-q32': ['aws-aif-d2', 1], 'aws-aif-q33': ['aws-aif-d2', 2],
+    'aws-aif-q34': ['aws-aif-d2', 2], 'aws-aif-q35': ['aws-aif-d2', 1], 'aws-aif-q36': ['aws-aif-d2', 1], 'aws-aif-q37': ['aws-aif-d2', 2], 'aws-aif-q38': ['aws-aif-d2', 0],
+    'aws-aif-q39': ['aws-aif-2', 0], 'aws-aif-q40': ['aws-aif-2', 0], 'aws-aif-q41': ['aws-aif-2', 0], 'aws-aif-q42': ['aws-aif-2', 1], 'aws-aif-q43': ['aws-aif-d4', 1],
+    'aws-aif-q44': ['aws-aif-2', 2], 'aws-aif-q45': ['aws-aif-2', 0], 'aws-aif-q46': ['aws-aif-2', 1], 'aws-aif-q47': ['aws-aif-2', 0], 'aws-aif-q48': ['aws-aif-2', 0],
+    'aws-aif-q49': ['aws-aif-1', 1], 'aws-aif-q50': ['aws-aif-2', 0],
+    'aws-aif-q51': ['aws-aif-d4', 0], 'aws-aif-q52': ['aws-aif-d4', 0], 'aws-aif-q53': ['aws-aif-d4', 2], 'aws-aif-q54': ['aws-aif-d4', 2], 'aws-aif-q55': ['aws-aif-d4', 1],
+    'aws-aif-q56': ['aws-aif-d5', 0], 'aws-aif-q57': ['aws-aif-d5', 0], 'aws-aif-q58': ['aws-aif-d5', 0], 'aws-aif-q59': ['aws-aif-d5', 1], 'aws-aif-q60': ['aws-aif-d5', 0],
   }),
   flashcards: [
     card('aws-aif-f1', 'aif.services', 'Amazon Textract', 'Extracts text, forms and tables from scanned documents.'),

@@ -1,3 +1,4 @@
+import { examCoverage } from '../src/engine/coverage';
 import { builtInCourses } from '../src/data/curriculum';
 import { awsAif } from '../src/data/curriculum/awsAif';
 import { validateStudyCourse } from '../src/engine/validate';
@@ -58,5 +59,46 @@ describe('lesson depth standard (AWS AI Practitioner pilot)', () => {
     const bad = JSON.parse(JSON.stringify(awsAif));
     bad.questions[0].teachIn = { lessonId: 'nope', section: 0 };
     expect(validateStudyCourse(bad).join(' ')).toMatch(/teachIn/);
+  });
+});
+
+describe('AIF-C01 question bank and coverage', () => {
+  const total = awsAif.questions.length;
+
+  it('has about 60 questions with unique ids', () => {
+    expect(total).toBeGreaterThanOrEqual(60);
+    expect(new Set(awsAif.questions.map((q) => q.id)).size).toBe(total);
+  });
+
+  it('gives every domain at least its weighted share of the bank (within one question)', () => {
+    for (const d of awsAif.blueprint!.domains) {
+      const have = awsAif.questions.filter((q) => q.domainId === d.id).length;
+      expect(have, d.name).toBeGreaterThanOrEqual(Math.floor((d.weight / 100) * total) - 1);
+    }
+  });
+
+  it('explains every option and keeps correct answers inside the options', () => {
+    for (const q of awsAif.questions) {
+      expect(q.explanation.length, q.id).toBeGreaterThan(10);
+      if ('options' in q) {
+        for (const o of q.options) expect(o.why.length, `${q.id}/${o.id}`).toBeGreaterThan(2);
+        for (const c of q.correct) expect(q.options.some((o) => o.id === c), `${q.id}/${c}`).toBe(true);
+      }
+    }
+  });
+
+  it('reports a lesson and questions for every domain', () => {
+    const rows = examCoverage(awsAif);
+    expect(rows).toHaveLength(5);
+    for (const r of rows) {
+      expect(r.lessons.length, r.name).toBeGreaterThan(0);
+      expect(r.questions, r.name).toBeGreaterThan(0);
+    }
+    expect(rows.reduce((n, r) => n + r.questions, 0)).toBe(total);
+  });
+
+  it('reports a domain with no lesson as studied outside', () => {
+    const bare = { ...awsAif, lessons: [], questions: awsAif.questions.map((q) => ({ ...q, teachIn: undefined })) };
+    expect(examCoverage(bare).every((r) => r.lessons.length === 0)).toBe(true);
   });
 });
