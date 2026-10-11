@@ -377,7 +377,7 @@ const emptyFor = (q: Question) =>
 
 type ReviewItem = { courseId: string; question?: Question; card?: Flashcard; why: string };
 
-export function ReviewPage({ courseId }: { courseId?: string }) {
+export function ReviewPage({ courseId, limit: maxItems }: { courseId?: string; limit?: number }) {
   const { state, dispatch, registry } = useStore();
   const [seed] = useState(newSeed);
   const [idx, setIdx] = useState(0);
@@ -409,7 +409,7 @@ export function ReviewPage({ courseId }: { courseId?: string }) {
         if (items.length === 0) items.push(...seededShuffle(course.questions, courseId, seed).slice(0, 5).map((q) => ({ courseId, question: q, why: 'Mixed practice' })));
       }
     }
-    return items.slice(0, limit);
+    return items.slice(0, Math.min(limit, maxItems ?? limit));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId]);
 

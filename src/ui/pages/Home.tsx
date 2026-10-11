@@ -50,7 +50,12 @@ export function HomePage() {
             <p className="eyebrow">Your next step</p>
             <h2 id="next-h" style={{ fontSize: '1.45rem' }}>{action.label}</h2>
             <p className="muted">{action.reason}</p>
-            <button type="button" className="primary" onClick={act}>Start now</button>
+            <div className="row">
+              <button type="button" className="primary" onClick={act}>Start now</button>
+              {action.kind === 'continue' && action.smaller && (
+                <a className="btn" href={href('review', action.smaller.courseId, 'one')}>{action.smaller.label}</a>
+              )}
+            </div>
           </div>
           <Mascot variant="full" size={190} />
         </div>

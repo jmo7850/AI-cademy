@@ -65,8 +65,14 @@ test('primary learner journey: study, feedback, resume, review, practice exam', 
   await page.goto('about:blank');
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Continue: AI, machine learning and generative AI/ })).toBeVisible();
+  await expect(page.getByText(/^Step 6 of 7, about \d+ min left\./)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Or answer one question (about 1 min)' })).toBeVisible();
   await page.getByRole('button', { name: 'Start now' }).click();
   await expect(page.getByRole('heading', { name: 'Knowledge check 3 of 4' })).toBeVisible();
+
+  // The smaller way back in is a single question.
+  await page.goto('/#/review/study-ai-foundations/one');
+  await expect(page.getByText(/^Review 1 of 1 · /)).toBeVisible();
 
   // Review the weak concept.
   await page.goto('/#/review/study-ai-foundations');
