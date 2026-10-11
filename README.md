@@ -87,6 +87,10 @@ For courses that run on the provider's site, the course page is a short guide: w
 
 The AWS AI Practitioner course is the pilot for a lesson standard: short sections that give the idea, a worked example or diagram, something that looks the same but is not, a common mix-up, and a two-line recap. When you miss a question, the feedback links to the exact section that teaches it.
 
+### Flashcards
+
+Every Practice category has a deck of 35 to 41 original flashcards written for the app: definitions, "X vs Y" pairs, which-service-for-this-job and common traps. Grading a card puts it on the same spaced-review schedule as questions. Cards describe what a service or idea does and avoid prices, quotas and version numbers, which change.
+
 The AWS AI Practitioner bank is now 60 original practice questions weighted across the five exam domains, and its course page links to a coverage view showing, per domain, its exam weight, the lessons that teach it and how many questions test it. Questions are original practice, never official exam content.
 
 ### Fast tracks
