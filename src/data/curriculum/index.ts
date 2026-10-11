@@ -4,7 +4,8 @@ import { awsAif } from './awsAif';
 import { careerReadiness, devFoundations, llmAppEng, localLlm } from './engineering';
 import { nvidiaGenl } from './nvidiaGenl';
 import { extraFlashcards } from './extraFlashcards';
-import { awsClf, gcpGail, msAi901 } from './vendorCourses';
+import { msAi901 } from './msAi901';
+import { awsClf, gcpGail } from './vendorCourses';
 
 const withExtraCards = (c: StudyCourse): StudyCourse => ({ ...c, flashcards: [...c.flashcards, ...(extraFlashcards[c.id] ?? [])] });
 

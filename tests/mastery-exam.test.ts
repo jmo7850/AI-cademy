@@ -1,5 +1,5 @@
 import { awsAif } from '../src/data/curriculum/awsAif';
-import { msAi901 } from '../src/data/curriculum/vendorCourses';
+import { msAi901 } from '../src/data/curriculum/msAi901';
 import { allocate, buildExam, scoreExam, suggestedMinutes, weakDomains } from '../src/engine/exam';
 import { conceptMastery, courseStatus, readiness, repeatedMistakes } from '../src/engine/mastery';
 import type { Attempt, ExamAttempt } from '../src/store/schema';

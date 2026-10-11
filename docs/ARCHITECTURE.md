@@ -100,7 +100,7 @@ AI-cademy/
       components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
       styles.css         Theme tokens (light and dark) and all styles
   scripts/catalog-drift.mjs  Weekly check of catalog source pages (npm run catalog:drift)
-  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (160 tests)
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (165 tests)
   e2e/journey.spec.ts    Playwright: 16 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 64 tests, with axe WCAG A/AA scans
 ```
 
