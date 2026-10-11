@@ -91,7 +91,11 @@ export type NextAction =
   | { kind: 'onboard'; label: string; reason: string }
   | { kind: 'resume-exam'; label: string; reason: string; examId: string }
   | { kind: 'review'; label: string; reason: string; count: number }
-  | { kind: 'continue'; label: string; reason: string; entryId: string }
+  | {
+      kind: 'continue'; label: string; reason: string; entryId: string;
+      /** A smaller way back in, for when the full next step feels like too much. */
+      smaller?: { label: string; courseId: string };
+    }
   | { kind: 'start'; label: string; reason: string; entryId: string }
   | { kind: 'exam'; label: string; reason: string; courseId: string }
   | { kind: 'browse'; label: string; reason: string };
@@ -122,7 +126,16 @@ export function nextAction(state: AppState, reg: Registry, now: Date): NextActio
     const lessonsLeft = course.lessons.filter((l) => !cp.completedLessons.includes(l.id));
     if (lessonsLeft.length) {
       const lesson = course.lessons.find((l) => l.id === cp.position!.lessonId) ?? lessonsLeft[0]!;
-      return { kind: 'continue', label: `Continue: ${lesson.title}`, reason: `${course.title}. ${lessonsLeft.length} lesson${lessonsLeft.length === 1 ? '' : 's'} left.`, entryId: cp.courseId };
+      const total = lesson.sections.length + lesson.checkIds.length;
+      const at = cp.position!.lessonId === lesson.id ? Math.min(cp.position!.section, total - 1) : 0;
+      const minutesLeft = Math.max(1, Math.round((lesson.minutes * (total - at)) / total));
+      return {
+        kind: 'continue',
+        label: `Continue: ${lesson.title}`,
+        reason: `Step ${at + 1} of ${total}, about ${minutesLeft} min left. ${course.title}. ${lessonsLeft.length} lesson${lessonsLeft.length === 1 ? '' : 's'} left.`,
+        entryId: cp.courseId,
+        smaller: course.questions.length ? { label: 'Or answer one question (about 1 min)', courseId: course.id } : undefined,
+      };
     }
     if (course.blueprint && !state.exams.some((e) => e.courseId === course.id && e.finishedAt)) {
       return { kind: 'exam', label: `Take a practice exam: ${course.title}`, reason: 'You finished the lessons. A practice exam shows which domains need work.', courseId: course.id };

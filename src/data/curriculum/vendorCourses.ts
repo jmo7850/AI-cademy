@@ -104,6 +104,12 @@ export const awsClf: StudyCourse = {
       { t: 'Amazon Redshift', why: 'Data warehouse for analytics.' },
       { t: 'Amazon S3', why: 'Object storage, not a database.' },
     ], 'DynamoDB = managed NoSQL.', { domain: 'd3', level: 2 }),
+    single('aws-clf-q11', ['clf.services'], 'An EC2 instance needs a persistent disk volume for its operating system and database files. Which service provides it?', [
+      { t: 'Amazon EBS', why: 'Correct: block storage volumes that attach to EC2.', ok: true },
+      { t: 'Amazon S3', why: 'Object storage over HTTP, not an attached disk.' },
+      { t: 'Amazon CloudFront', why: 'Content delivery, not storage for an instance.' },
+      { t: 'AWS Backup', why: 'Manages backups; it is not the volume itself.' },
+    ], 'EBS = block disk for EC2; S3 = objects.', { domain: 'd3' }),
     single('aws-clf-q9', ['clf.billing'], 'Which tool sends an alert when monthly spend is forecast to exceed a set amount?', [
       { t: 'AWS Budgets', why: 'Correct.', ok: true },
       { t: 'AWS Pricing Calculator', why: 'Estimates before you build.' },
@@ -204,6 +210,12 @@ export const msAi901: StudyCourse = {
       { t: 'A speech voice', why: 'Output modality, not knowledge.' },
       { t: 'A larger max tokens', why: 'Longer answers, same knowledge.' },
     ], 'Grounding gives agents facts they were not trained on.', { domain: 'd2', level: 2 }),
+    single('ms-q9', ['ms.foundry'], 'A support agent built in Microsoft Foundry must look up live order status in the company\'s order system. What should you give the agent?', [
+      { t: 'A tool that calls the order system\'s API', why: 'Correct: tools let an agent take actions and fetch live data.', ok: true },
+      { t: 'A knowledge source of last month\'s orders', why: 'Static documents go stale; live status needs a call to the system.' },
+      { t: 'A lower temperature', why: 'Makes answers more consistent, but adds no data.' },
+      { t: 'A longer system message', why: 'Instructions cannot supply live data.' },
+    ], 'Knowledge grounds answers in documents; tools fetch live data and take actions.', { domain: 'd2', level: 2 }),
     match('ms-q7', ['ms.modalities'], 'Match each scenario to the capability.', [
       ['Turn call recordings into text', 'Speech to text'],
       ['Read a menu aloud', 'Text to speech'],

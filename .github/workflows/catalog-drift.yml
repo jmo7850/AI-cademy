@@ -1,0 +1,24 @@
+name: Catalog drift check
+
+# Weekly: lists official source pages that changed, moved or went away, for a person to re-check.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Check catalog source pages
+        run: npm run catalog:drift

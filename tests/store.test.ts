@@ -119,6 +119,20 @@ describe('recommendations', () => {
     expect(nextAction(s, reg, new Date(Date.parse(NOW) + 3600_000)).kind).toBe('review');
   });
 
+  it('tells a returning learner their step, the time left and a smaller option', () => {
+    let s = onboarded();
+    const reg = buildRegistry(s);
+    const lesson = reg.courseForEntry('academy-ai-foundations')!.lessons.find((l) => l.id === 'aif-2')!;
+    const total = lesson.sections.length + lesson.checkIds.length;
+    s = reducer(s, { type: 'setPosition', entryId: 'academy-ai-foundations', lessonId: 'aif-2', section: 1, now: NOW });
+    const action = nextAction(s, reg, new Date(NOW));
+    expect(action.kind).toBe('continue');
+    if (action.kind !== 'continue') return;
+    expect(action.reason).toMatch(new RegExp(`^Step 2 of ${total}, about \\d+ min left\\.`));
+    expect(action.reason).not.toMatch(/day/);
+    expect(action.smaller).toEqual({ label: 'Or answer one question (about 1 min)', courseId: 'study-ai-foundations' });
+  });
+
   it('explains choices, honours provider preference, budget and experience', () => {
     const s = onboarded('ai-foundations', { providers: ['microsoft'], budget: 'free', experience: 'developer' });
     const items = personalizePath(pathById.get('ai-foundations')!.steps, s, buildRegistry(s));

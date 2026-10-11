@@ -69,7 +69,7 @@ export function App() {
       case 'paths': return <PathsPage />;
       case 'quick': return <QuickPage />;
       case 'practice': return <PracticePage />;
-      case 'review': return <ReviewPage courseId={a} />;
+      case 'review': return <ReviewPage key={`${a ?? ''}/${b ?? ''}`} courseId={a} limit={b === 'one' ? 1 : undefined} />;
       case 'flashcards': return <FlashcardsPage courseId={a ?? ''} />;
       case 'exam': return <ExamPage examId={a ?? ''} />;
       case 'projects': return <ProjectsPage />;
