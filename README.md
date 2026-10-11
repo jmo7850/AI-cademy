@@ -95,7 +95,7 @@ The AWS AI Practitioner bank is now 60 original practice questions weighted acro
 
 ### Fast tracks
 
-Career Paths links to fixed-order routes with a fixed hours budget and a pace picker (5, 10 or 20 hours a week) that shows an estimated finish. The first is the Claude fast track: three Claude Academy courses, with the credential labelled as a completion badge and never as a certification. A route can be copied into your plans. Poqeni never marks a credential earned.
+Career Paths links to fixed-order routes with a fixed hours budget and a pace picker (5, 10 or 20 hours a week) that shows an estimated finish. The first is the Claude fast track: three Claude Academy courses, with the credential labelled as a completion badge and never as a certification. The second is the AWS AI Practitioner route: an optional on-ramp course, then the exam preparation, with the exam described as AWS-granted and never earned in the app. A route can be copied into your plans. Poqeni never marks a credential earned.
 
 ### What Poqeni knows about me
 

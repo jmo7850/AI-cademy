@@ -415,3 +415,15 @@ test('coverage view shows every exam domain with lessons and questions', async (
   await expect(page.getByRole('row')).toHaveCount(3);
   await expect(page.getByText(/None yet/)).toHaveCount(0);
 });
+
+test('AWS fast track is an exam route that never says the exam is earned in the app', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/#/fast/aws-ai');
+  await expect(page.getByRole('heading', { level: 1, name: 'AWS AI Practitioner fast track' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Step 1: AWS Cloud Practitioner Essentials.*\(optional\)/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Step 2: AWS Certified AI Practitioner/ })).toBeVisible();
+  await expect(page.getByText(/not something finishing these steps earns/)).toBeVisible();
+  await expectNoSeriousAxe(page, 'aws fast track');
+  await page.getByLabel('Hours a week').selectOption('10');
+  await expect(page.getByRole('status')).toContainText('about 3 weeks');
+});
