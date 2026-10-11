@@ -63,7 +63,7 @@ AI-cademy/
   index.html, vite.config.ts, tsconfig.json, eslint.config.js, playwright.config.ts
   README.md              Setup, features, sources, limitations
   CONTRIBUTING.md        How to work on the project
-  .github/workflows/     CI: check + Playwright on every push and pull request
+  .github/workflows/     CI on every push and pull request; weekly catalog drift check
   docs/                  Architecture, catalog, games, testing, roadmap, build report
   src/
     domain/types.ts      Catalog, curriculum, question and Fact<T> provenance types
@@ -95,8 +95,9 @@ AI-cademy/
       pages/             Home, Catalog, MyLearning, Paths, Quick, Practice, Lesson, Arcade, Projects, Progress, Settings, Onboarding
       components/        QuestionView (renders all question formats with per-option feedback), Mascot, SessionTimer, ConfirmButton, bits
       styles.css         Theme tokens (light and dark) and all styles
-  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (84 tests)
-  e2e/journey.spec.ts    Playwright: 8 journeys × desktop + Pixel 7 = 16 tests, with axe WCAG A/AA scans
+  scripts/catalog-drift.mjs  Weekly check of catalog source pages (npm run catalog:drift)
+  tests/                 Vitest: catalog, games, grading, mastery-exam, srs, store (86 tests)
+  e2e/journey.spec.ts    Playwright: 8 journeys × desktop Chrome, Pixel 7, Firefox and WebKit = 32 tests, with axe WCAG A/AA scans
 ```
 
 **Dependencies:** React and React DOM at runtime. Development uses Vite, TypeScript, Vitest, Testing Library with jsdom, Playwright, axe-core and ESLint. There are no state, routing or validation libraries, and new dependencies should be avoided unless they clearly earn their place.
