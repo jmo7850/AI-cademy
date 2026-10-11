@@ -34,6 +34,8 @@ export function PathsPage() {
         </div>
       )}
 
+      <p><a className="btn" href={href('fast')}>Fast tracks: a fixed, ordered route to an entry credential</a></p>
+
       {plan ? <PlanEditor plan={plan} /> : <Empty>No active plan yet. Pick a template below.</Empty>}
 
       <details>

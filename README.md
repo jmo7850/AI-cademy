@@ -83,6 +83,10 @@ Lesson sections (one at a time, "Go deeper" is optional) → knowledge check wit
 
 For courses that run on the provider's site, the course page is a short guide: what to look for (the course's published objectives), a time estimate with its provenance, and a "Back from it?" step. You can tick "I finished this course", add a note or an https link, and take a five-question check drawn from Poqeni's own question banks. The status says exactly that, for example "You said you finished this" or "You passed Poqeni's check on this topic (4 of 5)". It never claims the provider course or a credential is confirmed. Project milestones accept optional evidence the same way.
 
+### Fast tracks
+
+Career Paths links to fixed-order routes with a fixed hours budget and a pace picker (5, 10 or 20 hours a week) that shows an estimated finish. The first is the Claude fast track: three Claude Academy courses, with the credential labelled as a completion badge and never as a certification. A route can be copied into your plans. Poqeni never marks a credential earned.
+
 ### What Poqeni knows about me
 
 Settings links to a screen listing everything remembered: setup answers, notes you add, and facts worked out from your activity. Each item can be changed or forgotten, and "Forget everything" clears it while keeping your progress. It all stays on your device.

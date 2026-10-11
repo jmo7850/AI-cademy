@@ -10,6 +10,7 @@ import { MyLearningPage } from './pages/MyLearning';
 import { OnboardingPage } from './pages/Onboarding';
 import { ReturnCheckPage } from './pages/Outside';
 import { KnowPage } from './pages/Know';
+import { FastTrackIndex, FastTrackPage } from './pages/FastTrack';
 import { PathsPage } from './pages/Paths';
 import { ExamPage, FlashcardsPage, PracticePage, ReviewPage } from './pages/Practice';
 import { ProgressPage } from './pages/Progress';
@@ -33,7 +34,7 @@ const NAV: [string, string][] = [
 ];
 
 /** Which nav section a route belongs to. */
-const SECTION: Record<string, string> = { course: 'catalog', learn: 'my', exam: 'practice', review: 'practice', flashcards: 'practice', project: 'projects', play: 'arcade', return: 'catalog', know: 'settings' };
+const SECTION: Record<string, string> = { course: 'catalog', learn: 'my', exam: 'practice', review: 'practice', flashcards: 'practice', project: 'projects', play: 'arcade', return: 'catalog', fast: 'paths', know: 'settings' };
 
 export function App() {
   const route = useRoute();
@@ -69,6 +70,7 @@ export function App() {
       case 'learn': return <LessonPage entryId={a ?? ''} lessonId={b} focus={focus} />;
       case 'my': return <MyLearningPage />;
       case 'paths': return <PathsPage />;
+      case 'fast': return a ? <FastTrackPage key={a} trackId={a} /> : <FastTrackIndex />;
       case 'quick': return <QuickPage />;
       case 'practice': return <PracticePage />;
       case 'review': return <ReviewPage key={`${a ?? ''}/${b ?? ''}`} courseId={a} limit={b === 'one' ? 1 : undefined} />;

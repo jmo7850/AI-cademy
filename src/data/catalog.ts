@@ -100,6 +100,7 @@ export const catalog: CatalogEntry[] = [
   // ---------------- Track A: Claude and AI productivity ----------------
   claudeCourse('ai-fluency-framework-foundations', 'AI Fluency: Framework and foundations', 4, 14, {
     difficulty: 'beginner',
+    credentialFree: verified(true, 'Course page (re-checked 2026-10-11): "After finishing the course, you will have the opportunity to take a final assessment and earn a completion badge."'),
     objectives: ['Collaborate with AI effectively, efficiently, ethically and safely', 'Apply the AI Fluency framework to real tasks'],
     careerValue: 'Strong first step for any AI role: the vocabulary and habits used in every later course.',
     nextSteps: ['claude-ai-capabilities-and-limitations', 'academy-ai-foundations'],
