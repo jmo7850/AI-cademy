@@ -8,6 +8,8 @@ import { HomePage } from './pages/Home';
 import { LessonPage } from './pages/Lesson';
 import { MyLearningPage } from './pages/MyLearning';
 import { OnboardingPage } from './pages/Onboarding';
+import { ReturnCheckPage } from './pages/Outside';
+import { KnowPage } from './pages/Know';
 import { PathsPage } from './pages/Paths';
 import { ExamPage, FlashcardsPage, PracticePage, ReviewPage } from './pages/Practice';
 import { ProgressPage } from './pages/Progress';
@@ -31,7 +33,7 @@ const NAV: [string, string][] = [
 ];
 
 /** Which nav section a route belongs to. */
-const SECTION: Record<string, string> = { course: 'catalog', learn: 'my', exam: 'practice', review: 'practice', flashcards: 'practice', project: 'projects', play: 'arcade' };
+const SECTION: Record<string, string> = { course: 'catalog', learn: 'my', exam: 'practice', review: 'practice', flashcards: 'practice', project: 'projects', play: 'arcade', return: 'catalog', know: 'settings' };
 
 export function App() {
   const route = useRoute();
@@ -58,7 +60,7 @@ export function App() {
   const dueCount = state.profile.reminders ? dueCards(state.reviews, new Date()).length : 0;
 
   const page = (() => {
-    if (!state.profile.onboarded && head !== 'onboarding' && head !== 'settings') return <OnboardingPage />;
+    if (!state.profile.onboarded && head !== 'onboarding' && head !== 'settings' && head !== 'know') return <OnboardingPage />;
     switch (head) {
       case '': return <HomePage />;
       case 'onboarding': return <OnboardingPage />;
@@ -75,6 +77,8 @@ export function App() {
       case 'projects': return <ProjectsPage />;
       case 'project': return <ProjectPage projectId={a ?? ''} />;
       case 'progress': return <ProgressPage />;
+      case 'return': return <ReturnCheckPage key={a ?? ''} entryId={a ?? ''} />;
+      case 'know': return <KnowPage />;
       case 'settings': return <SettingsPage />;
       case 'arcade': return <ArcadePage />;
       case 'play': return <PlayPage kind={a} courseId={b} domainId={c} />;

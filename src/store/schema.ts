@@ -1,7 +1,7 @@
 import type { Answer, CatalogEntry, PathStep, StudyCourse } from '../domain/types';
 
 /** Bump when the persisted shape changes, and add a migration step. */
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export type CareerGoal =
   | 'ai-foundations'
@@ -63,6 +63,17 @@ export interface CourseProgress {
     credentialId?: string;
     verificationUrl?: string;
   };
+  /** A note or link the learner attached to an outside course. Stored as given; Poqeni does not check it. */
+  evidence?: { note?: string; url?: string; addedOn: string };
+  /** Results of Poqeni's own questions on an outside course's topic, oldest first (capped). */
+  checks?: ReturnCheck[];
+}
+
+/** One sitting of a return check: Poqeni's own questions on the topic of a course studied elsewhere. */
+export interface ReturnCheck {
+  at: string;
+  correct: number;
+  total: number;
 }
 
 export interface ExamAttempt {
@@ -94,10 +105,18 @@ export interface CustomPlan {
   overrides?: Record<string, 'include' | 'skip'>;
 }
 
+/** A note or link attached to one project milestone as evidence. Stored as given. */
+export interface Checkpoint {
+  note?: string;
+  url?: string;
+  addedOn: string;
+}
+
 export interface ProjectProgress {
   projectId: string;
   started: string;
   milestones: string[];
+  checkpoints?: Record<string, Checkpoint>;
   portfolio?: {
     summary: string;
     skills: string[];
@@ -131,6 +150,14 @@ export interface AppState {
   notes: Record<string, string>;
   /** Finished games in the Arcade (most recent last, capped). */
   games: GameResult[];
+  /** Things the learner asked Poqeni to remember, shown and editable on the "What Poqeni knows" screen. */
+  memoryNotes: MemoryNote[];
+}
+
+export interface MemoryNote {
+  id: string;
+  text: string;
+  addedOn: string;
 }
 
 export type GameKind = 'run' | 'match' | 'boss';
@@ -179,5 +206,6 @@ export function initialState(): AppState {
     recheckedOn: {},
     notes: {},
     games: [],
+    memoryNotes: [],
   };
 }

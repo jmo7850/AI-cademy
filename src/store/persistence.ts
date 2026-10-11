@@ -10,10 +10,12 @@ type Raw = Record<string, unknown>;
  * Ordered migrations: MIGRATIONS[n] upgrades a version-n object to n+1.
  * v1 (pre-release) lacked import tracking and catalog re-checks.
  * v2 lacked the Arcade: game results and the games on/off preference.
+ * v3 lacked the memory notes behind "What Poqeni knows about me".
  */
 const MIGRATIONS: Record<number, (s: Raw) => Raw> = {
   1: (s) => ({ ...s, importedEntries: [], importedCourses: s.importedCourses ?? [], recheckedOn: {}, schemaVersion: 2 }),
   2: (s) => ({ ...s, games: [], profile: { ...(s.profile as object), games: true }, schemaVersion: 3 }),
+  3: (s) => ({ ...s, memoryNotes: [], schemaVersion: 4 }),
 };
 
 export function migrate(raw: Raw): AppState {

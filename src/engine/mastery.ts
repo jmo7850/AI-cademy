@@ -93,7 +93,7 @@ export const statusLabel: Record<CourseStatus, string> = {
   completed: 'Completed',
   'assessment-passed': 'Practice assessment passed',
   mastery: 'Demonstrated mastery',
-  'external-recorded': 'External credential recorded',
+  'external-recorded': 'Credential recorded by you',
 };
 
 export interface Readiness {
