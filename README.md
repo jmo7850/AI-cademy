@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="src/ui/assets/poqeni-head.webp" alt="poqeni, the mascot" width="120">
+  <img src="docs/images/logo.svg" alt="poqeni" width="360">
 </p>
-
-<h1 align="center">poqeni</h1>
 
 <p align="center"><strong>Learn. Build. Certify.</strong><br>
 A local-first, ADHD-friendly study platform for entry-level AI careers.</p>
@@ -91,7 +89,7 @@ Applied from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `S
 
 ## Visual design
 
-poqeni (first drawn up as Vector Academy, then PathBolt) follows its brand identity board: Deep Navy `#232F42`, Electric Cyan `#00FFFF`, Brushed Gold `#D4A74F`, Metallic Silver `#B4B7BD`, Warm Cream `#F7F4E8`; Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are warm cream; the sidebar and hero card are navy with a faint cyan circuit pattern. poqeni, the mascot, is the logo (head) and stands in the hero card (full figure); both are cut-out images in `src/ui/assets/`, inlined into the build. Cyan is used only on navy or as a glow; links on cream use a deep teal for contrast. Gold marks formal certifications, achievements and the main call to action. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
+poqeni (first drawn up as Vector Academy, then PathBolt) uses its logo's colours: Deep Navy `#232F42`, Sky Blue `#6FB3E0` and Cream `#F2F0EA`, with Brushed Gold `#D4A74F` kept for certifications and achievements. Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are cream; the sidebar and hero card are navy with a faint sky-blue circuit pattern. The mascot, a line-art robot with a graduation cap, is the logo (head and lockup) and stands in the hero card (full figure); it is drawn as inline SVG in `src/ui/components/Mascot.tsx`, so it follows light and dark themes. Sky blue is used on navy; links on cream use a deeper blue for contrast. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
 
 ## Architecture
 
