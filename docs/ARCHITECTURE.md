@@ -1,6 +1,6 @@
 # Product, brand and architecture
 
-How PathBolt is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
+How poqeni is meant to behave, how it looks, and how the code is organised. Start here before changing the app.
 
 ## Product
 
@@ -30,7 +30,7 @@ These came from the spec and from the ADHD reference repo, [ayghri/i-have-adhd](
 | Career Paths | 5 templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). The learner can reorder, add, remove, skip or include steps, and every suggestion says why. Choose-one steps recommend a single provider and prefer the learner's choice. |
 | Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a note on the speed, depth and cost trade-off. |
 | Practice Center | Review queue, weak areas, flashcards, and an exam simulator weighted by the published domain weights. |
-| Arcade | Optional, untimed games hosted by Bolt: Bolt Run, Flash Match and Boss Battle. It can be hidden in Settings. |
+| Arcade | Optional, untimed games hosted by poqeni: poqeni Run, Flash Match and Boss Battle. It can be hidden in Settings. |
 | Project Lab | 9 projects from exercises to capstones, each with milestones, a definition of done, validation and a portfolio entry. |
 | Progress | Mastery per concept, activity, study time, review backlog, confidence, history, and the Arcade Win board. |
 | Settings | Preferences, schedule, budget, theme, backup export and restore (file or pasted text), course import, and delete all data. |
@@ -44,9 +44,9 @@ Course status levels are kept separate: Not started, In progress, Completed, Pra
 
 | Item | Value |
 | --- | --- |
-| Name | **PathBolt**, with a capital B. |
-| Mascot | **Bolt**, a white and gold robot. Every robot in the app uses this art; there are no silver variants. The head crop is the logo and browser-tab icon. The full figure stands in the Home hero card and hosts the Arcade. |
-| Mascot files | `src/ui/assets/bolt-head.webp`, `bolt-full.webp` and `bolt-icon.png`, used through `src/ui/components/Mascot.tsx`. The checkerboard background was removed once, offline, with an ML background-removal model, which is not a project dependency. |
+| Name | **poqeni**, always lowercase, including at the start of a sentence. |
+| Mascot | **poqeni**, a white and gold robot. Every robot in the app uses this art; there are no silver variants. The head crop is the logo and browser-tab icon. The full figure stands in the Home hero card and hosts the Arcade. |
+| Mascot files | `src/ui/assets/poqeni-head.webp`, `poqeni-full.webp` and `poqeni-icon.png`, used through `src/ui/components/Mascot.tsx`. The checkerboard background was removed once, offline, with an ML background-removal model, which is not a project dependency. |
 | Palette | Deep Navy `#232F42` · Electric Cyan `#00FFFF` · Brushed Gold `#D4A74F` · Metallic Silver `#B4B7BD` · Warm Cream `#F7F4E8` |
 | Fonts | Montserrat for headings and Lato for body text, both from Google Fonts with system fallbacks. |
 | Surfaces | Light panels are warm cream. The sidebar and hero card are navy with a faint cyan circuit pattern (the `--circuit` token). Cards are rounded at 16 px with soft shadows, and buttons are pills. |
@@ -136,4 +136,4 @@ AI-cademy/
 - **Schema change:** bump `SCHEMA_VERSION` in `store/schema.ts`, add a step to `MIGRATIONS` in `store/persistence.ts`, and add a store test showing that an older save loads unchanged.
 - **AI tutoring:** implement `TutorProvider` behind a server you control. Never put API keys in client code.
 
-Keep these ids stable: the storage key `ai-career-academy`, the backup format id, and the 29 first-release catalog ids (a unit test checks the ids). They were deliberately not renamed, so saved progress and older backups still load. Only the downloaded backup file name changed, to `pathbolt-backup-*.json`.
+Keep these ids stable: the storage key `ai-career-academy`, the backup format id, and the 29 first-release catalog ids (a unit test checks the ids). They were deliberately not renamed, so saved progress and older backups still load. Only the downloaded backup file name changed, to `poqeni-backup-*.json`.

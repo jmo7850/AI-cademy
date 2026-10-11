@@ -84,9 +84,10 @@ Not run: manual screen-reader pass; browsers other than Chromium.
 ---
 
 # Update: PathBolt and the Arcade (2026-10-10)
+> Later renamed: the app and its mascot Bolt are now both called **poqeni**, and `bolt-*` assets are `poqeni-*`. This section is kept as written.
 - Renamed to **PathBolt**; the mascot is **Bolt** (same white-and-gold art and brand colours). Backups now download as `pathbolt-backup-*.json`; older backups still restore.
 - **Arcade** (new nav section, optional, can be hidden in Settings), hosted by Bolt:
-  - Bolt Run: 5 questions, due reviews first, then weak concepts. Bolt walks a 5-tile track; correct answers charge his battery (a run of correct answers charges double; misses never remove charge).
+  - Bolt Run: 5 questions, due reviews first, then weak concepts. Bolt walks a 5-tile track; correct answers charge the battery (a run of correct answers charges double; misses never remove charge).
   - Flash Match: pair 5 terms with meanings, unseen and due cards first. A card counts as known only if matched first time.
   - Boss Battle: one boss per exam-blueprint domain; 3 hits win, with 2 spare questions; misses cost nothing.
   - Level and XP from concept mastery (+10 per game won), 6 badges, and a Win board on Progress.

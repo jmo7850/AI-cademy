@@ -45,7 +45,7 @@ export function App() {
 
   useEffect(() => {
     setMenuOpen(false);
-    document.title = `${NAV.find(([k]) => k === section)?.[1] ?? 'Study'} · PathBolt`;
+    document.title = `${NAV.find(([k]) => k === section)?.[1] ?? 'Study'} · poqeni`;
     mainRef.current?.focus({ preventScroll: true });
   }, [routeKey, section]);
 
@@ -88,7 +88,7 @@ export function App() {
       <div className={`shell ${focus ? 'focus' : ''}`}>
         {!focus && (
           <nav className={`nav ${menuOpen ? 'open' : ''}`} aria-label="Main">
-            <div className="brand"><Mascot size={52} /><span>Path<b>Bolt</b><small>Learn. Build. Certify.</small></span></div>
+            <div className="brand"><Mascot size={52} /><span>poqeni<small>Learn. Build. Certify.</small></span></div>
             <button type="button" className="menu-btn" aria-expanded={menuOpen} aria-controls="nav-list" onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? 'Close menu' : 'Menu'}
             </button>

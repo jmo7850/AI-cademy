@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="src/ui/assets/bolt-head.webp" alt="Bolt, the PathBolt mascot" width="120">
+  <img src="src/ui/assets/poqeni-head.webp" alt="poqeni, the mascot" width="120">
 </p>
 
-<h1 align="center">PathBolt</h1>
+<h1 align="center">poqeni</h1>
 
 <p align="center"><strong>Learn. Build. Certify.</strong><br>
 A local-first, ADHD-friendly study platform for entry-level AI careers.</p>
@@ -11,13 +11,13 @@ A local-first, ADHD-friendly study platform for entry-level AI careers.</p>
   <a href="https://github.com/jmo7850/AI-cademy/actions/workflows/ci.yml"><img src="https://github.com/jmo7850/AI-cademy/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
 </p>
 
-PathBolt brings courses and credentials from Claude Academy, AWS, Microsoft, Google, OpenAI Academy, AMD AI Academy and NVIDIA into one catalog, and adds its own lessons, practice exams, spaced repetition, mastery tracking, career paths, a project lab and an optional games Arcade hosted by Bolt.
+poqeni brings courses and credentials from Claude Academy, AWS, Microsoft, Google, OpenAI Academy, AMD AI Academy and NVIDIA into one catalog, and adds its own lessons, practice exams, spaced repetition, mastery tracking, career paths, a project lab and an optional games Arcade hosted by poqeni.
 
 No account, server or paid AI API is needed. All progress stays in your browser and can be exported as JSON.
 
 | Dashboard | Arcade |
 | --- | --- |
-| ![Home dashboard with the next recommended step](docs/images/home.webp) | ![Arcade with Bolt Run, Flash Match and Boss Battle](docs/images/arcade.webp) |
+| ![Home dashboard with the next recommended step](docs/images/home.webp) | ![Arcade with poqeni Run, Flash Match and Boss Battle](docs/images/arcade.webp) |
 | **Course page with verified facts** | **Phone, dark mode** |
 | ![NVIDIA certification page showing verified exam facts](docs/images/course.webp) | ![Flash Match on a phone in dark mode](docs/images/mobile-dark.webp) |
 
@@ -72,7 +72,7 @@ To build a static site, run `npm run build`. It writes to `dist/`, which any sta
 | Career Paths | Five templates (AI Foundations, Cloud and AI, AI Application Developer, AI Agent and Runtime Engineer, Local LLM Developer). Reorder, add, remove, skip or include; every suggestion says why. |
 | Quick Credentials | Short courses, badges and beginner certifications with 14 filters and a speed/depth/cost trade-off note. |
 | Practice Center | Review queue, weak areas, flashcards, and an exam simulator that follows published domain weights. |
-| Arcade | Optional, untimed games hosted by Bolt: **Bolt Run** (5 questions from due reviews and weak concepts), **Flash Match** (pair terms with meanings), **Boss Battle** (beat one exam domain). Every answer is recorded like normal practice, so it updates mastery and the review schedule. Levels come from concept mastery (not time spent), plus badges and a Win board on Progress. Can be hidden in Settings. |
+| Arcade | Optional, untimed games hosted by poqeni: **poqeni Run** (5 questions from due reviews and weak concepts), **Flash Match** (pair terms with meanings), **Boss Battle** (beat one exam domain). Every answer is recorded like normal practice, so it updates mastery and the review schedule. Levels come from concept mastery (not time spent), plus badges and a Win board on Progress. Can be hidden in Settings. |
 | Project Lab | 9 projects from exercises to capstones, with milestones, definition of done, validation and portfolio entries. |
 | Progress | Mastery per concept, activity, study time, review backlog, confidence, status and history. |
 | Settings | Preferences, schedule, budget, theme, backup export/restore, course import, delete all data. |
@@ -91,7 +91,7 @@ Applied from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (its `S
 
 ## Visual design
 
-PathBolt (first drawn up as Vector Academy) follows its brand identity board: Deep Navy `#232F42`, Electric Cyan `#00FFFF`, Brushed Gold `#D4A74F`, Metallic Silver `#B4B7BD`, Warm Cream `#F7F4E8`; Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are warm cream; the sidebar and hero card are navy with a faint cyan circuit pattern. Bolt, the mascot, is the logo (head) and stands in the hero card (full figure); both are cut-out images in `src/ui/assets/`, inlined into the build. Cyan is used only on navy or as a glow; links on cream use a deep teal for contrast. Gold marks formal certifications, achievements and the main call to action. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
+poqeni (first drawn up as Vector Academy, then PathBolt) follows its brand identity board: Deep Navy `#232F42`, Electric Cyan `#00FFFF`, Brushed Gold `#D4A74F`, Metallic Silver `#B4B7BD`, Warm Cream `#F7F4E8`; Montserrat headings and Lato body (Google Fonts, with system fallbacks). Light panels are warm cream; the sidebar and hero card are navy with a faint cyan circuit pattern. poqeni, the mascot, is the logo (head) and stands in the hero card (full figure); both are cut-out images in `src/ui/assets/`, inlined into the build. Cyan is used only on navy or as a glow; links on cream use a deep teal for contrast. Gold marks formal certifications, achievements and the main call to action. All colours are tokens in `src/ui/styles.css`, redefined for dark mode.
 
 ## Architecture
 

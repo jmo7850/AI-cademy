@@ -1,5 +1,5 @@
 /*
- * PathBolt brand board (originally drawn up as Vector Academy): Deep Navy #232F42, Electric Cyan #00FFFF, Brushed Gold #D4A74F,
+ * poqeni brand board (originally drawn up as Vector Academy): Deep Navy #232F42, Electric Cyan #00FFFF, Brushed Gold #D4A74F,
  * Metallic Silver #B4B7BD, Warm Cream #F7F4E8. Light panels are warm cream; dark panels are navy
  * with a faint cyan circuit pattern. Cyan only sits on navy (or as a glow); on cream, links use a
  * deep teal for contrast. Gold marks achievements and the single most important action.
@@ -125,9 +125,8 @@ pre { background: var(--surface-2); padding: 12px; border-radius: var(--radius-s
 .shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100vh; }
 .shell.focus { grid-template-columns: minmax(0, 1fr); }
 .nav { background: var(--circuit) 0 0 / 160px repeat, var(--navy); color: var(--on-navy); padding: 20px 14px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-.nav .brand { display: flex; align-items: center; gap: 10px; margin: 0 4px 22px; font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; line-height: 1.1; letter-spacing: 0.04em; text-transform: uppercase; color: var(--on-navy); }
+.nav .brand { display: flex; align-items: center; gap: 10px; margin: 0 4px 22px; font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; line-height: 1.1; letter-spacing: 0.02em; color: var(--on-navy); }
 .nav .brand .mascot { width: 52px; height: 52px; flex: none; filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.35)); }
-.nav .brand b { color: var(--cyan); font-weight: 800; }
 .nav .brand small { display: block; margin-top: 4px; font-family: var(--font-body); font-weight: 400; font-size: 0.75rem; color: var(--on-navy-muted); letter-spacing: 0.02em; text-transform: none; }
 .nav :focus-visible { outline-color: var(--gold); }
 .nav ul { list-style: none; margin: 0; padding: 0; }

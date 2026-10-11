@@ -11,7 +11,7 @@ import { seededShuffle } from './random';
 
 const dueAt = (state: Pick<AppState, 'reviews'>, courseId: string, itemId: string) => state.reviews[`${courseId}:${itemId}`]?.due;
 
-/** Bolt Run: due reviews first (most overdue first), then weak concepts, then fresh questions. */
+/** poqeni Run: due reviews first (most overdue first), then weak concepts, then fresh questions. */
 export function pickRun(course: StudyCourse, state: Pick<AppState, 'reviews' | 'attempts'>, now: Date, seed: number, n = 5): Question[] {
   const picked: Question[] = [];
   const add = (q: Question | undefined) => {
@@ -100,7 +100,7 @@ export function badges(state: Pick<AppState, 'attempts' | 'games' | 'exams'>, co
   const passed = state.exams.some((e) => e.finishedAt && typeof e.score === 'number' && e.score >= 0.7);
   return [
     { id: 'first-spark', label: 'First spark', how: 'Finish any game.', earned: state.games.length > 0 },
-    { id: 'full-charge', label: 'Full charge', how: 'Answer every question in a Bolt Run correctly.', earned: state.games.some((g) => g.kind === 'run' && g.correct === g.total && g.total > 0) },
+    { id: 'full-charge', label: 'Full charge', how: 'Answer every question in a poqeni Run correctly.', earned: state.games.some((g) => g.kind === 'run' && g.correct === g.total && g.total > 0) },
     { id: 'memory-circuit', label: 'Memory circuit', how: 'Clear a Flash Match board.', earned: won('match') },
     { id: 'boss-breaker', label: 'Boss breaker', how: 'Beat a domain boss.', earned: won('boss') },
     { id: 'concept-collector', label: 'Concept collector', how: 'Master 5 concepts.', earned: mastered >= 5 },

@@ -1,8 +1,8 @@
-import fullUrl from '../assets/bolt-full.webp';
-import headUrl from '../assets/bolt-head.webp';
+import fullUrl from '../assets/poqeni-full.webp';
+import headUrl from '../assets/poqeni-head.webp';
 
 /**
- * Bolt, the PathBolt mascot. "head" is the logo mark; "full" is the standing figure.
+ * poqeni, the mascot. "head" is the logo mark; "full" is the standing figure.
  * Decorative wherever it sits next to the product name, so it is hidden from assistive tech.
  */
 export function Mascot({ variant = 'head', size = 40, className = 'mascot' }: { variant?: 'head' | 'full'; size?: number; className?: string }) {
