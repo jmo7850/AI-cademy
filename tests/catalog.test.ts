@@ -3,6 +3,7 @@ import { builtInCourses, diagnosticItems } from '../src/data/curriculum';
 import { pathTemplates } from '../src/data/paths';
 import { projectById } from '../src/data/projects';
 import { validateStudyCourse } from '../src/engine/validate';
+import { allocate } from '../src/engine/exam';
 
 describe('seed catalog', () => {
   it('has unique ids', () => {
@@ -120,6 +121,17 @@ describe('built-in study courses', () => {
         expect(q.explanation.length).toBeGreaterThan(5);
         if ('options' in q) for (const o of q.options) expect(o.why.length, `${q.id}/${o.id}`).toBeGreaterThan(0);
       }
+  });
+
+  it('can fill a default practice exam from each domain without borrowing', () => {
+    // The exam setup defaults to 10 questions (or the whole bank if smaller).
+    for (const c of builtInCourses.filter((x) => x.blueprint)) {
+      const want = allocate(c.blueprint!.domains, Math.min(10, c.questions.length));
+      for (const d of c.blueprint!.domains) {
+        const have = c.questions.filter((q) => q.domainId === d.id).length;
+        expect(have, `${c.id}/${d.id} has ${have}, needs ${want[d.id]}`).toBeGreaterThanOrEqual(want[d.id]!);
+      }
+    }
   });
 
   it('has questions in every blueprint domain', () => {
