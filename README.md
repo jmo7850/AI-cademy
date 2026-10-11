@@ -87,6 +87,10 @@ For courses that run on the provider's site, the course page is a short guide: w
 
 The AWS AI Practitioner course is the pilot for a lesson standard: short sections that give the idea, a worked example or diagram, something that looks the same but is not, a common mix-up, and a two-line recap. When you miss a question, the feedback links to the exact section that teaches it.
 
+### Flashcards
+
+Every Practice category has a deck of 35 to 41 original flashcards written for the app: definitions, "X vs Y" pairs, which-service-for-this-job and common traps. Grading a card puts it on the same spaced-review schedule as questions. Cards describe what a service or idea does and avoid prices, quotas and version numbers, which change.
+
 ### Fast tracks
 
 Career Paths links to fixed-order routes with a fixed hours budget and a pace picker (5, 10 or 20 hours a week) that shows an estimated finish. The first is the Claude fast track: three Claude Academy courses, with the credential labelled as a completion badge and never as a certification. A route can be copied into your plans. Poqeni never marks a credential earned.

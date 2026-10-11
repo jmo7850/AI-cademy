@@ -373,3 +373,25 @@ test('a missed question links back to the section that teaches it', async ({ pag
   await expect(page.getByRole('heading', { name: 'Is the model any good?' })).toBeVisible();
   await expect(page.getByText('Remember:')).toBeVisible();
 });
+
+test('every Practice flashcard category has 30 to 50 cards and a deck can be studied', async ({ page }) => {
+  await skipOnboarding(page);
+  await openSection(page, 'Practice Center');
+  const counts = await page.locator('#fc-h ~ ul li').allTextContents();
+  expect(counts.length).toBe(10);
+  for (const t of counts) {
+    const n = Number(/\((\d+) cards\)/.exec(t)?.[1]);
+    expect(n, t).toBeGreaterThanOrEqual(30);
+    expect(n, t).toBeLessThanOrEqual(50);
+  }
+  await page.goto('/#/flashcards/study-aws-clf');
+  await expect(page.getByText(/card 1 of 40/)).toBeVisible();
+  await expectNoSeriousAxe(page, 'flashcards');
+  await page.getByRole('button', { name: 'Show answer' }).click();
+  await page.getByRole('button', { name: 'Knew it easily' }).click();
+  await page.getByRole('button', { name: 'Next card' }).click();
+  await expect(page.getByText(/card 2 of 40/)).toBeVisible();
+  // The answer joins the spaced-review schedule.
+  const scheduled = await page.evaluate(() => Object.keys((JSON.parse(localStorage.getItem('ai-career-academy') ?? '{}') as { reviews?: Record<string, unknown> }).reviews ?? {}).length);
+  expect(scheduled).toBe(1);
+});
